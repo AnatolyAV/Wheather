@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Погода</string>
+    <string name="title_activity_city_list">Список городов</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_help">Помощь</string>
+    <string name="action_weather_current">Текущая погода</string>
+    <string name="action_cities">Список городов</string>
+    <string name="action_weather_forecast">Прогноз погоды</string>
+    <string name="action_settings">Настройки</string>
+
+    <string name="loading">Загрузка\u2026</string>
+
+
+    <!-- Dialog -->
+    <string name="dialog_add_city_title_label">Выбор города</string>
+    <string name="dialog_add_city_message_label">Введите город:</string>
+
+    <!-- Toolbar menu -->
+    <string name="toolbar_menu_refresh">Обновить</string>
+
+    <!-- Toast messages -->
+    <string name="connection_not_found">Проверьте подключение к Интернету</string>
+    <string name="error">Произошла ошибка. Попробуйте позже!</string>
+    <string name="loaded">Данные обновлены!</string>
+    <string name="not_loaded">Данные не удалось загрузить или обновить!</string>
+
+    <!-- Weather label strings -->
+    <string name="label_wind">Ветер: %1$s %2$s</string>
+    <string name="label_rain">Дождь: %1$s %2$s</string>
+    <string name="label_snow">Снег: %1$s %2$s</string>
+    <string name="label_humidity">Влажность: %1$s%2$s</string>
+    <string name="label_pressure">Давление: %1$s %2$s</string>
+    <string name="label_cloudiness">Облачность: %1$s%2$s</string>
+    <string name="label_time_measurement">Время измерений: %s</string>
+    <string name="label_last_update">Последнее обновление: %s</string>
+    <string name="label_sunrise">Восход: %s</string>
+    <string name="label_sunset">Заход: %s</string>
+
+    <!-- SharedPreferences default  -->
+    <string name="default_city_name">Moscow</string>
+    <string name="default_icon_weather">01d</string>
+    <string name="default_weather_description">Ясно</string>
+
+
+    <!-- Units and Measurement-->
+    <string name="pressure_measurement">гПа</string>
+    <string name="wind_speed_meters">м/с</string>
+    <string name="wind_speed_miles">миль/ч</string>
+    <string name="millimetre_label">мм</string>
+
+</resources>

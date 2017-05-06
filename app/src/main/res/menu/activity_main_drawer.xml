@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_current_city"
+            android:icon="@drawable/ic_menu_weather_current"
+            android:title="@string/action_weather_current" />
+        <item
+            android:id="@+id/action_cities"
+            android:icon="@drawable/ic_menu_city"
+            android:title="@string/action_cities" />
+        <item
+            android:id="@+id/action_weather_forecast"
+            android:icon="@drawable/ic_menu_weather_forecast"
+            android:title="@string/action_weather_forecast" />
+    </group>
+
+</menu>

@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="title_activity_city_list">City list</string>
+
+    <!-- Navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_help">Help</string>
+    <string name="action_weather_current">Current weather</string>
+    <string name="action_cities">City list</string>
+    <string name="action_weather_forecast">Weather forecast</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="loading">Loading\u2026</string>
+
+    <!-- Dialog -->
+    <string name="dialog_add_city_title_label">Select city</string>
+    <string name="dialog_add_city_message_label">Input city:</string>
+
+    <!-- Toolbar menu -->
+    <string name="toolbar_menu_refresh">Refresh</string>
+
+    <!-- Toast messages -->
+    <string name="connection_not_found">Check your internet connection</string>
+    <string name="error">An error has occurred. Try later!</string>
+    <string name="loaded">Data updated!</string>
+    <string name="not_loaded">Data could not be downloaded or updated!</string>
+
+    <!-- Weather icons -->
+    <string name="icon_clear_sky_day" translatable="false">&#xf00d;</string>
+    <string name="icon_clear_sky_night" translatable="false">&#xf02e;</string>
+    <string name="icon_few_clouds_day" translatable="false">&#xf002;</string>
+    <string name="icon_few_clouds_night" translatable="false">&#xf086;</string>
+    <string name="icon_scattered_clouds" translatable="false">&#xf041;</string>
+    <string name="icon_broken_clouds" translatable="false">&#xf013;</string>
+    <string name="icon_shower_rain" translatable="false">&#xf01a;</string>
+    <string name="icon_rain_day" translatable="false">&#xf008;</string>
+    <string name="icon_rain_night" translatable="false">&#xf028;</string>
+    <string name="icon_thunderstorm" translatable="false">&#xf01e;</string>
+    <string name="icon_snow" translatable="false">&#xf01b;</string>
+    <string name="icon_mist" translatable="false">&#xf014;</string>
+    <string name="icon_weather_default" translatable="false">&#xf075;</string>
+    <string name="icon_wind" translatable="false">&#xf050;</string>
+    <string name="icon_humidity" translatable="false">&#xf07a;</string>
+    <string name="icon_barometer" translatable="false">&#xf079;</string>
+    <string name="icon_cloudiness" translatable="false">&#xf002;</string>
+    <string name="icon_sunrise" translatable="false">&#xf051;</string>
+    <string name="icon_sunset" translatable="false">&#xf052;</string>
+
+    <!-- Weather label strings -->
+    <string name="label_wind">Wind: %1$s %2$s</string>
+    <string name="label_rain">Rain: %1$s %2$s</string>
+    <string name="label_snow">Snow: %1$s %2$s</string>
+    <string name="label_humidity">Humidity: %1$s%2$s</string>
+    <string name="label_pressure">Pressure: %1$s %2$s</string>
+    <string name="label_cloudiness">Cloudiness: %1$s%2$s</string>
+    <string name="label_time_measurement">Time measurement: %s</string>
+    <string name="label_last_update">Last update: %s</string>
+    <string name="label_sunrise">Sunrise: %s</string>
+    <string name="label_sunset">Sunset: %s</string>
+
+    <!-- SharedPreferences default  -->
+    <string name="default_city_name">Moscow</string>
+    <string name="default_icon_weather">01d</string>
+    <string name="default_weather_description">Clear sky</string>
+
+
+    <!-- Units and Measurement-->
+    <string name="percent_sign" translatable="false">\u0025</string>
+    <string name="temperature_with_degree" translatable="false">%s\u2103</string>
+    <string name="pressure_measurement">hPa</string>
+    <string name="wind_speed_meters">m/s</string>
+    <string name="wind_speed_miles">mph</string>
+    <string name="millimetre_label">mm</string>
+
+    <!-- Error -->
+    <string name="error_fill_db">Error fill db: </string>
+    <string name="error_response">Error response: </string>
+</resources>
