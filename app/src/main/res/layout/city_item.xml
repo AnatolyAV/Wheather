@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
+        android:clickable="true"
         android:clipChildren="false"
         android:foreground="?android:attr/selectableItemBackground"
         android:paddingTop="20dp"
