@@ -18,7 +18,7 @@ public class WeatherForecastEntry implements BaseColumns {
 
     public static final String COLUMN_CITY_ID = "city_id";
 
-    public static final String COLUMN_TIME_MEASUREMENT = "time_of_measurement";
+    public static final String COLUMN_DATE_TIME = "date_time";
 
     public static final String COLUMN_TEMPERATURE_DAY = "temperature_day";
     public static final String COLUMN_TEMPERATURE_MIN = "temperature_min";

@@ -39,6 +39,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
         }
         cityListIntent = new Intent(this, CityListActivity.class);
         weatherCurrentIntent = new Intent(this, WeatherCurrentActivity.class);
+        weatherForecastListIntent = new Intent(this, WeatherForecastActivity.class);
     }
 
     @Override
@@ -84,6 +85,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
                 startActivity(cityListIntent);
                 break;
             case R.id.action_weather_forecast:
+                startActivity(weatherForecastListIntent);
                 break;
         }
         item.setChecked(false);

@@ -87,7 +87,7 @@ public class WeatherContentProvider extends ContentProvider {
             WeatherForecastEntry.COLUMN_CLOUDINESS + " FLOAT NOT NULL, " +
             WeatherForecastEntry.COLUMN_RAIN_VOLUME + " FLOAT, " +
             WeatherForecastEntry.COLUMN_SNOW_VOLUME + " FLOAT, " +
-            WeatherForecastEntry.COLUMN_TIME_MEASUREMENT + " BIGINT NOT NULL " +
+            WeatherForecastEntry.COLUMN_DATE_TIME + " BIGINT NOT NULL " +
             ")";
 
     private static final int URI_CITIES = 1;

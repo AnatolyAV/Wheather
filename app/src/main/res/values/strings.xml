@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="title_activity_city_list">City list</string>
+    <string name="title_activity_weather_forecast">Weather forecast</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -19,6 +20,7 @@
 
     <!-- Toolbar menu -->
     <string name="toolbar_menu_refresh">Refresh</string>
+    <string name="toolbar_menu_count_days">7</string>
 
     <!-- Toast messages -->
     <string name="connection_not_found">Check your internet connection</string>

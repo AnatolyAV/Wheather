@@ -2,6 +2,8 @@ package ru.andreev_av.weather.net;
 
 import android.content.Context;
 
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import ru.andreev_av.weather.App;
@@ -20,7 +22,7 @@ public class WeatherForecastHttpRequest {
     }
 
     public void getWeatherForecast(int cityId, int countDays) {
-        App.getApi().getWeatherForecasts(cityId, countDays, "metric", "ru", OwmApi.API_KEY).enqueue(new Callback<WeatherForecastModel>() {
+        App.getApi().getWeatherForecasts(cityId, countDays, "metric", Locale.getDefault().getLanguage(), OwmApi.API_KEY).enqueue(new Callback<WeatherForecastModel>() {
             @Override
             public void onResponse(Call<WeatherForecastModel> call, retrofit2.Response<WeatherForecastModel> response) {
                 processor.runProcessSuccessResponse(response.body());

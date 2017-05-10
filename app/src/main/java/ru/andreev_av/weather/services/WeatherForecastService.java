@@ -36,6 +36,6 @@ public class WeatherForecastService extends IntentService {
         int cityId = extras.getInt(ServiceHelper.Methods.PARAMETER_CITY_ID);
         int countDays = extras.getInt(ServiceHelper.Methods.PARAMETER_COUNT_DAYS);
         int methodId = extras.getInt(Processor.Extras.METHOD_EXTRA);
-        new WeatherForecastProcessor(this, methodId, resultAction).loadWeatherForecast(countDays, cityId);
+        new WeatherForecastProcessor(this, methodId, resultAction).loadWeatherForecast(cityId, countDays);
     }
 }

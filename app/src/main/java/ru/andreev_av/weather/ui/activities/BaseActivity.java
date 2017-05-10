@@ -18,7 +18,7 @@ public abstract class BaseActivity extends BaseDrawerActivity {
     public final static int STATUS_CONNECTION_NOT_FOUND = 300;
     public final static String PARAM_STATUS = "status";
     protected Toolbar toolbar;
-    private MenuItem updateItem;
+    protected MenuItem updateItem;
     private ProgressBar progressUpdate;
 
     @Override

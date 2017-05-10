@@ -45,9 +45,9 @@ public class ServiceHelper {
         initAndStartService(LOAD_WEATHER_CITIES, extras);
     }
 
-    public void loadWeatherForecast(City city, int countDays) {
+    public void loadWeatherForecast(int cityId, int countDays) {
         Bundle extras = new Bundle();
-        extras.putInt(PARAMETER_CITY_ID, city.getId());
+        extras.putInt(PARAMETER_CITY_ID, cityId);
         extras.putInt(PARAMETER_COUNT_DAYS, countDays);
         initAndStartService(LOAD_WEATHER_FORECAST, extras);
     }

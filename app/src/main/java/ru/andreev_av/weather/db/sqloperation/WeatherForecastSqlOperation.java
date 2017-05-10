@@ -26,7 +26,7 @@ public class WeatherForecastSqlOperation {
             ContentValues cv = new ContentValues();
             if (weatherForecastModel.getCity() != null)
                 cv.put(WeatherForecastEntry.COLUMN_CITY_ID, weatherForecastModel.getCity().getId());
-            cv.put(WeatherForecastEntry.COLUMN_TIME_MEASUREMENT, weatherForecast.getDateTime());
+            cv.put(WeatherForecastEntry.COLUMN_DATE_TIME, weatherForecast.getDateTime());
             if (weatherForecast.getTemperature() != null) {
                 cv.put(WeatherForecastEntry.COLUMN_TEMPERATURE_DAY, weatherForecast.getTemperature().getDay());
                 cv.put(WeatherForecastEntry.COLUMN_TEMPERATURE_MIN, weatherForecast.getTemperature().getMin());
@@ -46,13 +46,11 @@ public class WeatherForecastSqlOperation {
             cv.put(WeatherForecastEntry.COLUMN_WIND_SPEED, weatherForecast.getSpeed());
             cv.put(WeatherForecastEntry.COLUMN_WIND_DEGREE, weatherForecast.getDeg());
             cv.put(WeatherForecastEntry.COLUMN_CLOUDINESS, weatherForecast.getClouds());
-            if (weatherForecast.getRain() != null)
-                cv.put(WeatherForecastEntry.COLUMN_RAIN_VOLUME, weatherForecast.getRain().get3h());
-            if (weatherForecast.getSnow() != null)
-                cv.put(WeatherForecastEntry.COLUMN_SNOW_VOLUME, weatherForecast.getSnow().get3h());
+            cv.put(WeatherForecastEntry.COLUMN_RAIN_VOLUME, weatherForecast.getRain());
+            cv.put(WeatherForecastEntry.COLUMN_SNOW_VOLUME, weatherForecast.getSnow());
 
-            String selection = WeatherForecastEntry.COLUMN_CITY_ID + " = ?";
-            String[] selectionArgs = new String[]{String.valueOf(weatherForecastModel.getCity().getId()),};
+            String selection = WeatherForecastEntry.COLUMN_CITY_ID + " = ?" + " and " + WeatherForecastEntry.COLUMN_DATE_TIME + " = ?";
+            String[] selectionArgs = new String[]{String.valueOf(weatherForecastModel.getCity().getId()), String.valueOf(weatherForecast.getDateTime())};
             int updCount = context.getContentResolver().update(WeatherForecastEntry.CONTENT_URI, cv, selection, selectionArgs);
             if (updCount == 0) {
                 context.getContentResolver().insert(WeatherForecastEntry.CONTENT_URI, cv);

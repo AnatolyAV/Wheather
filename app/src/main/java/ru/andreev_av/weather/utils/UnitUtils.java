@@ -3,6 +3,8 @@ package ru.andreev_av.weather.utils;
 import android.content.Context;
 import android.text.format.DateUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class UnitUtils {
@@ -12,7 +14,7 @@ public class UnitUtils {
     }
 
     public static String getFormatTemperature(float temperature) {
-        return String.format(Locale.getDefault(), "%.0f", temperature);
+        return (temperature > 0 ? String.format(Locale.getDefault(), "+%.0f", temperature) : String.format(Locale.getDefault(), "%.0f", temperature));
     }
 
     public static String getFormatPressure(float pressure) {
@@ -31,4 +33,12 @@ public class UnitUtils {
         long unixTimeToMillis = unixTime * 1000;
         return DateUtils.formatDateTime(context, unixTimeToMillis, DateUtils.FORMAT_SHOW_TIME);
     }
+
+    public static String getFormatDateTimeEEEddMMMM(long unixTime) {
+        SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMM", Locale.getDefault());
+        long unixTimeToMillis = unixTime * 1000;
+        Date date = new Date(unixTimeToMillis);
+        return format.format(date);
+    }
+
 }

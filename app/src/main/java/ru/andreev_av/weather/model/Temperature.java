@@ -25,6 +25,18 @@ public class Temperature {
     @Expose
     private Float morning;
 
+    public Temperature() {
+    }
+
+    public Temperature(Float day, Float min, Float max, Float night, Float evening, Float morning) {
+        this.day = day;
+        this.min = min;
+        this.max = max;
+        this.night = night;
+        this.evening = evening;
+        this.morning = morning;
+    }
+
     public Float getDay() {
         return day;
     }

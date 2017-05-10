@@ -17,7 +17,7 @@ public class WeatherForecast {
     private Float pressure;
     @SerializedName("humidity")
     @Expose
-    private Integer humidity;
+    private Float humidity;
     @SerializedName("weather")
     @Expose
     private java.util.List<Weather> weather = null;
@@ -32,10 +32,10 @@ public class WeatherForecast {
     private Integer clouds;
     @SerializedName("snow")
     @Expose
-    private Snow snow;
+    private Float snow;
     @SerializedName("rain")
     @Expose
-    private Rain rain;
+    private Float rain;
 
     public Long getDateTime() {
         return dateTime;
@@ -61,11 +61,11 @@ public class WeatherForecast {
         this.pressure = pressure;
     }
 
-    public Integer getHumidity() {
+    public Float getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(Integer humidity) {
+    public void setHumidity(Float humidity) {
         this.humidity = humidity;
     }
 
@@ -101,19 +101,19 @@ public class WeatherForecast {
         this.clouds = clouds;
     }
 
-    public Snow getSnow() {
+    public Float getSnow() {
         return snow;
     }
 
-    public void setSnow(Snow snow) {
+    public void setSnow(Float snow) {
         this.snow = snow;
     }
 
-    public Rain getRain() {
+    public Float getRain() {
         return rain;
     }
 
-    public void setRain(Rain rain) {
+    public void setRain(Float rain) {
         this.rain = rain;
     }
 

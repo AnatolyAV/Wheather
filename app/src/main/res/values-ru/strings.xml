@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Погода</string>
     <string name="title_activity_city_list">Список городов</string>
+    <string name="title_activity_weather_forecast">Прогноз погоды</string>
 
     <!-- Navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

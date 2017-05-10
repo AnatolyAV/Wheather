@@ -14,9 +14,11 @@ public class ImageUtils {
         String icon;
         switch (iconId) {
             case "01d":
+            case "01ddd":
                 icon = context.getString(R.string.icon_clear_sky_day);
                 break;
             case "01n":
+            case "01nnn":
                 icon = context.getString(R.string.icon_clear_sky_night);
                 break;
             case "02d":

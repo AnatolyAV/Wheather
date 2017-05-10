@@ -55,6 +55,13 @@
         <service
             android:name=".services.CreateDatabaseService"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.activities.WeatherForecastActivity"
+            android:label="@string/title_activity_weather_forecast"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
