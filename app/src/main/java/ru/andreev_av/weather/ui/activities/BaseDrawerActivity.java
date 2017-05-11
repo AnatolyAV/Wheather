@@ -51,6 +51,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
         int menuSize = navigationView.getMenu().size();
         for (int i = 0; i < menuSize; i++)
             navigationView.getMenu().getItem(i).setChecked(false);
+
+        // TODO рефакторинг нужен
+        cityAndCountryCode = AppPreference.getCityAndCode(this);
+        View headerLayout = navigationView.getHeaderView(0);
+        tvCityAndCountryCode = (TextView) headerLayout.findViewById(R.id.tv_city);
+        tvCityAndCountryCode.setText(cityAndCountryCode[0] + ", " + cityAndCountryCode[1]);
     }
 
     protected void initDrawer(Toolbar toolbar) {
@@ -62,13 +68,6 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);// слушатель нажатия на пункты бокового меню
-
-        // TODO рефакторинг нужен
-        cityAndCountryCode = AppPreference.getCityAndCode(this);
-        View headerLayout = navigationView.getHeaderView(0);
-        tvCityAndCountryCode = (TextView) headerLayout.findViewById(R.id.tv_city);
-        tvCityAndCountryCode.setText(cityAndCountryCode[0] + ", " + cityAndCountryCode[1]);
-
     }
 
 

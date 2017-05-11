@@ -105,6 +105,7 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
         rvCityList.addOnItemTouchListener(new RecyclerItemClickListener(this, rvCityList, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                AppPreference.updateCurrentCityId(CityListActivity.this, weatherCurrentList.get(position).getCityId());
                 AppPreference.saveWeather(CityListActivity.this, weatherCurrentList.get(position));
                 Intent intent = new Intent(CityListActivity.this, WeatherCurrentActivity.class);
                 startActivity(intent);
@@ -169,8 +170,6 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
                                 getSupportLoaderManager().getLoader(WEATHER_CURRENT_LOADER).forceLoad();
                             }
                             setUpdateButtonState(false);
-                            break;
-                        case ServiceHelper.Methods.LOAD_WEATHER_FORECAST:
                             break;
                         case ServiceHelper.Methods.LOAD_CITY_TO_WATCH:
                             if (success) {
@@ -301,7 +300,7 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
 
                 weatherCurrentList.add(weatherCurrentModel);
 
-                if (cursor.getPosition() == 0 && AppPreference.getWeatherCityId(this) == -1) {
+                if (AppPreference.getCurrentCityId(this) == weatherCurrentModel.getCityId()) {
                     AppPreference.saveWeather(this, weatherCurrentModel);
                 }
 

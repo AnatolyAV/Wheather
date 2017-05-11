@@ -37,7 +37,6 @@ import ru.andreev_av.weather.utils.StringUtils;
 import ru.andreev_av.weather.utils.UnitUtils;
 
 import static ru.andreev_av.weather.preferences.AppPreference.LAST_UPDATE_TIME_IN_MS;
-import static ru.andreev_av.weather.preferences.AppPreference.PREF_CITY_ID;
 import static ru.andreev_av.weather.preferences.AppPreference.PREF_CITY_NAME;
 import static ru.andreev_av.weather.preferences.AppPreference.PREF_CLOUDINESS;
 import static ru.andreev_av.weather.preferences.AppPreference.PREF_HUMIDITY;
@@ -97,7 +96,8 @@ public class WeatherCurrentActivity extends BaseActivity implements AppBarLayout
         serviceHelper = new ServiceHelper(this, BROADCAST_ACTION);
 
         prefWeather = getSharedPreferences(PREF_WEATHER_CURRENT, MODE_PRIVATE);
-        cityId = prefWeather.getInt(PREF_CITY_ID, -1);
+
+        cityId = AppPreference.getCurrentCityId(this);
 
         isRefreshed = true;
 

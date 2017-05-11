@@ -70,7 +70,7 @@ public class WeatherForecastActivity extends BaseActivity implements LoaderManag
 
         serviceHelper = new ServiceHelper(this, BROADCAST_ACTION);
 
-        cityId = AppPreference.getWeatherCityId(this);
+        cityId = AppPreference.getCurrentCityId(this);
 
         isRefreshed = true;
 

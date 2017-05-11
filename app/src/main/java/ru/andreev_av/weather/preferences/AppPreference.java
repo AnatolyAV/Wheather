@@ -111,8 +111,16 @@ public class AppPreference {
         return result;
     }
 
-    public static int getWeatherCityId(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(PREF_WEATHER_CURRENT,
+    public static void updateCurrentCityId(Context context, int cityId) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_CITY,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(PREF_CITY_ID, cityId);
+        editor.apply();
+    }
+
+    public static int getCurrentCityId(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_CITY,
                 Context.MODE_PRIVATE);
         return preferences.getInt(PREF_CITY_ID, -1);
     }
@@ -121,6 +129,7 @@ public class AppPreference {
         SharedPreferences preferences = context.getSharedPreferences(PREF_CITY,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(PREF_CITY_ID, cityIds.get(0));
         editor.putString(PREF_CITY_IDS, StringUtils.joinIds(cityIds));
         editor.apply();
     }
