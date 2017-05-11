@@ -24,7 +24,7 @@ public class WeatherForecastProcessor extends WeatherProcessor {
     }
 
     public void runProcessSuccessResponse(final WeatherForecastModel weatherForecastModel) {
-        Log.d(TAG, "WeatherCurrentProcessor onResponse success ");
+        Log.d(TAG, "WeatherForecastProcesor onResponse success ");
         new Thread() {
             public void run() {
                 fillDb(weatherForecastModel);

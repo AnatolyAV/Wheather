@@ -31,7 +31,6 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
     private ServiceHelper serviceHelper;
     private BroadcastReceiver weatherBroadcastReceiver;
     private ArrayList<Integer> cityIds = new ArrayList<>();
-    private boolean dbCreated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +39,9 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
         initWeatherReceiver();
         serviceHelper = new ServiceHelper(SplashActivity.this, BROADCAST_ACTION);
 
-        if (!AppPreference.isDbCreated(this)) {
+        if (!AppPreference.isDbCreated(this))
             serviceHelper.createDb();
-        } else {
-            dbCreated = true;
-        }
+
         getSupportLoaderManager().initLoader(CITY_LOADER, null, this);
     }
 
@@ -82,7 +79,6 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
                         case ServiceHelper.Methods.CREATE_DATABASE:
                             if (success) {
                                 AppPreference.setDbCreated(SplashActivity.this, true);
-                                dbCreated = true;
                                 getSupportLoaderManager().getLoader(CITY_LOADER).forceLoad();
                             } else {
                                 Toast.makeText(context, context.getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -111,7 +107,7 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (dbCreated) {
+        if (AppPreference.isDbCreated(this)) {
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     do {
