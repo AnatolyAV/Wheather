@@ -6,13 +6,13 @@ import android.widget.TextView;
 
 import ru.andreev_av.weather.R;
 
-public class CityHolder extends RecyclerView.ViewHolder {
+public class CityViewHolder extends RecyclerView.ViewHolder {
 
     public final TextView tvCityName;
     public final TextView imgWeatherCurrentIcon;
     public final TextView tvWeatherCurrentTemp;
 
-    public CityHolder(View itemView) {
+    public CityViewHolder(View itemView) {
         super(itemView);
         tvCityName = (TextView) itemView.findViewById(R.id.tv_city_name);
         imgWeatherCurrentIcon = (TextView) itemView.findViewById(R.id.ic_weather);

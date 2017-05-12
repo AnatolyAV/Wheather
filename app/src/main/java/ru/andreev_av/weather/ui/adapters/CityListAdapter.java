@@ -11,11 +11,11 @@ import java.util.List;
 
 import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.model.WeatherCurrentModel;
-import ru.andreev_av.weather.ui.adapters.holders.CityHolder;
+import ru.andreev_av.weather.ui.adapters.holders.CityViewHolder;
 import ru.andreev_av.weather.utils.ImageUtils;
 import ru.andreev_av.weather.utils.UnitUtils;
 
-public class CityListAdapter extends RecyclerView.Adapter<CityHolder> {
+public class CityListAdapter extends RecyclerView.Adapter<CityViewHolder> {
 
     private Context context;
     private List<WeatherCurrentModel> weatherCurrentModelList;
@@ -26,13 +26,13 @@ public class CityListAdapter extends RecyclerView.Adapter<CityHolder> {
     }
 
     @Override
-    public CityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_item, parent, false);
-        return new CityHolder(view);
+        return new CityViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CityHolder holder, int position) {
+    public void onBindViewHolder(CityViewHolder holder, int position) {
         Typeface weatherFontIcon = Typeface.createFromAsset(context.getAssets(), "fonts/weathericons-regular-webfont.ttf");
 
         WeatherCurrentModel weatherCurrentModel = weatherCurrentModelList.get(position);
