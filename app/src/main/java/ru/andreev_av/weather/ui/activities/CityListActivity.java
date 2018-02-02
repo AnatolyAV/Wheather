@@ -51,6 +51,7 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
     private ServiceHelper serviceHelper;
     private FloatingActionButton fabAddCity;
     private BroadcastReceiver weatherBroadcastReceiver;
+    // TODO Заменить на ProgressBar
     private ProgressDialog dialog;
 
     @Override
@@ -133,9 +134,7 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
                 int status = intent.getIntExtra(PARAM_STATUS, 0);
 
                 if (status == STATUS_CONNECTION_NOT_FOUND) {
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
-                    }
+                    hideLoading();
                     Toast.makeText(CityListActivity.this,
                             R.string.connection_not_found,
                             Toast.LENGTH_SHORT).show();
@@ -144,15 +143,11 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
                 if (status == STATUS_START) {
                     dialog = new ProgressDialog(context);
                     dialog.setMessage(context.getResources().getString(R.string.loading));
-                    if (!dialog.isShowing()) {
-                        dialog.show();
-                    }
+                    showLoading();
                 }
 
                 if (status == STATUS_FINISH) {
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
-                    }
+                    hideLoading();
                     Bundle extras = intent.getExtras();
 
                     boolean success = extras.getBoolean(Processor.Extras.RESULT_EXTRA);
@@ -305,6 +300,18 @@ public class CityListActivity extends BaseActivity implements LoaderManager.Load
                 }
 
             } while (cursor.moveToNext());
+        }
+    }
+
+    private void showLoading() {
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
+    }
+
+    private void hideLoading() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
         }
     }
 }
