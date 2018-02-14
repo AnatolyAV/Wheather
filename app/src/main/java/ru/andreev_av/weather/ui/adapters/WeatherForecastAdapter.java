@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.model.WeatherForecast;
+import ru.andreev_av.weather.data.model.WeatherForecast;
 import ru.andreev_av.weather.ui.adapters.holders.WeatherForecastViewHolder;
 import ru.andreev_av.weather.utils.ImageUtils;
 import ru.andreev_av.weather.utils.StringUtils;

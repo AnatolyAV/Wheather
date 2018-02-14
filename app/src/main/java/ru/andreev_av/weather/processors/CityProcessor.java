@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.db.sqloperation.CitySqlOperation;
-import ru.andreev_av.weather.model.City;
 
 public class CityProcessor extends Processor {
 

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.model.WeatherForecastModel;
 import ru.andreev_av.weather.db.sqloperation.WeatherForecastSqlOperation;
-import ru.andreev_av.weather.model.WeatherForecastModel;
 import ru.andreev_av.weather.net.WeatherForecastHttpRequest;
 
 public class WeatherForecastProcessor extends WeatherProcessor {

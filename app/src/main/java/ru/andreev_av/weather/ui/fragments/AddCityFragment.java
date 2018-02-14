@@ -22,9 +22,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.model.City;
+import ru.andreev_av.weather.data.model.Coordinate;
 import ru.andreev_av.weather.db.entry.CityEntry;
-import ru.andreev_av.weather.model.City;
-import ru.andreev_av.weather.model.Coordinate;
 import ru.andreev_av.weather.processors.Processor;
 
 

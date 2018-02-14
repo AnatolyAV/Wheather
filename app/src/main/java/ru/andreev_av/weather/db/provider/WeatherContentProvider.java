@@ -19,11 +19,11 @@ import java.io.InputStream;
 import java.util.List;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.db.entry.CityEntry;
 import ru.andreev_av.weather.db.entry.WeatherCurrentEntry;
 import ru.andreev_av.weather.db.entry.WeatherForecastEntry;
 import ru.andreev_av.weather.files.CityFileReader;
-import ru.andreev_av.weather.model.City;
 
 public class WeatherContentProvider extends ContentProvider {
 

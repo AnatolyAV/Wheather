@@ -4,8 +4,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 
+import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.db.entry.CityEntry;
-import ru.andreev_av.weather.model.City;
 import ru.andreev_av.weather.processors.Processor;
 
 public class CitySqlOperation {

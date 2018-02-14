@@ -6,9 +6,9 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.model.WeatherCurrentListModel;
+import ru.andreev_av.weather.data.model.WeatherCurrentModel;
 import ru.andreev_av.weather.db.sqloperation.WeatherCurrentSqlOperation;
-import ru.andreev_av.weather.model.WeatherCurrentListModel;
-import ru.andreev_av.weather.model.WeatherCurrentModel;
 import ru.andreev_av.weather.net.WeatherCurrentHttpRequest;
 
 public class WeatherCurrentProcessor extends WeatherProcessor {

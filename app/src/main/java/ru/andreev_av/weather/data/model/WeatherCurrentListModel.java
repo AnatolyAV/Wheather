@@ -1,7 +1,9 @@
-package ru.andreev_av.weather.model;
+package ru.andreev_av.weather.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 
 public class WeatherCurrentListModel {
 
@@ -21,6 +23,9 @@ public class WeatherCurrentListModel {
     }
 
     public java.util.List<WeatherCurrentModel> getWeatherCurrentModelList() {
+        if (weatherCurrentModelList == null) {
+            return new ArrayList<>();
+        }
         return weatherCurrentModelList;
     }
 

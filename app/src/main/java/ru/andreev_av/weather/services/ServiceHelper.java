@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 
-import ru.andreev_av.weather.model.City;
+import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.processors.Processor;
 
 import static ru.andreev_av.weather.services.ServiceHelper.Methods.CREATE_DATABASE;

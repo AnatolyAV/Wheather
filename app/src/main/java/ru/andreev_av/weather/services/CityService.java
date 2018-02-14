@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 
-import ru.andreev_av.weather.model.City;
+import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.processors.CityProcessor;
 import ru.andreev_av.weather.processors.Processor;
 import ru.andreev_av.weather.ui.activities.BaseActivity;

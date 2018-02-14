@@ -3,9 +3,9 @@ package ru.andreev_av.weather.ownapi;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import ru.andreev_av.weather.model.WeatherCurrentListModel;
-import ru.andreev_av.weather.model.WeatherCurrentModel;
-import ru.andreev_av.weather.model.WeatherForecastModel;
+import ru.andreev_av.weather.data.model.WeatherCurrentListModel;
+import ru.andreev_av.weather.data.model.WeatherCurrentModel;
+import ru.andreev_av.weather.data.model.WeatherForecastModel;
 
 public interface OwmApi {
 

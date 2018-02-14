@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.model.Temperature;
+import ru.andreev_av.weather.data.model.Weather;
+import ru.andreev_av.weather.data.model.WeatherForecast;
 import ru.andreev_av.weather.db.entry.WeatherCurrentEntry;
 import ru.andreev_av.weather.db.entry.WeatherForecastEntry;
-import ru.andreev_av.weather.model.Temperature;
-import ru.andreev_av.weather.model.Weather;
-import ru.andreev_av.weather.model.WeatherForecast;
 import ru.andreev_av.weather.net.ConnectionDetector;
 import ru.andreev_av.weather.preferences.AppPreference;
 import ru.andreev_av.weather.processors.Processor;

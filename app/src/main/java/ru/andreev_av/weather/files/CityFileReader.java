@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.andreev_av.weather.model.City;
-import ru.andreev_av.weather.model.Coordinate;
+import ru.andreev_av.weather.data.model.City;
+import ru.andreev_av.weather.data.model.Coordinate;
 
 public class CityFileReader {
     // TODO выбрать и убрать лишние города, а то файл очень большой

@@ -5,9 +5,9 @@ import android.content.Context;
 
 import java.util.List;
 
+import ru.andreev_av.weather.data.model.WeatherCurrentListModel;
+import ru.andreev_av.weather.data.model.WeatherCurrentModel;
 import ru.andreev_av.weather.db.entry.WeatherCurrentEntry;
-import ru.andreev_av.weather.model.WeatherCurrentListModel;
-import ru.andreev_av.weather.model.WeatherCurrentModel;
 
 public class WeatherCurrentSqlOperation {
 

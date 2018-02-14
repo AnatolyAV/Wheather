@@ -7,7 +7,7 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import ru.andreev_av.weather.App;
-import ru.andreev_av.weather.model.WeatherForecastModel;
+import ru.andreev_av.weather.data.model.WeatherForecastModel;
 import ru.andreev_av.weather.ownapi.OwmApi;
 import ru.andreev_av.weather.processors.WeatherForecastProcessor;
 

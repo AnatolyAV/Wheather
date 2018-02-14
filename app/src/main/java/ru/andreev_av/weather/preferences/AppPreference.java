@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 
-import ru.andreev_av.weather.model.WeatherCurrentModel;
+import ru.andreev_av.weather.data.model.WeatherCurrentModel;
 import ru.andreev_av.weather.utils.StringUtils;
 
 public class AppPreference {

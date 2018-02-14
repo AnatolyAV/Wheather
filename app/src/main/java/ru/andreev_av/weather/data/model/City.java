@@ -1,5 +1,5 @@
 
-package ru.andreev_av.weather.model;
+package ru.andreev_av.weather.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
