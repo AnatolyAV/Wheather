@@ -7,16 +7,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
+
 import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.preferences.AppPreference;
 
-public abstract class BaseDrawerActivity extends AppCompatActivity
+public abstract class BaseDrawerActivity extends MvpAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected boolean drawerClosed;

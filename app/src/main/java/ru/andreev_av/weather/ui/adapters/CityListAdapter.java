@@ -10,19 +10,19 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.model.WeatherCurrentModel;
+import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.ui.adapters.holders.CityViewHolder;
 import ru.andreev_av.weather.utils.ImageUtils;
 import ru.andreev_av.weather.utils.UnitUtils;
 
 public class CityListAdapter extends RecyclerView.Adapter<CityViewHolder> {
 
-    private Context context;
-    private List<WeatherCurrentModel> weatherCurrentModelList;
+    private Context mContext;
+    private List<WeatherCurrent> mWeatherCurrents;
 
-    public CityListAdapter(Context context, List<WeatherCurrentModel> weatherCurrentModelList) {
-        this.context = context;
-        this.weatherCurrentModelList = weatherCurrentModelList;
+    public CityListAdapter(Context context, List<WeatherCurrent> weatherCurrents) {
+        mContext = context;
+        mWeatherCurrents = weatherCurrents;
     }
 
     @Override
@@ -33,24 +33,25 @@ public class CityListAdapter extends RecyclerView.Adapter<CityViewHolder> {
 
     @Override
     public void onBindViewHolder(CityViewHolder holder, int position) {
-        Typeface weatherFontIcon = Typeface.createFromAsset(context.getAssets(), "fonts/weathericons-regular-webfont.ttf");
+        Typeface weatherFontIcon = Typeface.createFromAsset(mContext.getAssets(), "fonts/weathericons-regular-webfont.ttf");
 
-        WeatherCurrentModel weatherCurrentModel = weatherCurrentModelList.get(position);
+        WeatherCurrent weatherCurrent = mWeatherCurrents.get(position);
 
-        holder.tvCityName.setText(weatherCurrentModel.getCityName());
+        holder.tvCityName.setText(weatherCurrent.getCityName());
         holder.imgWeatherCurrentIcon.setTypeface(weatherFontIcon);
-        holder.imgWeatherCurrentIcon.setText(ImageUtils.getStrIcon(context, weatherCurrentModel.getWeather().get(0).getIcon()));
+        holder.imgWeatherCurrentIcon.setText(ImageUtils.getStrIcon(mContext, weatherCurrent.getWeathers().get(0).getIcon()));
         // TODO когда добавлю "Настройки" поменять для работы и с °F
-        holder.tvWeatherCurrentTemp.setText(context.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(weatherCurrentModel.getMain().getTemperature())));
+        holder.tvWeatherCurrentTemp.setText(mContext.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(weatherCurrent.getMain().getTemperature())));
 
     }
 
     @Override
     public int getItemCount() {
-        return weatherCurrentModelList.size();
+        return mWeatherCurrents.size();
     }
 
-    public void refreshList(List<WeatherCurrentModel> list) {
-        weatherCurrentModelList = list;
+    public void refreshList(List<WeatherCurrent> weatherCurrents) {
+        mWeatherCurrents = weatherCurrents;
+        notifyDataSetChanged();
     }
 }
