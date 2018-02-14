@@ -24,6 +24,8 @@
 
     <!-- Toast messages -->
     <string name="connection_not_found">Проверьте подключение к Интернету</string>
+    <string name="error_weather_current">Произошла ошибка загрузки погоды</string>
+    <string name="error_weather_currents">Произошла ошибка загрузки погод</string>
     <string name="error">Произошла ошибка. Попробуйте позже!</string>
     <string name="loaded">Данные обновлены!</string>
     <string name="not_loaded">Данные не удалось загрузить или обновить!</string>
