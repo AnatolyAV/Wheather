@@ -6,15 +6,23 @@ import android.net.NetworkInfo;
 
 public class ConnectionDetector {
 
-    private Context context;
+    private static ConnectionDetector mInstance;
+    private Context mContext;
 
-    public ConnectionDetector(Context context) {
-        this.context = context;
+    private ConnectionDetector(Context context) {
+        mContext = context;
+    }
+
+    public static ConnectionDetector getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new ConnectionDetector(context);
+        }
+        return mInstance;
     }
 
     public boolean isNetworkAvailableAndConnected() {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
