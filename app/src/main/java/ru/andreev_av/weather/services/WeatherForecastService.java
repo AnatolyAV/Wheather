@@ -23,7 +23,7 @@ public class WeatherForecastService extends IntentService {
         String resultAction = extras.getString(Processor.Extras.RESULT_ACTION_EXTRA);
         Intent resultIntent = new Intent(resultAction);
 
-        ConnectionDetector connectionDetector = new ConnectionDetector(this);
+        ConnectionDetector connectionDetector = ConnectionDetector.getInstance(this);
         if (!connectionDetector.isNetworkAvailableAndConnected()) {
             resultIntent.putExtra(BaseActivity.PARAM_STATUS, BaseActivity.STATUS_CONNECTION_NOT_FOUND);
             getBaseContext().sendBroadcast(resultIntent);

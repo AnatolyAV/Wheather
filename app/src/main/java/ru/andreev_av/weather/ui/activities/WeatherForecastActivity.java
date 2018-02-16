@@ -66,7 +66,7 @@ public class WeatherForecastActivity extends BaseActivity implements LoaderManag
 
         initComponents();
 
-        connectionDetector = new ConnectionDetector(this);
+        connectionDetector = ConnectionDetector.getInstance(this);
 
         serviceHelper = new ServiceHelper(this, BROADCAST_ACTION);
 

@@ -91,7 +91,7 @@ public class WeatherCurrentActivity extends BaseActivity implements AppBarLayout
         initListeners();
         initDrawer(toolbar);
 
-        connectionDetector = new ConnectionDetector(this);
+        connectionDetector = ConnectionDetector.getInstance(this);
 
         serviceHelper = new ServiceHelper(this, BROADCAST_ACTION);
 

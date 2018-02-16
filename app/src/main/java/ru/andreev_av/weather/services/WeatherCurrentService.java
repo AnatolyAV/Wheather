@@ -26,7 +26,7 @@ public class WeatherCurrentService extends IntentService {
         Intent resultIntent = new Intent(resultAction);
 
         // TODO подумать куда это анализ лучше вынести во всех сервисах
-        ConnectionDetector connectionDetector = new ConnectionDetector(this);
+        ConnectionDetector connectionDetector = ConnectionDetector.getInstance(this);
         if (!connectionDetector.isNetworkAvailableAndConnected()) {
             resultIntent.putExtra(BaseActivity.PARAM_STATUS, BaseActivity.STATUS_CONNECTION_NOT_FOUND);
             getBaseContext().sendBroadcast(resultIntent);
