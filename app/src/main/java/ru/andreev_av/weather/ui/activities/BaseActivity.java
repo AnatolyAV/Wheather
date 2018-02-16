@@ -48,11 +48,15 @@ public abstract class BaseActivity extends BaseDrawerActivity {
 
     protected void setUpdateButtonState(boolean isUpdate) {
         if (isUpdate) {
-            updateItem.setVisible(false);
+            if (updateItem != null) {
+                updateItem.setVisible(false);
+            }
             progressUpdate.setVisibility(View.VISIBLE);
         } else {
             progressUpdate.setVisibility(View.GONE);
-            updateItem.setVisible(true);
+            if (updateItem != null) {
+                updateItem.setVisible(true);
+            }
         }
     }
 }
