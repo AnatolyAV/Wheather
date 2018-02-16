@@ -7,6 +7,8 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.net.ConnectionDetector;
@@ -15,25 +17,18 @@ import ru.andreev_av.weather.utils.RxUtils;
 @InjectViewState
 public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitiesPresenter {
 
-    private ICitiesUseCase mCitiesUseCase;
+    private final ICitiesUseCase mCitiesUseCase;
+    private final ConnectionDetector mConnectionDetector;
     private ArrayList<Integer> mCityIds;
-    private ConnectionDetector mConnectionDetector;
 
-    //    public CitiesPresenter(ICitiesUseCase citiesUseCase, ArrayList<Integer> cityIds) {
-//        mCitiesUseCase = citiesUseCase;
-//        mCityIds= cityIds;
-//    }
-
-    public void setCitiesUseCase(ICitiesUseCase citiesUseCase) {
+    @Inject
+    public CitiesPresenter(ICitiesUseCase citiesUseCase, ConnectionDetector connectionDetector) {
         mCitiesUseCase = citiesUseCase;
+        mConnectionDetector = connectionDetector;
     }
 
     public void setCityIds(ArrayList<Integer> cityIds) {
         mCityIds = cityIds;
-    }
-
-    public void setConnectionDetector(ConnectionDetector connectionDetector) {
-        mConnectionDetector = connectionDetector;
     }
 
     /**

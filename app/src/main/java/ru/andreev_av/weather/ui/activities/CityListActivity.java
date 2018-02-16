@@ -12,19 +12,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ru.andreev_av.weather.App;
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.db.WeatherCurrentDao;
 import ru.andreev_av.weather.data.model.City;
-import ru.andreev_av.weather.data.repository.CitiesRepository;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
-import ru.andreev_av.weather.domain.usecase.CitiesUseCase;
-import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.listeners.RecyclerItemClickListener;
-import ru.andreev_av.weather.net.ConnectionDetector;
 import ru.andreev_av.weather.preferences.AppPreference;
 import ru.andreev_av.weather.ui.adapters.CityListAdapter;
 import ru.andreev_av.weather.ui.fragments.AddCityFragment;
@@ -33,6 +32,7 @@ import ru.andreev_av.weather.ui.presentation.ICitiesView;
 
 public class CityListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, ICitiesView {
 
+    @Inject
     @InjectPresenter
     CitiesPresenter mCitiesPresenter;
     private RecyclerView rvCityList;
@@ -45,6 +45,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        App.getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_list);
 
@@ -64,12 +65,13 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
         dialog = new ProgressDialog(this);
 
-        // TODO инжектить через Dagger
-        ICitiesUseCase citiesUseCase = new CitiesUseCase(new CitiesRepository(WeatherCurrentDao.getInstance(this)));
         // TODO возможно при пересоздании некорректные cityIds будут, надо проверить
-        mCitiesPresenter.setCitiesUseCase(citiesUseCase);
         mCitiesPresenter.setCityIds(cityIds);
-        mCitiesPresenter.setConnectionDetector(new ConnectionDetector(this));
+    }
+
+    @ProvidePresenter
+    CitiesPresenter providePresenter() {
+        return mCitiesPresenter;
     }
 
     protected void findComponents() {
