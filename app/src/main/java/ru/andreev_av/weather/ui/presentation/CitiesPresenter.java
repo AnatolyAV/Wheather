@@ -37,17 +37,12 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        loadWeather(mCityIds);
-    }
-
-    @Override
-    public void checkNetworkAvailableAndConnected() {
-
+        loadWeather(mCityIds, false);
     }
 
     @Override
     public void loadWeather(int cityId) {
-        if (mConnectionDetector.isNetworkAvailableAndConnected()) {
+        if (checkNetworkAvailableAndConnected()) {
             mCitiesUseCase.loadWeather(cityId)
                     .doOnSubscribe(getViewState()::showLoading)
                     .doAfterTerminate(getViewState()::hideLoading)
@@ -60,8 +55,12 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     }
 
     @Override
-    public void loadWeather(ArrayList<Integer> cityIds) {
-        if (mConnectionDetector.isNetworkAvailableAndConnected()) {
+    public void loadWeather(ArrayList<Integer> cityIds, boolean isCallByPressingUpdateButton) {
+        if (isCallByPressingUpdateButton) {
+            getViewState().updateButtonState(true);
+        }
+
+        if (checkNetworkAvailableAndConnected()) {
             mCitiesUseCase.loadWeather(cityIds)
                     .doOnSubscribe(getViewState()::showLoading)
                     .doAfterTerminate(getViewState()::hideLoading)
@@ -77,5 +76,9 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
         Bundle extras = new Bundle();
 //        extras.putParcelable(PARAMETER_CITY, city);
 //        initAndStartService(LOAD_CITY_TO_WATCH, extras);
+    }
+
+    private boolean checkNetworkAvailableAndConnected() {
+        return mConnectionDetector.isNetworkAvailableAndConnected();
     }
 }

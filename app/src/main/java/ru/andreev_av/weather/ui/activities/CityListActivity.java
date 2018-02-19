@@ -172,8 +172,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         switch (id) {
             case R.id.main_menu_refresh:
                 if (cityIds != null && !cityIds.isEmpty()) {
-                    mCitiesPresenter.loadWeather(cityIds);
-                    setUpdateButtonState(true);
+                    mCitiesPresenter.loadWeather(cityIds, true);
                 }
                 return true;
         }
@@ -204,13 +203,18 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
     }
 
     @Override
+    public void updateButtonState(boolean isUpdate) {
+        setUpdateButtonState(isUpdate);
+    }
+
+    @Override
     public void showWeatherCurrents(List<WeatherCurrent> weatherCurrents) {
         adapter.refreshList(weatherCurrents);
         // TODO удалить
         Toast.makeText(CityListActivity.this,
                 "Загрузка погод успешно завершена",
                 Toast.LENGTH_SHORT).show();
-        setUpdateButtonState(false);
+        updateButtonState(false);
     }
 
     @Override
@@ -220,7 +224,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         Toast.makeText(CityListActivity.this,
                 "Загрузка погоды успешно завершена",
                 Toast.LENGTH_SHORT).show();
-        setUpdateButtonState(false);
+        updateButtonState(false);
     }
 
     @Override
@@ -228,7 +232,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         Toast.makeText(CityListActivity.this,
                 R.string.error_weather_current,
                 Toast.LENGTH_SHORT).show();
-        setUpdateButtonState(false);
+        updateButtonState(false);
     }
 
     @Override
@@ -236,7 +240,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         Toast.makeText(CityListActivity.this,
                 R.string.error_weather_currents,
                 Toast.LENGTH_SHORT).show();
-        setUpdateButtonState(false);
+        updateButtonState(false);
     }
 
     @Override
@@ -244,6 +248,6 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         Toast.makeText(CityListActivity.this,
                 R.string.connection_not_found,
                 Toast.LENGTH_SHORT).show();
-        setUpdateButtonState(false);
+        updateButtonState(false);
     }
 }

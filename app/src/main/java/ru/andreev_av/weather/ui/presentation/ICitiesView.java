@@ -20,4 +20,5 @@ public interface ICitiesView extends ILoadingView {
 
     void showNotConnection();
 
+    void updateButtonState(boolean isUpdate);
 }

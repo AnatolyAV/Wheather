@@ -12,9 +12,7 @@ public interface ICitiesPresenter {
 
     void loadWeather(int cityId);
 
-    void loadWeather(ArrayList<Integer> cityIds);
+    void loadWeather(ArrayList<Integer> cityIds, boolean isCallFromMenuItemRefresh);
 
     void loadCityToWatch(City city);
-
-    void checkNetworkAvailableAndConnected();
 }
