@@ -85,23 +85,29 @@ public class WeatherCurrentDao extends AbstractDao implements IWeatherCurrentDao
     public WeatherCurrent getWeatherCurrentByCityId(int cityId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
+        WeatherCurrent weatherCurrent = null;
         try {
             db = mDbHelper.getWritableDatabase();
             db.beginTransaction();
             String selection = COLUMN_CITY_ID + " = ?";
             String[] selectionArgs = new String[]{String.valueOf(cityId),};
             cursor = db.query(TABLE_NAME, null, selection, selectionArgs, null, null, null);
+            cursor.moveToFirst();
             db.setTransactionSuccessful();
+            weatherCurrent = converter.convert(cursor);
         } catch (SQLException e) {
             Logger.getLogger(TAG).log(Level.SEVERE, null, e);
         } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
             if (db != null) {
                 db.endTransaction();
                 mDbHelper.close();
             }
         }
 
-        return converter.convert(cursor);
+        return weatherCurrent;
     }
 
     @Override
