@@ -22,28 +22,28 @@ import javax.inject.Inject;
 import ru.andreev_av.weather.App;
 import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.data.db.CityDao;
-import ru.andreev_av.weather.data.repository.CityRepository;
+import ru.andreev_av.weather.data.repository.CitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
-import ru.andreev_av.weather.domain.usecase.CityUseCase;
-import ru.andreev_av.weather.domain.usecase.ICityUseCase;
+import ru.andreev_av.weather.domain.usecase.CitiesUseCase;
+import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.listeners.RecyclerItemClickListener;
 import ru.andreev_av.weather.preferences.AppPreference;
 import ru.andreev_av.weather.ui.adapters.WeatherCurrentCitiesAdapter;
 import ru.andreev_av.weather.ui.fragments.AddCityFragment;
-import ru.andreev_av.weather.ui.presentation.CityPresenter;
-import ru.andreev_av.weather.ui.presentation.ICityView;
+import ru.andreev_av.weather.ui.presentation.CitiesPresenter;
+import ru.andreev_av.weather.ui.presentation.ICitiesView;
 import ru.andreev_av.weather.ui.presentation.IWeatherCurrentView;
 import ru.andreev_av.weather.ui.presentation.WeatherCurrentPresenter;
 
-public class CityListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentView, ICityView {
+public class CitiesListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentView, ICitiesView {
 
     @Inject
     @InjectPresenter
     WeatherCurrentPresenter mWeatherCurrentPresenter;
 
     @InjectPresenter
-    CityPresenter mCitiesPresenter;
+    CitiesPresenter mCitiesPresenter;
 
     private RecyclerView mWeatherCurrentCitiesRecyclerView;
     private WeatherCurrentCitiesAdapter mWeatherCurrentCitiesAdapter;
@@ -80,7 +80,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         mWeatherCurrentPresenter.setCityIds(mCityIds);
 
         // TODO Заменить на Dagger
-        ICityUseCase cityUseCase = new CityUseCase(new CityRepository(CityDao.getInstance(getApplicationContext())));
+        ICitiesUseCase cityUseCase = new CitiesUseCase(new CitiesRepository(CityDao.getInstance(getApplicationContext())));
         mCitiesPresenter.setCitiesUseCase(cityUseCase);
     }
 
@@ -99,9 +99,9 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         mWeatherCurrentCitiesRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, mWeatherCurrentCitiesRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                AppPreference.updateCurrentCityId(CityListActivity.this, weatherCurrents.get(position).getCityId());
-//                AppPreference.saveWeather(CityListActivity.this, weatherCurrents.get(position));
-                Intent intent = new Intent(CityListActivity.this, WeatherCurrentActivity.class);
+//                AppPreference.updateCurrentCityId(CitiesListActivity.this, weatherCurrents.get(position).getCityId());
+//                AppPreference.saveWeather(CitiesListActivity.this, weatherCurrents.get(position));
+                Intent intent = new Intent(CitiesListActivity.this, WeatherCurrentActivity.class);
                 startActivity(intent);
             }
         }));

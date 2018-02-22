@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activities.CityListActivity"
+            android:name=".ui.activities.CitiesListActivity"
             android:label="@string/title_activity_city_list"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

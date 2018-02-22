@@ -22,19 +22,19 @@ import java.util.List;
 
 import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.data.db.CityDao;
-import ru.andreev_av.weather.data.repository.CityRepository;
+import ru.andreev_av.weather.data.repository.CitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
-import ru.andreev_av.weather.domain.usecase.CityUseCase;
-import ru.andreev_av.weather.domain.usecase.ICityUseCase;
+import ru.andreev_av.weather.domain.usecase.CitiesUseCase;
+import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.ui.adapters.CitiesAutoCompleteAdapter;
-import ru.andreev_av.weather.ui.presentation.CityPresenter;
-import ru.andreev_av.weather.ui.presentation.ICityView;
+import ru.andreev_av.weather.ui.presentation.CitiesPresenter;
+import ru.andreev_av.weather.ui.presentation.ICitiesView;
 
 
-public class AddCityFragment extends MvpDialogFragment implements ICityView {
+public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
     @InjectPresenter
-    CityPresenter mCitiesPresenter;
+    CitiesPresenter mCitiesPresenter;
 
     private FrameLayout mAddCityLayout;
     private AutoCompleteTextView mAddCityAutoCompleteTextView;
@@ -58,7 +58,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICityView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO Заменить на Dagger
-        ICityUseCase cityUseCase = new CityUseCase(new CityRepository(CityDao.getInstance(this.getActivity().getApplicationContext())));
+        ICitiesUseCase cityUseCase = new CitiesUseCase(new CitiesRepository(CityDao.getInstance(this.getActivity().getApplicationContext())));
         mCitiesPresenter.setCitiesUseCase(cityUseCase);
         mCitiesPresenter.init();
     }
@@ -143,7 +143,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICityView {
 
     private void initComponents() {
         mAddCityAutoCompleteTextView.setAdapter(mCityAdapter);
-        mAddCityAutoCompleteTextView.setThreshold(CityPresenter.CITY_LETTERS_MIN_FOR_SEARCH);
+        mAddCityAutoCompleteTextView.setThreshold(CitiesPresenter.CITY_LETTERS_MIN_FOR_SEARCH);
     }
 
     protected void initListeners() {

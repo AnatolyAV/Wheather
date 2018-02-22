@@ -6,29 +6,29 @@ import com.arellomobile.mvp.MvpPresenter;
 import java.util.concurrent.TimeUnit;
 
 import ru.andreev_av.weather.domain.model.City;
-import ru.andreev_av.weather.domain.usecase.ICityUseCase;
+import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.utils.RxUtils;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 @InjectViewState
-public class CityPresenter extends MvpPresenter<ICityView> implements ICityPresenter {
+public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitiesPresenter {
 
     public final static int CITY_LETTERS_MIN_FOR_SEARCH = 3;
 
-    private ICityUseCase mCitiesUseCase;
+    private ICitiesUseCase mCitiesUseCase;
 
     private PublishSubject<String> subject = PublishSubject.create();
 
-    public CityPresenter() {
+    public CitiesPresenter() {
     }
 
-    public CityPresenter(ICityUseCase citiesUseCase) {
+    public CitiesPresenter(ICitiesUseCase citiesUseCase) {
         mCitiesUseCase = citiesUseCase;
     }
 
-    public void setCitiesUseCase(ICityUseCase сitiesUseCase) {
+    public void setCitiesUseCase(ICitiesUseCase сitiesUseCase) {
         mCitiesUseCase = сitiesUseCase;
     }
 

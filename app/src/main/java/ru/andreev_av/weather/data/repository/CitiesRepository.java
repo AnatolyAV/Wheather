@@ -6,11 +6,11 @@ import ru.andreev_av.weather.data.db.ICityDao;
 import ru.andreev_av.weather.domain.model.City;
 import rx.Observable;
 
-public class CityRepository implements ICityRepository {
+public class CitiesRepository implements ICitiesRepository {
 
     private ICityDao mCityDao;
 
-    public CityRepository(ICityDao cityDao) {
+    public CitiesRepository(ICityDao cityDao) {
         mCityDao = cityDao;
     }
 

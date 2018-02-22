@@ -5,7 +5,7 @@ import java.util.List;
 import ru.andreev_av.weather.domain.model.City;
 import rx.Observable;
 
-public interface ICityUseCase {
+public interface ICitiesUseCase {
 
     Observable<List<City>> findCities(String cityNameFirstLetters);
 

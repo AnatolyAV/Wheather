@@ -2,15 +2,15 @@ package ru.andreev_av.weather.domain.usecase;
 
 import java.util.List;
 
-import ru.andreev_av.weather.data.repository.ICityRepository;
+import ru.andreev_av.weather.data.repository.ICitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
 import rx.Observable;
 
-public class CityUseCase implements ICityUseCase {
+public class CitiesUseCase implements ICitiesUseCase {
 
-    private final ICityRepository mRepository;
+    private final ICitiesRepository mRepository;
 
-    public CityUseCase(ICityRepository repository) {
+    public CitiesUseCase(ICitiesRepository repository) {
         mRepository = repository;
     }
 

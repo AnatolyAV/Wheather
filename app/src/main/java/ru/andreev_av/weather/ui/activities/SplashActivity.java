@@ -61,7 +61,7 @@ public class SplashActivity extends AppCompatActivity implements LoaderManager.L
         weatherBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Intent cityListIntent = new Intent(SplashActivity.this, CityListActivity.class);
+                Intent cityListIntent = new Intent(SplashActivity.this, CitiesListActivity.class);
                 int status = intent.getIntExtra(BaseActivity.PARAM_STATUS, 0);
 
                 if (status == STATUS_CONNECTION_NOT_FOUND) {
