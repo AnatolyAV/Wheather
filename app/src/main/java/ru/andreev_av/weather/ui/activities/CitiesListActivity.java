@@ -21,12 +21,8 @@ import javax.inject.Inject;
 
 import ru.andreev_av.weather.App;
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.db.CityDao;
-import ru.andreev_av.weather.data.repository.CitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
-import ru.andreev_av.weather.domain.usecase.CitiesUseCase;
-import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.listeners.RecyclerItemClickListener;
 import ru.andreev_av.weather.preferences.AppPreference;
 import ru.andreev_av.weather.ui.adapters.WeatherCurrentCitiesAdapter;
@@ -42,6 +38,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     @InjectPresenter
     WeatherCurrentPresenter mWeatherCurrentPresenter;
 
+    @Inject
     @InjectPresenter
     CitiesPresenter mCitiesPresenter;
 
@@ -56,7 +53,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.getAppComponent().inject(this);
+        App.getInstance().getAppComponent().plusWeatherCurrentComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_list);
 
@@ -78,15 +75,16 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
         // TODO возможно при пересоздании некорректные mCityIds будут, надо проверить
         mWeatherCurrentPresenter.setCityIds(mCityIds);
-
-        // TODO Заменить на Dagger
-        ICitiesUseCase cityUseCase = new CitiesUseCase(new CitiesRepository(CityDao.getInstance(getApplicationContext())));
-        mCitiesPresenter.setCitiesUseCase(cityUseCase);
     }
 
     @ProvidePresenter
-    WeatherCurrentPresenter providePresenter() {
+    WeatherCurrentPresenter provideWeatherCurrentPresenter() {
         return mWeatherCurrentPresenter;
+    }
+
+    @ProvidePresenter
+    CitiesPresenter provideCitiesPresenter() {
+        return mCitiesPresenter;
     }
 
     protected void findComponents() {

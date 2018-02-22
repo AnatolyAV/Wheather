@@ -5,6 +5,8 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.utils.RxUtils;
@@ -21,15 +23,10 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
 
     private PublishSubject<String> subject = PublishSubject.create();
 
-    public CitiesPresenter() {
-    }
 
+    @Inject
     public CitiesPresenter(ICitiesUseCase citiesUseCase) {
         mCitiesUseCase = citiesUseCase;
-    }
-
-    public void setCitiesUseCase(ICitiesUseCase сitiesUseCase) {
-        mCitiesUseCase = сitiesUseCase;
     }
 
     @Override

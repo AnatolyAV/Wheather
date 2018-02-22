@@ -17,15 +17,15 @@ import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.MvpDialogFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ru.andreev_av.weather.App;
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.db.CityDao;
-import ru.andreev_av.weather.data.repository.CitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
-import ru.andreev_av.weather.domain.usecase.CitiesUseCase;
-import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.ui.adapters.CitiesAutoCompleteAdapter;
 import ru.andreev_av.weather.ui.presentation.CitiesPresenter;
 import ru.andreev_av.weather.ui.presentation.ICitiesView;
@@ -33,6 +33,7 @@ import ru.andreev_av.weather.ui.presentation.ICitiesView;
 
 public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
+    @Inject
     @InjectPresenter
     CitiesPresenter mCitiesPresenter;
 
@@ -56,10 +57,8 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        App.getInstance().getAppComponent().plusCitiesComponent().inject(this);
         super.onCreate(savedInstanceState);
-        // TODO Заменить на Dagger
-        ICitiesUseCase cityUseCase = new CitiesUseCase(new CitiesRepository(CityDao.getInstance(this.getActivity().getApplicationContext())));
-        mCitiesPresenter.setCitiesUseCase(cityUseCase);
         mCitiesPresenter.init();
     }
 
@@ -103,6 +102,11 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
         });
 
         return dialog;
+    }
+
+    @ProvidePresenter
+    CitiesPresenter provideCitiesPresenter() {
+        return mCitiesPresenter;
     }
 
     @Override

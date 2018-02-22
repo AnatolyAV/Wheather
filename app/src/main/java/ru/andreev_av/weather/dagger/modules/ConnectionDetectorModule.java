@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 import ru.andreev_av.weather.net.ConnectionDetector;
 
-@Module(includes = {ContextModule.class})
+@Module(includes = {AppModule.class})
 public class ConnectionDetectorModule {
 
     @Provides

@@ -8,10 +8,10 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class ContextModule {
+public class AppModule {
     private Context mContext;
 
-    public ContextModule(Context context) {
+    public AppModule(Context context) {
         mContext = context;
     }
 
