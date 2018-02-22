@@ -8,8 +8,8 @@ import ru.andreev_av.weather.data.repository.IWeatherCurrentRepository;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
 import ru.andreev_av.weather.domain.usecase.WeatherCurrentUseCase;
 
-@Module(includes = {CitiesRepositoryModule.class})
-public class CitiesUseCaseModule {
+@Module(includes = {WeatherCurrentRepositoryModule.class})
+public class WeatherCurrentUseCaseModule {
 
     @Provides
     @Singleton

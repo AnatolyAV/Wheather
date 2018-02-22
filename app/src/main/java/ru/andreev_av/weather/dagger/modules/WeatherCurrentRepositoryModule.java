@@ -9,7 +9,7 @@ import ru.andreev_av.weather.data.repository.IWeatherCurrentRepository;
 import ru.andreev_av.weather.data.repository.WeatherCurrentRepository;
 
 @Module(includes = {WeatherCurrentDaoModule.class})
-public class CitiesRepositoryModule {
+public class WeatherCurrentRepositoryModule {
 
     @Provides
     @Singleton
