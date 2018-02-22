@@ -3,14 +3,8 @@ package ru.andreev_av.weather.ui.fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,25 +15,35 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 
+import com.arellomobile.mvp.MvpDialogFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import java.util.List;
+
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.model.City;
-import ru.andreev_av.weather.data.model.Coordinate;
-import ru.andreev_av.weather.db.entry.CityEntry;
-import ru.andreev_av.weather.processors.Processor;
+import ru.andreev_av.weather.data.db.CityDao;
+import ru.andreev_av.weather.data.repository.CityRepository;
+import ru.andreev_av.weather.domain.model.City;
+import ru.andreev_av.weather.domain.usecase.CityUseCase;
+import ru.andreev_av.weather.domain.usecase.ICityUseCase;
+import ru.andreev_av.weather.ui.adapters.CitiesAutoCompleteAdapter;
+import ru.andreev_av.weather.ui.presentation.CityPresenter;
+import ru.andreev_av.weather.ui.presentation.ICityView;
 
 
-public class AddCityFragment extends DialogFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AddCityFragment extends MvpDialogFragment implements ICityView {
 
-    private final static int CITY_LETTERS_THRESHOLD = 4;
-    private final static int CITY_LIST_LIMIT = 10;
+    @InjectPresenter
+    CityPresenter mCitiesPresenter;
 
-    private final static String CITY_FIRST_LETTERS = "cityFirstLetters";
-    private final static int CITY_LOADER = 1;
-    private FrameLayout flAddCity;
-    private AutoCompleteTextView actvAddCity;
-    private SimpleCursorAdapter cityAdapter;
-    private City selectedCity;
-    private boolean isSelectedCity;
+    private FrameLayout mAddCityLayout;
+    private AutoCompleteTextView mAddCityAutoCompleteTextView;
+
+    private CitiesAutoCompleteAdapter mCityAdapter;
+
+    private City mSelectedCity;
+    private boolean mIsSelectedCity;
+
     private OnAddCityFragmentInteractionListener mListener;
 
     public AddCityFragment() {
@@ -53,7 +57,10 @@ public class AddCityFragment extends DialogFragment implements LoaderManager.Loa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().getSupportLoaderManager().initLoader(CITY_LOADER, null, this);
+        // TODO Заменить на Dagger
+        ICityUseCase cityUseCase = new CityUseCase(new CityRepository(CityDao.getInstance(this.getActivity().getApplicationContext())));
+        mCitiesPresenter.setCitiesUseCase(cityUseCase);
+        mCitiesPresenter.init();
     }
 
     @Override
@@ -69,23 +76,23 @@ public class AddCityFragment extends DialogFragment implements LoaderManager.Loa
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.dialog_add_city_title_label);
-        builder.setView(flAddCity)
+        builder.setView(mAddCityLayout)
                 // Add action buttons
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onAddCityFragmentInteraction(selectedCity);
+                        mListener.onAddCityFragmentInteraction(mSelectedCity);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        selectedCity = null;
+                        mSelectedCity = null;
                     }
                 });
 
         final AlertDialog dialog = builder.create();
 
-        actvAddCity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mAddCityAutoCompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -115,25 +122,32 @@ public class AddCityFragment extends DialogFragment implements LoaderManager.Loa
         mListener = null;
     }
 
+    @Override
+    public void showCities(List<City> cities) {
+        mCityAdapter.setCities(cities);
+    }
+
+    @Override
+    public void processAddedCity(City city) {
+    }
+
     private void findComponents() {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        flAddCity = (FrameLayout) inflater.inflate(R.layout.fragment_add_city, null);
-        actvAddCity = (AutoCompleteTextView) flAddCity.findViewById(R.id.actv_add_city);
+        mAddCityLayout = (FrameLayout) inflater.inflate(R.layout.fragment_add_city, null);
+        mAddCityAutoCompleteTextView = (AutoCompleteTextView) mAddCityLayout.findViewById(R.id.actv_add_city);
     }
 
     private void initAdapter() {
-        String[] from = new String[]{CityEntry.COLUMN_NAME, CityEntry.COLUMN_COUNTRY_CODE};
-        int[] to = new int[]{android.R.id.text1, android.R.id.text2};
-        cityAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.two_line_list_item, null, from, to, 0);
+        mCityAdapter = new CitiesAutoCompleteAdapter(getActivity());
     }
 
     private void initComponents() {
-        actvAddCity.setAdapter(cityAdapter);
-        actvAddCity.setThreshold(CITY_LETTERS_THRESHOLD);
+        mAddCityAutoCompleteTextView.setAdapter(mCityAdapter);
+        mAddCityAutoCompleteTextView.setThreshold(CityPresenter.CITY_LETTERS_MIN_FOR_SEARCH);
     }
 
     protected void initListeners() {
-        actvAddCity.addTextChangedListener(new TextWatcher() {
+        mAddCityAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -141,80 +155,29 @@ public class AddCityFragment extends DialogFragment implements LoaderManager.Loa
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // необходимо, чтобы поиск не отрабатывал сразу же после выбора города
-                if (!isSelectedCity) {
-                    selectedCity = null;
-                    final String content = actvAddCity.getText().toString();
-                    Bundle args = new Bundle();
-                    args.putString(CITY_FIRST_LETTERS, content);
-                    getActivity().getSupportLoaderManager().restartLoader(CITY_LOADER, args, AddCityFragment.this);
+                if (!mIsSelectedCity) {
+                    mSelectedCity = null;
+                    final String cityNameFirstLetters = mAddCityAutoCompleteTextView.getText().toString();
+                    mCitiesPresenter.findCities(cityNameFirstLetters);
                 }
-                isSelectedCity = false;
+                mIsSelectedCity = false;
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-
-        actvAddCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAddCityAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null) {
-                    loadCityFromCursor(cursor);
-                    cursor.close();
-                    actvAddCity.setText(selectedCity.toString());
+                City city = (City) parent.getItemAtPosition(position);
+                if (city != null) {
+                    mIsSelectedCity = true;
+                    mSelectedCity = city;
+                    mAddCityAutoCompleteTextView.setText(mSelectedCity.toString());
                 }
             }
         });
-    }
-
-    private void loadCityFromCursor(Cursor cursor) {
-        int cityId = cursor.getInt(cursor.getColumnIndex(CityEntry.COLUMN_CITY_ID));
-        String cityName = cursor.getString(cursor.getColumnIndex(CityEntry.COLUMN_NAME));
-        float lat = cursor.getInt(cursor.getColumnIndex(CityEntry.COLUMN_LATITUDE));
-        float lon = cursor.getInt(cursor.getColumnIndex(CityEntry.COLUMN_LONGITUDE));
-        String countryCode = cursor.getString(cursor.getColumnIndex(CityEntry.COLUMN_COUNTRY_CODE));
-        isSelectedCity = true;
-        selectedCity = new City(cityId, cityName, new Coordinate(lat, lon), countryCode);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader cursorLoader = null;
-        if (args != null && !args.isEmpty()) {
-            String cityFirstLetters = args.getString(CITY_FIRST_LETTERS);
-            if (cityFirstLetters != null && cityFirstLetters.length() >= CITY_LETTERS_THRESHOLD) {
-                switch (id) {
-                    case CITY_LOADER:
-                        String selection = CityEntry.COLUMN_NAME + " like " + String.format("'%s%%'", cityFirstLetters) + " and " + CityEntry.COLUMN_WATCHED + " != " + Processor.CITY_WATCH;
-                        String sortOrder = CityEntry.COLUMN_NAME + " ASC " + " LIMIT " + AddCityFragment.CITY_LIST_LIMIT;
-                        cursorLoader = new CursorLoader(getActivity(), CityEntry.CONTENT_URI, null, selection, null, sortOrder);
-                        break;
-                }
-            }
-        }
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cityAdapter != null) {
-            if (loader != null && !isSelectedCity) {
-                cityAdapter.swapCursor(cursor);
-            } else {
-                cityAdapter.swapCursor(null);
-            }
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // у нового loader отрабатывает onLoadFinished раньше чем у старого onLoaderReset,
-        // что может сбросить результаты нового loader если не проверять loader.isAbandoned() (судя по lifeCycle)
-        if (!loader.isAbandoned()) {
-            cityAdapter.swapCursor(null);
-        }
     }
 
     public interface OnAddCityFragmentInteractionListener {

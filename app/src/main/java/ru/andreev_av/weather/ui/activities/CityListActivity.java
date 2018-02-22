@@ -1,10 +1,10 @@
 package ru.andreev_av.weather.ui.activities;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -21,25 +21,35 @@ import javax.inject.Inject;
 
 import ru.andreev_av.weather.App;
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.model.City;
+import ru.andreev_av.weather.data.db.CityDao;
+import ru.andreev_av.weather.data.repository.CityRepository;
+import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
+import ru.andreev_av.weather.domain.usecase.CityUseCase;
+import ru.andreev_av.weather.domain.usecase.ICityUseCase;
 import ru.andreev_av.weather.listeners.RecyclerItemClickListener;
 import ru.andreev_av.weather.preferences.AppPreference;
 import ru.andreev_av.weather.ui.adapters.CityListAdapter;
 import ru.andreev_av.weather.ui.fragments.AddCityFragment;
-import ru.andreev_av.weather.ui.presentation.CitiesPresenter;
-import ru.andreev_av.weather.ui.presentation.ICitiesView;
+import ru.andreev_av.weather.ui.presentation.CityPresenter;
+import ru.andreev_av.weather.ui.presentation.ICityView;
+import ru.andreev_av.weather.ui.presentation.IWeatherCurrentView;
+import ru.andreev_av.weather.ui.presentation.WeatherCurrentPresenter;
 
-public class CityListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, ICitiesView {
+public class CityListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentView, ICityView {
 
     @Inject
     @InjectPresenter
-    CitiesPresenter mCitiesPresenter;
+    WeatherCurrentPresenter mWeatherCurrentPresenter;
+
+    @InjectPresenter
+    CityPresenter mCitiesPresenter;
+
     private RecyclerView rvCityList;
     private FloatingActionButton fabAddCity;
     private CityListAdapter adapter;
     private ArrayList<Integer> cityIds;
-    private List<WeatherCurrent> weatherCurrents = new ArrayList<>();
+    private List<WeatherCurrent> mWeatherCurrents = new ArrayList<>();
     // TODO Заменить на ProgressBar
     private ProgressDialog dialog;
 
@@ -66,12 +76,16 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         dialog = new ProgressDialog(this);
 
         // TODO возможно при пересоздании некорректные cityIds будут, надо проверить
-        mCitiesPresenter.setCityIds(cityIds);
+        mWeatherCurrentPresenter.setCityIds(cityIds);
+
+        // TODO Заменить на Dagger
+        ICityUseCase cityUseCase = new CityUseCase(new CityRepository(CityDao.getInstance(getApplicationContext())));
+        mCitiesPresenter.setCitiesUseCase(cityUseCase);
     }
 
     @ProvidePresenter
-    CitiesPresenter providePresenter() {
-        return mCitiesPresenter;
+    WeatherCurrentPresenter providePresenter() {
+        return mWeatherCurrentPresenter;
     }
 
     protected void findComponents() {
@@ -101,63 +115,12 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
     }
 
     private void initAddCityFragment() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentManager fragmentManager = getFragmentManager();
         AddCityFragment.newInstance().show(fragmentManager, "AddCityFragmentDialog");
     }
 
-//    private void initWeatherReceiver() {
-//        weatherBroadcastReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//
-//                int status = intent.getIntExtra(PARAM_STATUS, 0);
-//
-//                if (status == STATUS_CONNECTION_NOT_FOUND) {
-//                    hideLoading();
-//                    showNotConnection();
-//                }
-//
-//                if (status == STATUS_START) {
-//                    dialog = new ProgressDialog(context);
-//                    dialog.setMessage(context.getResources().getString(R.string.loading));
-//                    showLoading();
-//                }
-//
-//                if (status == STATUS_FINISH) {
-//                    hideLoading();
-//                    Bundle extras = intent.getExtras();
-//
-//                    boolean success = extras.getBoolean(Processor.Extras.RESULT_EXTRA);
-//
-//                    int method = extras.getInt(Processor.Extras.METHOD_EXTRA);
-//
-//                    switch (method) {
-//                        case ServiceHelper.Methods.LOAD_WEATHER_CITY:
-//                            if (success) {
-//                                getSupportLoaderManager().restartLoader(WEATHER_CURRENT_LOADER, null, CityListActivity.this);
-//                            }
-//                            break;
-//                        case ServiceHelper.Methods.LOAD_WEATHER_CITIES:
-//                            if (success) {
-//                                getSupportLoaderManager().getLoader(WEATHER_CURRENT_LOADER).forceLoad();
-//                            }
-//                            setUpdateButtonState(false);
-//                            break;
-//                        case ServiceHelper.Methods.LOAD_CITY_TO_WATCH:
-//                            if (success) {
-//                                int cityId = extras.getInt(Processor.CITY_ID);
-//                                if (cityId != Processor.NOT_CITY)
-//                                    serviceHelper.loadWeather(cityId);
-//                            }
-//                            break;
-//                    }
-//                }
-//            }
-//        };
-//    }
-
     private void initAdapter() {
-        adapter = new CityListAdapter(this, weatherCurrents);
+        adapter = new CityListAdapter(this, mWeatherCurrents);
     }
 
     private void initComponents() {
@@ -172,7 +135,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
         switch (id) {
             case R.id.main_menu_refresh:
                 if (cityIds != null && !cityIds.isEmpty()) {
-                    mCitiesPresenter.loadWeather(cityIds, true);
+                    mWeatherCurrentPresenter.loadWeather(cityIds, true);
                 }
                 return true;
         }
@@ -181,10 +144,10 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
     }
 
     @Override
-    public void onAddCityFragmentInteraction(City city) {
+    public void onAddCityFragmentInteraction(ru.andreev_av.weather.domain.model.City city) {
         if (city != null) {
             AppPreference.addCityId(this, city.getId());
-//            serviceHelper.loadCityToWatch(city);
+            mCitiesPresenter.loadCityToWatch(city);
         }
     }
 
@@ -209,9 +172,10 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
     @Override
     public void showWeatherCurrents(List<WeatherCurrent> weatherCurrents) {
-        adapter.refreshList(weatherCurrents);
+        mWeatherCurrents = weatherCurrents;
+        adapter.refreshList(mWeatherCurrents);
         // TODO удалить
-        Toast.makeText(CityListActivity.this,
+        Toast.makeText(this,
                 "Загрузка погод успешно завершена",
                 Toast.LENGTH_SHORT).show();
         updateButtonState(false);
@@ -219,9 +183,10 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
     @Override
     public void showWeatherCurrent(List<WeatherCurrent> weatherCurrent) {
-        adapter.refreshList(weatherCurrent);
+        mWeatherCurrents.add(weatherCurrent.get(0));
+        adapter.refreshList(mWeatherCurrents);
         // TODO удалить
-        Toast.makeText(CityListActivity.this,
+        Toast.makeText(this,
                 "Загрузка погоды успешно завершена",
                 Toast.LENGTH_SHORT).show();
         updateButtonState(false);
@@ -229,7 +194,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
     @Override
     public void showErrorWeatherCurrent() {
-        Toast.makeText(CityListActivity.this,
+        Toast.makeText(this,
                 R.string.error_weather_current,
                 Toast.LENGTH_SHORT).show();
         updateButtonState(false);
@@ -237,7 +202,7 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
     @Override
     public void showErrorWeatherCurrents() {
-        Toast.makeText(CityListActivity.this,
+        Toast.makeText(this,
                 R.string.error_weather_currents,
                 Toast.LENGTH_SHORT).show();
         updateButtonState(false);
@@ -245,9 +210,19 @@ public class CityListActivity extends BaseActivity implements AddCityFragment.On
 
     @Override
     public void showNotConnection() {
-        Toast.makeText(CityListActivity.this,
+        Toast.makeText(this,
                 R.string.connection_not_found,
                 Toast.LENGTH_SHORT).show();
         updateButtonState(false);
+    }
+
+    @Override
+    public void processAddedCity(City city) {
+        mWeatherCurrentPresenter.loadWeather(city.getId());
+    }
+
+    @Override
+    public void showCities(List<City> cities) {
+
     }
 }
