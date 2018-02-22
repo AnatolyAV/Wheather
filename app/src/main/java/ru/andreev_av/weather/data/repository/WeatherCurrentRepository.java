@@ -14,11 +14,11 @@ import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.utils.StringUtils;
 import rx.Observable;
 
-public class CitiesRepository implements ICitiesRepository {
+public class WeatherCurrentRepository implements IWeatherCurrentRepository {
 
     private IWeatherCurrentDao mWeatherCurrentDao;
 
-    public CitiesRepository(IWeatherCurrentDao weatherCurrentDao) {
+    public WeatherCurrentRepository(IWeatherCurrentDao weatherCurrentDao) {
         mWeatherCurrentDao = weatherCurrentDao;
     }
 

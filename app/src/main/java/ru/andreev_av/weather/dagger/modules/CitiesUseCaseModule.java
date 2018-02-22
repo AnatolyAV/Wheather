@@ -4,16 +4,16 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.andreev_av.weather.data.repository.ICitiesRepository;
-import ru.andreev_av.weather.domain.usecase.CitiesUseCase;
-import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
+import ru.andreev_av.weather.data.repository.IWeatherCurrentRepository;
+import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
+import ru.andreev_av.weather.domain.usecase.WeatherCurrentUseCase;
 
 @Module(includes = {CitiesRepositoryModule.class})
 public class CitiesUseCaseModule {
 
     @Provides
     @Singleton
-    public ICitiesUseCase provideCitiesUseCase(ICitiesRepository citiesRepository) {
-        return new CitiesUseCase(citiesRepository);
+    public IWeatherCurrentUseCase provideCitiesUseCase(IWeatherCurrentRepository citiesRepository) {
+        return new WeatherCurrentUseCase(citiesRepository);
     }
 }

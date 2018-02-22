@@ -5,15 +5,15 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ru.andreev_av.weather.data.db.IWeatherCurrentDao;
-import ru.andreev_av.weather.data.repository.CitiesRepository;
-import ru.andreev_av.weather.data.repository.ICitiesRepository;
+import ru.andreev_av.weather.data.repository.IWeatherCurrentRepository;
+import ru.andreev_av.weather.data.repository.WeatherCurrentRepository;
 
 @Module(includes = {WeatherCurrentDaoModule.class})
 public class CitiesRepositoryModule {
 
     @Provides
     @Singleton
-    public ICitiesRepository provideCitiesUseCase(IWeatherCurrentDao weatherCurrentDao) {
-        return new CitiesRepository(weatherCurrentDao);
+    public IWeatherCurrentRepository provideCitiesUseCase(IWeatherCurrentDao weatherCurrentDao) {
+        return new WeatherCurrentRepository(weatherCurrentDao);
     }
 }

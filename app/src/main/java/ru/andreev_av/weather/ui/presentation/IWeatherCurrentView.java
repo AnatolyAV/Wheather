@@ -4,11 +4,8 @@ import java.util.List;
 
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 
-/**
- * Created by Tolik on 01.02.2018.
- */
 // TODO добавить стратегии наверно надо
-public interface ICitiesView extends ILoadingView {
+public interface IWeatherCurrentView extends ILoadingView {
 
     void showWeatherCurrents(List<WeatherCurrent> weatherCurrents);
 
