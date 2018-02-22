@@ -15,12 +15,12 @@ import ru.andreev_av.weather.ui.adapters.holders.CityViewHolder;
 import ru.andreev_av.weather.utils.ImageUtils;
 import ru.andreev_av.weather.utils.UnitUtils;
 
-public class CityListAdapter extends RecyclerView.Adapter<CityViewHolder> {
+public class WeatherCurrentCitiesAdapter extends RecyclerView.Adapter<CityViewHolder> {
 
     private Context mContext;
     private List<WeatherCurrent> mWeatherCurrents;
 
-    public CityListAdapter(Context context, List<WeatherCurrent> weatherCurrents) {
+    public WeatherCurrentCitiesAdapter(Context context, List<WeatherCurrent> weatherCurrents) {
         mContext = context;
         mWeatherCurrents = weatherCurrents;
     }
