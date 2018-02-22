@@ -129,14 +129,11 @@ public class WeatherCurrentDao extends AbstractDao implements IWeatherCurrentDao
             String[] selectionArgs = new String[]{String.valueOf((int) weatherCurrentModel.getCityId()),};
             int updCount = db.update(TABLE_NAME, contentValues, selection, selectionArgs);
 
-            db.setTransactionSuccessful();
             if (updCount == 0) {
-                db.endTransaction();
-                db.beginTransaction();
                 db.insert(TABLE_NAME, null, contentValues);
-                db.setTransactionSuccessful();
             }
 
+            db.setTransactionSuccessful();
         } catch (SQLException e) {
             Logger.getLogger(TAG).log(Level.SEVERE, null, e);
         } finally {
