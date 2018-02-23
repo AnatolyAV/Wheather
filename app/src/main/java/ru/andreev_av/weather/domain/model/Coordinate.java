@@ -33,6 +33,14 @@ public class Coordinate {
         return result;
     }
 
+    public Float getLatitude() {
+        return mLatitude;
+    }
+
+    public Float getLongitude() {
+        return mLongitude;
+    }
+
     public static final class Builder {
         private Float mLatitude;
         private Float mLongitude;

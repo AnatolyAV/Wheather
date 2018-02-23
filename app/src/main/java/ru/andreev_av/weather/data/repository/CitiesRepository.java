@@ -1,7 +1,9 @@
 package ru.andreev_av.weather.data.repository;
 
+import java.util.Collections;
 import java.util.List;
 
+import ru.andreev_av.weather.data.cache.CitiesToWatchCacheTransformer;
 import ru.andreev_av.weather.data.db.ICityDao;
 import ru.andreev_av.weather.domain.model.City;
 import rx.Observable;
@@ -12,6 +14,11 @@ public class CitiesRepository implements ICitiesRepository {
 
     public CitiesRepository(ICityDao cityDao) {
         mCityDao = cityDao;
+    }
+
+    @Override
+    public Observable<List<City>> getCitiesByToWatch(boolean isToWatch) {
+        return Observable.just(Collections.<City>emptyList()).compose(new CitiesToWatchCacheTransformer(mCityDao, isToWatch));
     }
 
     @Override

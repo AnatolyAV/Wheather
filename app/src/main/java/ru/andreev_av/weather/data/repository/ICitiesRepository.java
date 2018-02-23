@@ -7,6 +7,8 @@ import rx.Observable;
 
 public interface ICitiesRepository {
 
+    Observable<List<City>> getCitiesByToWatch(boolean isToWatch);
+
     Observable<List<City>> findCities(String cityNameFirstLetters);
 
     Observable<Boolean> loadCityToWatch(City city);

@@ -7,6 +7,8 @@ public interface ICitiesPresenter {
 
     void init();
 
+    void getCitiesByToWatch(boolean isToWatch);
+
     void findCities(String cityNameFirstLetters);
 
     void loadCityToWatch(City city);

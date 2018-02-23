@@ -15,6 +15,11 @@ public class CitiesUseCase implements ICitiesUseCase {
     }
 
     @Override
+    public Observable<List<City>> getCitiesByToWatch(boolean isToWatch) {
+        return mRepository.getCitiesByToWatch(isToWatch);
+    }
+
+    @Override
     public Observable<List<City>> findCities(String cityNameFirstLetters) {
         return mRepository.findCities(cityNameFirstLetters);
     }

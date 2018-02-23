@@ -14,16 +14,9 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.model.City;
 import ru.andreev_av.weather.db.entry.CityEntry;
 import ru.andreev_av.weather.db.entry.WeatherCurrentEntry;
 import ru.andreev_av.weather.db.entry.WeatherForecastEntry;
-import ru.andreev_av.weather.files.CityFileReader;
 
 public class WeatherContentProvider extends ContentProvider {
 
@@ -229,30 +222,30 @@ public class WeatherContentProvider extends ContentProvider {
         return cnt;
     }
 
-    private void fillCityTable(SQLiteDatabase db) {
-        InputStream inputStream = context.getResources().openRawResource(R.raw.city_list);
-        CityFileReader fileReader = new CityFileReader();
-        try {
-            final List<City> cities = fileReader.readCityListFromFile(inputStream);
-            inputStream.close();
-            db.beginTransaction();
-            for (City city : cities) {
-                ContentValues cv = new ContentValues();
-                cv.put(CityEntry.COLUMN_CITY_ID, city.getId());
-                cv.put(CityEntry.COLUMN_NAME, city.getName());
-                cv.put(CityEntry.COLUMN_LATITUDE, city.getCoordinate().getLat());
-                cv.put(CityEntry.COLUMN_LONGITUDE, city.getCoordinate().getLon());
-                cv.put(CityEntry.COLUMN_COUNTRY_CODE, city.getCountryCode());
-                cv.put(CityEntry.COLUMN_WATCHED, city.getWatch());
-                db.insert(CityEntry.TABLE_CITY, null, cv);
-            }
-            db.setTransactionSuccessful();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-        }
-    }
+//    private void fillCityTable(SQLiteDatabase db) {
+//        InputStream inputStream = context.getResources().openRawResource(R.raw.city_list);
+//        CityFileReader fileReader = new CityFileReader();
+//        try {
+//            final List<City> cities = fileReader.readCityListFromFile(inputStream);
+//            inputStream.close();
+//            db.beginTransaction();
+//            for (City city : cities) {
+//                ContentValues cv = new ContentValues();
+//                cv.put(CityEntry.COLUMN_CITY_ID, city.getId());
+//                cv.put(CityEntry.COLUMN_NAME, city.getName());
+//                cv.put(CityEntry.COLUMN_LATITUDE, city.getCoordinate().getLat());
+//                cv.put(CityEntry.COLUMN_LONGITUDE, city.getCoordinate().getLon());
+//                cv.put(CityEntry.COLUMN_COUNTRY_CODE, city.getCountryCode());
+//                cv.put(CityEntry.COLUMN_WATCHED, city.getWatch());
+//                db.insert(CityEntry.TABLE_CITY, null, cv);
+//            }
+//            db.setTransactionSuccessful();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            db.endTransaction();
+//        }
+//    }
 
     private class DBHelper extends SQLiteOpenHelper {
 
@@ -267,7 +260,7 @@ public class WeatherContentProvider extends ContentProvider {
 
             // т.к. поиск по названию города через http://api.openweathermap.org/data/2.5/find работает криво,
             // то приходится сначала грузить все необходимые города в БД (из подготовленного файла) и уже искать нужный город из БД
-            fillCityTable(db);
+//            fillCityTable(db);
         }
 
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

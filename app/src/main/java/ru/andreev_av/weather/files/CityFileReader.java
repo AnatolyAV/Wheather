@@ -7,11 +7,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.andreev_av.weather.data.model.City;
-import ru.andreev_av.weather.data.model.Coordinate;
+import ru.andreev_av.weather.domain.model.City;
+import ru.andreev_av.weather.domain.model.Coordinate;
 
 public class CityFileReader {
     // TODO выбрать и убрать лишние города, а то файл очень большой
+    // TODO отрефакторить
     public List<City> readCityListFromFile(InputStream is) throws IOException {
         List<City> cities = new ArrayList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -24,7 +25,7 @@ public class CityFileReader {
             float lon = Float.valueOf(fields[3]);
             float lat = Float.valueOf(fields[4]);
             int isWatched = Integer.parseInt(fields[5]);
-            cities.add(new City(id, name, new Coordinate(lon, lat), countryCode, isWatched));
+            cities.add(new City(id, name, Coordinate.builder().longitude(lon).latitude(lat).build(), countryCode, isWatched));
         }
         br.close();
         return cities;

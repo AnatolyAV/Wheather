@@ -49,6 +49,13 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
                 .subscribe(cities -> getViewState().showCities(cities));
     }
 
+    @Override
+    public void getCitiesByToWatch(boolean isToWatch) {
+        mCitiesUseCase.getCitiesByToWatch(isToWatch)
+                .compose(RxUtils.async())
+                .subscribe(cities -> getViewState().showCities(cities));
+    }
+
 
     @Override
     public void findCities(String cityNameFirstLetters) {

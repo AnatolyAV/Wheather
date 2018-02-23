@@ -8,9 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.model.City;
+import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.files.CityFileReader;
 
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_CITY_ID;
@@ -60,6 +62,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
 
     }
 
+    // TODO подумать, может вынести и отрефакторить
     private void fillCityTable(SQLiteDatabase db) {
         InputStream inputStream = mContext.getResources().openRawResource(R.raw.city_list);
         CityFileReader fileReader = new CityFileReader();
@@ -71,18 +74,20 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 ContentValues cv = new ContentValues();
                 cv.put(COLUMN_CITY_ID, city.getId());
                 cv.put(COLUMN_NAME, city.getName());
-                cv.put(COLUMN_LATITUDE, city.getCoordinate().getLat());
-                cv.put(COLUMN_LONGITUDE, city.getCoordinate().getLon());
+                cv.put(COLUMN_LATITUDE, city.getCoordinate().getLatitude());
+                cv.put(COLUMN_LONGITUDE, city.getCoordinate().getLongitude());
                 cv.put(COLUMN_COUNTRY_CODE, city.getCountryCode());
                 cv.put(COLUMN_WATCHED, city.getWatch());
                 db.insert(TABLE_NAME, null, cv);
             }
             db.setTransactionSuccessful();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(TAG).log(Level.SEVERE, null, e);
         } finally {
             mContext = null;
-            db.endTransaction();
+            if (db != null) {
+                db.endTransaction();
+            }
         }
     }
 }

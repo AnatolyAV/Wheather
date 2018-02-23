@@ -52,8 +52,8 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     }
 
     @Override
-    public void loadWeather(ArrayList<Integer> cityIds, boolean isCallByPressingUpdateButton) {
-        if (isCallByPressingUpdateButton) {
+    public void loadWeather(ArrayList<Integer> cityIds, boolean isRefreshing) {
+        if (isRefreshing) {
             getViewState().updateButtonState(true);
         }
 
