@@ -1,9 +1,8 @@
 package ru.andreev_av.weather.data.repository;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-import ru.andreev_av.weather.data.cache.CitiesToWatchCacheTransformer;
 import ru.andreev_av.weather.data.db.ICityDao;
 import ru.andreev_av.weather.domain.model.City;
 import rx.Observable;
@@ -18,7 +17,13 @@ public class CitiesRepository implements ICitiesRepository {
 
     @Override
     public Observable<List<City>> getCitiesByToWatch(boolean isToWatch) {
-        return Observable.just(Collections.<City>emptyList()).compose(new CitiesToWatchCacheTransformer(mCityDao, isToWatch));
+        return Observable.fromCallable(new Callable<List<City>>() {
+
+            @Override
+            public List<City> call() throws Exception {
+                return mCityDao.getCitiesByToWatch(isToWatch);
+            }
+        });
     }
 
     @Override
@@ -29,8 +34,13 @@ public class CitiesRepository implements ICitiesRepository {
 
     @Override
     public Observable<Boolean> loadCityToWatch(City city) {
-        boolean updated = mCityDao.updateCityWatched(city);
-        return Observable.just(updated);
+        return Observable.fromCallable(new Callable<Boolean>() {
+
+            @Override
+            public Boolean call() throws Exception {
+                return mCityDao.updateCityWatched(city);
+            }
+        });
     }
 
 }
