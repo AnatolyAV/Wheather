@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
 import ru.andreev_av.weather.net.ConnectionDetector;
-import ru.andreev_av.weather.utils.RxUtils;
 
 @InjectViewState
 public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> implements IWeatherCurrentPresenter {
@@ -43,7 +42,6 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
             mWeatherCurrentUseCase.loadWeather(cityId)
                     .doOnSubscribe(getViewState()::showLoading)
                     .doAfterTerminate(getViewState()::hideLoading)
-                    .compose(RxUtils.async())
                     .subscribe(getViewState()::showWeatherCurrent, throwable -> getViewState()
                             .showErrorWeatherCurrent());
         } else {
@@ -61,7 +59,6 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
             mWeatherCurrentUseCase.loadWeather(cityIds)
                     .doOnSubscribe(getViewState()::showLoading)
                     .doAfterTerminate(getViewState()::hideLoading)
-                    .compose(RxUtils.async())
                     .subscribe(getViewState()::showWeatherCurrents, throwable -> getViewState().showErrorWeatherCurrents());
         } else {
             getViewState().showNotConnection();

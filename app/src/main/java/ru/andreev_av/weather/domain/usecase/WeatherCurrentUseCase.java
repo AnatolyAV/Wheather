@@ -5,6 +5,7 @@ import java.util.List;
 
 import ru.andreev_av.weather.data.repository.IWeatherCurrentRepository;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
+import ru.andreev_av.weather.utils.RxUtils;
 import rx.Observable;
 
 public class WeatherCurrentUseCase implements IWeatherCurrentUseCase {
@@ -18,11 +19,13 @@ public class WeatherCurrentUseCase implements IWeatherCurrentUseCase {
     @Override
     public Observable<List<WeatherCurrent>> loadWeather(int cityId) {
         return mRepository.getWeatherCurrent(cityId)
-                .toList();
+                .toList()
+                .compose(RxUtils.async());
     }
 
     @Override
     public Observable<List<WeatherCurrent>> loadWeather(ArrayList<Integer> cityIds) {
-        return mRepository.getWeatherCurrents(cityIds);
+        return mRepository.getWeatherCurrents(cityIds)
+                .compose(RxUtils.async());
     }
 }

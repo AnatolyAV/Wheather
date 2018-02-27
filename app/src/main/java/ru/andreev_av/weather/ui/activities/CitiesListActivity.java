@@ -152,14 +152,14 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     @Override
     public void showLoading() {
         if (!dialog.isShowing()) {
-//            dialog.show();
+            dialog.show();
         }
     }
 
     @Override
     public void hideLoading() {
         if (dialog != null && dialog.isShowing()) {
-//            dialog.dismiss();
+            dialog.dismiss();
         }
     }
 
