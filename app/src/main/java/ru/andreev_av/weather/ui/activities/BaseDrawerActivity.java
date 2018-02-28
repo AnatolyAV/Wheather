@@ -39,7 +39,7 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         cityListIntent = new Intent(this, CitiesListActivity.class);
-        weatherCurrentIntent = new Intent(this, WeatherCurrentActivity.class);
+        weatherCurrentIntent = new Intent(this, WeatherCurrentDetailsActivity.class);
         weatherForecastListIntent = new Intent(this, WeatherForecastActivity.class);
     }
 

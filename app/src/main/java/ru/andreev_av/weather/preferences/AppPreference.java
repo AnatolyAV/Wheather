@@ -102,6 +102,15 @@ public class AppPreference {
         editor.apply();
     }
 
+    public static void saveCityNameAndCountryCode(Context context, String cityName, String countryCode) {
+        SharedPreferences preferences = context.getSharedPreferences(PREF_WEATHER_CURRENT,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREF_CITY_NAME, cityName);
+        editor.putString(PREF_COUNTRY_CODE, countryCode);
+        editor.apply();
+    }
+
     public static String[] getCityAndCode(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_WEATHER_CURRENT,
                 Context.MODE_PRIVATE);

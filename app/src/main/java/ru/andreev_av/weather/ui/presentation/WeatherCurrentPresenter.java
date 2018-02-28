@@ -18,16 +18,11 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
 
     private final IWeatherCurrentUseCase mWeatherCurrentUseCase;
     private final ConnectionDetector mConnectionDetector;
-    private ArrayList<Integer> mCityIds;
 
     @Inject
     public WeatherCurrentPresenter(IWeatherCurrentUseCase weatherCurrentUseCase, ConnectionDetector connectionDetector) {
         mWeatherCurrentUseCase = weatherCurrentUseCase;
         mConnectionDetector = connectionDetector;
-    }
-
-    public void setCityIds(ArrayList<Integer> cityIds) {
-        mCityIds = cityIds;
     }
 
     /**
@@ -36,11 +31,14 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        loadWeather(mCityIds, false);
     }
 
     @Override
-    public void loadWeather(int cityId) {
+    public void loadWeather(int cityId, boolean isRefreshing, boolean isSwipeRefreshing) {
+        if (isRefreshing && !isSwipeRefreshing) {
+            getViewState().updateButtonState(true);
+        }
+
         mWeatherCurrentUseCase.loadWeather(cityId)
                 .doOnSubscribe(getViewState()::showLoading)
                 .doAfterTerminate(getViewState()::hideLoading)

@@ -74,7 +74,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         mProgressDialog = new ProgressDialog(this);
 
         // TODO возможно при пересоздании некорректные mCityIds будут, надо проверить
-        mWeatherCurrentPresenter.setCityIds(mCityIds);
+        mWeatherCurrentPresenter.loadWeather(mCityIds, false);
     }
 
     @ProvidePresenter
@@ -97,9 +97,11 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         mWeatherCurrentCitiesRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, mWeatherCurrentCitiesRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                AppPreference.updateCurrentCityId(CitiesListActivity.this, weatherCurrents.get(position).getCityId());
+                // TODO заменить на intent.putExtra()
+                AppPreference.updateCurrentCityId(CitiesListActivity.this, mWeatherCurrents.get(position).getCityId());
 //                AppPreference.saveWeather(CitiesListActivity.this, weatherCurrents.get(position));
-                Intent intent = new Intent(CitiesListActivity.this, WeatherCurrentActivity.class);
+                AppPreference.saveCityNameAndCountryCode(CitiesListActivity.this, mWeatherCurrents.get(position).getCityName(), mWeatherCurrents.get(position).getSys().getCountryCode());
+                Intent intent = new Intent(CitiesListActivity.this, WeatherCurrentDetailsActivity.class);
                 startActivity(intent);
             }
         }));
@@ -219,7 +221,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
     @Override
     public void processAddedCity(City city) {
-        mWeatherCurrentPresenter.loadWeather(city.getId());
+        mWeatherCurrentPresenter.loadWeather(city.getId(), false, false);
     }
 
     @Override
