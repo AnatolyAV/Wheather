@@ -7,9 +7,11 @@ import rx.Observable;
 
 public interface ICitiesUseCase {
 
+    Observable<List<City>> initPublishSubjectForFindCities(int cityNameLettersMinForSearch);
+
     Observable<List<City>> getCitiesByToWatch(boolean isToWatch);
 
-    Observable<List<City>> findCities(String cityNameFirstLetters);
+    void findCities(String cityNameFirstLetters);
 
     Observable<Boolean> loadCityToWatch(City city);
 }

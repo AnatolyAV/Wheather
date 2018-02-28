@@ -5,7 +5,7 @@ import ru.andreev_av.weather.domain.model.City;
 
 public interface ICitiesPresenter {
 
-    void init();
+    void initPublishSubjectForFindCities();
 
     void getCitiesByToWatch(boolean isToWatch);
 

@@ -59,7 +59,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         App.getInstance().getAppComponent().plusCitiesComponent().inject(this);
         super.onCreate(savedInstanceState);
-        mCitiesPresenter.init();
+        mCitiesPresenter.initPublishSubjectForFindCities();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
     private void initComponents() {
         mAddCityAutoCompleteTextView.setAdapter(mCityAdapter);
-        mAddCityAutoCompleteTextView.setThreshold(CitiesPresenter.CITY_LETTERS_MIN_FOR_SEARCH);
+        mAddCityAutoCompleteTextView.setThreshold(CitiesPresenter.CITY_NAME_LETTERS_MIN_FOR_SEARCH);
     }
 
     protected void initListeners() {

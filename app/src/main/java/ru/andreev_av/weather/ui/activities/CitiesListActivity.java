@@ -46,7 +46,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     private WeatherCurrentCitiesAdapter mWeatherCurrentCitiesAdapter;
     private FloatingActionButton mAddCityFloatingActionButton;
     // TODO Заменить на ProgressBar
-    private ProgressDialog dialog;
+    private ProgressDialog mProgressDialog;
 
     private ArrayList<Integer> mCityIds;
     private List<WeatherCurrent> mWeatherCurrents = new ArrayList<>();
@@ -71,7 +71,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
         mCityIds = AppPreference.getCityIds(this);
 
-        dialog = new ProgressDialog(this);
+        mProgressDialog = new ProgressDialog(this);
 
         // TODO возможно при пересоздании некорректные mCityIds будут, надо проверить
         mWeatherCurrentPresenter.setCityIds(mCityIds);
@@ -151,15 +151,15 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
     @Override
     public void showLoading() {
-        if (!dialog.isShowing()) {
-            dialog.show();
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
         }
     }
 
     @Override
     public void hideLoading() {
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 
