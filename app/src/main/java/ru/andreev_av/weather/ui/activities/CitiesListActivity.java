@@ -142,7 +142,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     }
 
     @Override
-    public void onAddCityFragmentInteraction(ru.andreev_av.weather.domain.model.City city) {
+    public void onAddCityFragmentInteraction(City city) {
         if (city != null) {
             AppPreference.addCityId(this, city.getId());
             mCitiesPresenter.loadCityToWatch(city);
