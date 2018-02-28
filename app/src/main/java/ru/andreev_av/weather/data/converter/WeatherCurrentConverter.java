@@ -16,6 +16,7 @@ import ru.andreev_av.weather.domain.model.Wind;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_CITY_ID;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_CITY_NAME;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_CLOUDINESS;
+import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_COUNTRY_CODE;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_HUMIDITY;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_PRESSURE;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_TEMPERATURE_CURRENT;
@@ -88,9 +89,10 @@ public class WeatherCurrentConverter implements IWeatherCurrentConverter {
         float windSpeed = cursor.getFloat(cursor.getColumnIndex(COLUMN_WIND_SPEED));
         Wind wind = new Wind(windSpeed);
 
+        String countryCode = cursor.getString(cursor.getColumnIndex(COLUMN_COUNTRY_CODE));
         int sysSunrise = cursor.getInt(cursor.getColumnIndex(COLUMN_TIME_SUNRISE));
         int sysSunset = cursor.getInt(cursor.getColumnIndex(COLUMN_TIME_SUNSET));
-        Sys sys = new Sys(sysSunrise, sysSunset);
+        Sys sys = new Sys(countryCode, sysSunrise, sysSunset);
 
         int cloudsAll = cursor.getInt(cursor.getColumnIndex(COLUMN_CLOUDINESS));
         Clouds clouds = new Clouds(cloudsAll);

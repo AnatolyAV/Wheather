@@ -38,6 +38,7 @@ public final class WeatherContract {
             WeatherCurrentEntry.COLUMN_RAIN_VOLUME + " FLOAT, " +
             WeatherCurrentEntry.COLUMN_SNOW_VOLUME + " FLOAT, " +
             WeatherCurrentEntry.COLUMN_TIME_MEASUREMENT + " BIGINT NOT NULL, " +
+            WeatherCurrentEntry.COLUMN_COUNTRY_CODE + " VARCHAR(10) NOT NULL, " +
             WeatherCurrentEntry.COLUMN_TIME_SUNRISE + " BIGINT NOT NULL, " +
             WeatherCurrentEntry.COLUMN_TIME_SUNSET + " BIGINT NOT NULL " +
             ")";
@@ -103,6 +104,7 @@ public final class WeatherContract {
 
         public static final String COLUMN_TIME_MEASUREMENT = "time_of_measurement";
 
+        public static final String COLUMN_COUNTRY_CODE = "country_code";
         public static final String COLUMN_TIME_SUNRISE = "time_sunrise";
         public static final String COLUMN_TIME_SUNSET = "time_sunset";
     }

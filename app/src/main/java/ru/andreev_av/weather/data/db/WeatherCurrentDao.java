@@ -19,6 +19,7 @@ import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_CITY_ID;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_CITY_NAME;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_CLOUDINESS;
+import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_COUNTRY_CODE;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_GRND_LEVEL;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_HUMIDITY;
 import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.COLUMN_PRESSURE;
@@ -265,6 +266,7 @@ public class WeatherCurrentDao extends AbstractDao implements IWeatherCurrentDao
 
         ru.andreev_av.weather.data.model.Sys sys = weatherCurrentModel.getSys();
         if (sys != null) {
+            contentValues.put(COLUMN_COUNTRY_CODE, sys.getCountryCode());
             contentValues.put(COLUMN_TIME_SUNRISE, sys.getSunrise());
             contentValues.put(COLUMN_TIME_SUNSET, sys.getSunset());
         }

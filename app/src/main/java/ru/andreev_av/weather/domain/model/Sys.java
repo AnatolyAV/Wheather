@@ -7,7 +7,8 @@ public class Sys {
     private Integer mSunrise;
     private Integer mSunset;
 
-    public Sys(Integer sunrise, Integer sunset) {
+    public Sys(String countryCode, Integer sunrise, Integer sunset) {
+        mCountryCode = countryCode;
         mSunrise = sunrise;
         mSunset = sunset;
     }
