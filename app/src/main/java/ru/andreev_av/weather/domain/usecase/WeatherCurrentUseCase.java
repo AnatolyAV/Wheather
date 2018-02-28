@@ -17,9 +17,8 @@ public class WeatherCurrentUseCase implements IWeatherCurrentUseCase {
     }
 
     @Override
-    public Observable<List<WeatherCurrent>> loadWeather(int cityId) {
+    public Observable<WeatherCurrent> loadWeather(int cityId) {
         return mRepository.getWeatherCurrent(cityId)
-                .toList()
                 .compose(RxUtils.async());
     }
 

@@ -9,7 +9,7 @@ public interface IWeatherCurrentView extends ILoadingView {
 
     void showWeatherCurrents(List<WeatherCurrent> weatherCurrents);
 
-    void showWeatherCurrent(List<WeatherCurrent> weatherCurrent);
+    void showWeatherCurrent(WeatherCurrent weatherCurrent);
 
     void showErrorWeatherCurrent();
 

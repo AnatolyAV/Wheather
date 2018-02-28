@@ -44,10 +44,10 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
         mWeatherCurrentUseCase.loadWeather(cityId)
                 .doOnSubscribe(getViewState()::showLoading)
                 .doAfterTerminate(getViewState()::hideLoading)
-                .subscribe(new Action1<List<WeatherCurrent>>() {
+                .subscribe(new Action1<WeatherCurrent>() {
                     @Override
-                    public void call(List<WeatherCurrent> weatherCurrents) {
-                        getViewState().showWeatherCurrent(weatherCurrents);
+                    public void call(WeatherCurrent weatherCurrent) {
+                        getViewState().showWeatherCurrent(weatherCurrent);
                         if (!checkNetworkAvailableAndConnected()) {
                             getViewState().showNotConnection();
                         }

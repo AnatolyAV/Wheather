@@ -7,7 +7,7 @@ import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import rx.Observable;
 
 public interface IWeatherCurrentUseCase {
-    Observable<List<WeatherCurrent>> loadWeather(int cityId);
+    Observable<WeatherCurrent> loadWeather(int cityId);
 
     Observable<List<WeatherCurrent>> loadWeather(ArrayList<Integer> cityIds);
 
