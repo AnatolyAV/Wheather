@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +34,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "WeatherDbHelper";
     private static WeatherDbHelper mInstance;
     private Context mContext;
+    private AtomicInteger mGetDbRequestCounter = new AtomicInteger();
 
     private WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -60,6 +62,25 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        mGetDbRequestCounter.incrementAndGet();
+        return super.getReadableDatabase();
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        mGetDbRequestCounter.incrementAndGet();
+        return super.getWritableDatabase();
+    }
+
+    @Override
+    public synchronized void close() {
+        if (mGetDbRequestCounter.decrementAndGet() == 0) {
+            super.close();
+        }
     }
 
     // TODO подумать, может вынести и отрефакторить
