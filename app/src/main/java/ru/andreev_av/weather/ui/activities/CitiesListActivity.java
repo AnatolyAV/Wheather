@@ -181,13 +181,16 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
     @Override
     public void showWeatherCurrent(List<WeatherCurrent> weatherCurrent) {
-        mWeatherCurrents.add(weatherCurrent.get(0));
-        mWeatherCurrentCitiesAdapter.refreshList(mWeatherCurrents);
-        // TODO удалить
-        Toast.makeText(this,
-                "Загрузка погоды успешно завершена",
-                Toast.LENGTH_SHORT).show();
+        if (weatherCurrent.size() > 0) {
+            mWeatherCurrents.add(weatherCurrent.get(0));
+            mWeatherCurrentCitiesAdapter.refreshList(mWeatherCurrents);
+            // TODO удалить
+            Toast.makeText(this,
+                    "Загрузка погоды успешно завершена",
+                    Toast.LENGTH_SHORT).show();
+        }
         updateButtonState(false);
+
     }
 
     @Override

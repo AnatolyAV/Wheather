@@ -4,11 +4,14 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
 import ru.andreev_av.weather.net.ConnectionDetector;
+import rx.functions.Action1;
 
 @InjectViewState
 public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> implements IWeatherCurrentPresenter {
@@ -38,15 +41,24 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
 
     @Override
     public void loadWeather(int cityId) {
-        if (checkNetworkAvailableAndConnected()) {
-            mWeatherCurrentUseCase.loadWeather(cityId)
-                    .doOnSubscribe(getViewState()::showLoading)
-                    .doAfterTerminate(getViewState()::hideLoading)
-                    .subscribe(getViewState()::showWeatherCurrent, throwable -> getViewState()
-                            .showErrorWeatherCurrent());
-        } else {
-            getViewState().showNotConnection();
-        }
+        mWeatherCurrentUseCase.loadWeather(cityId)
+                .doOnSubscribe(getViewState()::showLoading)
+                .doAfterTerminate(getViewState()::hideLoading)
+                .subscribe(new Action1<List<WeatherCurrent>>() {
+                    @Override
+                    public void call(List<WeatherCurrent> weatherCurrents) {
+                        getViewState().showWeatherCurrent(weatherCurrents);
+                        if (!checkNetworkAvailableAndConnected()) {
+                            getViewState().showNotConnection();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        getViewState()
+                                .showErrorWeatherCurrent();
+                    }
+                });
     }
 
     @Override
@@ -55,14 +67,24 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
             getViewState().updateButtonState(true);
         }
 
-        if (checkNetworkAvailableAndConnected()) {
-            mWeatherCurrentUseCase.loadWeather(cityIds)
-                    .doOnSubscribe(getViewState()::showLoading)
-                    .doAfterTerminate(getViewState()::hideLoading)
-                    .subscribe(getViewState()::showWeatherCurrents, throwable -> getViewState().showErrorWeatherCurrents());
-        } else {
-            getViewState().showNotConnection();
-        }
+        mWeatherCurrentUseCase.loadWeather(cityIds)
+                .doOnSubscribe(getViewState()::showLoading)
+                .doAfterTerminate(getViewState()::hideLoading)
+                .subscribe(new Action1<List<WeatherCurrent>>() {
+                    @Override
+                    public void call(List<WeatherCurrent> weatherCurrents) {
+                        getViewState().showWeatherCurrents(weatherCurrents);
+                        if (!checkNetworkAvailableAndConnected()) {
+                            getViewState().showNotConnection();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        getViewState()
+                                .showErrorWeatherCurrents();
+                    }
+                });
     }
 
     private boolean checkNetworkAvailableAndConnected() {

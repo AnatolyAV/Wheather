@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,13 +63,15 @@ public class WeatherCurrentDao extends AbstractDao implements IWeatherCurrentDao
     public List<WeatherCurrent> getAll() {
         SQLiteDatabase db = null;
         Cursor cursor;
-        List<WeatherCurrent> weatherCurrents = null;
+        List<WeatherCurrent> weatherCurrents = Collections.emptyList();
         try {
             db = mDbHelper.getReadableDatabase();
             db.beginTransaction();
             cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
             db.setTransactionSuccessful();
-            weatherCurrents = converter.convertAll(cursor);
+            if (cursor.getCount() > 0) {
+                weatherCurrents = converter.convertAll(cursor);
+            }
         } catch (SQLException e) {
             Logger.getLogger(TAG).log(Level.SEVERE, null, e);
         } finally {
@@ -92,9 +95,11 @@ public class WeatherCurrentDao extends AbstractDao implements IWeatherCurrentDao
             String selection = COLUMN_CITY_ID + " = ?";
             String[] selectionArgs = new String[]{String.valueOf(cityId),};
             cursor = db.query(TABLE_NAME, null, selection, selectionArgs, null, null, null);
-            cursor.moveToFirst();
             db.setTransactionSuccessful();
-            weatherCurrent = converter.convert(cursor);
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                weatherCurrent = converter.convert(cursor);
+            }
         } catch (SQLException e) {
             Logger.getLogger(TAG).log(Level.SEVERE, null, e);
         } finally {
