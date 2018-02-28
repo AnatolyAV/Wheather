@@ -39,7 +39,11 @@ public class CityDao extends AbstractDao implements ICityDao {
 
     public static CityDao getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new CityDao(context);
+            synchronized (CityDao.class) {
+                if (mInstance == null) {
+                    mInstance = new CityDao(context);
+                }
+            }
         }
         return mInstance;
     }

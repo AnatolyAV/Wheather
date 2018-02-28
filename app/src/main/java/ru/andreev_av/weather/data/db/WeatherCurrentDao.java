@@ -54,7 +54,11 @@ public class WeatherCurrentDao extends AbstractDao implements IWeatherCurrentDao
 
     public static WeatherCurrentDao getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new WeatherCurrentDao(context);
+            synchronized (WeatherCurrentDao.class) {
+                if (mInstance == null) {
+                    mInstance = new WeatherCurrentDao(context);
+                }
+            }
         }
         return mInstance;
     }
