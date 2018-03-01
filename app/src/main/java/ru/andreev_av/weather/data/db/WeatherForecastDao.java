@@ -117,7 +117,6 @@ public class WeatherForecastDao extends AbstractDao implements IWeatherForecastD
             cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
             db.setTransactionSuccessful();
             if (cursor.getCount() > 0) {
-                cursor.moveToFirst();
                 weatherForecasts = converter.convertAll(cursor);
             }
         } catch (SQLException e) {

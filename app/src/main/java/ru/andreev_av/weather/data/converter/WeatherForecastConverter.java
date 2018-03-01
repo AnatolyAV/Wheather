@@ -34,7 +34,10 @@ public class WeatherForecastConverter implements IWeatherForecastConverter {
         List<WeatherForecast> weatherForecasts;
         if (cursor != null && !cursor.isClosed()) {
             weatherForecasts = new ArrayList<>();
-            while (cursor.moveToNext()) {
+            // TODO Подумать, как сделать лучше
+            // пришлось так сделать т.к. позиция курсора непонятным образом менялась, что приводило к некорректным данным
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
                 WeatherForecast weatherForecast = convert(cursor);
                 weatherForecasts.add(weatherForecast);
             }
