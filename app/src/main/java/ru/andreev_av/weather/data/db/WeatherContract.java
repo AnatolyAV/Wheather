@@ -33,7 +33,7 @@ public final class WeatherContract {
             WeatherCurrentEntry.COLUMN_SEA_LEVEL + " FLOAT, " +
             WeatherCurrentEntry.COLUMN_GRND_LEVEL + " FLOAT, " +
             WeatherCurrentEntry.COLUMN_WIND_SPEED + " FLOAT NOT NULL, " +
-            WeatherCurrentEntry.COLUMN_WIND_DEGREE + " FLOAT NOT NULL, " +
+            WeatherCurrentEntry.COLUMN_WIND_DEGREE + " FLOAT, " +
             WeatherCurrentEntry.COLUMN_CLOUDINESS + " FLOAT NOT NULL, " +
             WeatherCurrentEntry.COLUMN_RAIN_VOLUME + " FLOAT, " +
             WeatherCurrentEntry.COLUMN_SNOW_VOLUME + " FLOAT, " +
@@ -58,7 +58,7 @@ public final class WeatherContract {
             WeatherForecastEntry.COLUMN_PRESSURE + " FLOAT NOT NULL, " +
             WeatherForecastEntry.COLUMN_HUMIDITY + " FLOAT NOT NULL, " +
             WeatherForecastEntry.COLUMN_WIND_SPEED + " FLOAT NOT NULL, " +
-            WeatherForecastEntry.COLUMN_WIND_DEGREE + " FLOAT NOT NULL, " +
+            WeatherForecastEntry.COLUMN_WIND_DEGREE + " FLOAT, " +
             WeatherForecastEntry.COLUMN_CLOUDINESS + " FLOAT NOT NULL, " +
             WeatherForecastEntry.COLUMN_RAIN_VOLUME + " FLOAT, " +
             WeatherForecastEntry.COLUMN_SNOW_VOLUME + " FLOAT, " +
