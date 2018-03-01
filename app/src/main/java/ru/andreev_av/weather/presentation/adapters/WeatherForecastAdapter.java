@@ -46,8 +46,8 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
         Temperature temperature = weatherForecast.getTemperature();
 
         holder.tvDescription.setText(StringUtils.firstUpperCase(weather.getDescription()));
-        holder.tvTemperatureMin.setText(mContext.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(temperature.getMin())));
-        holder.tvTemperatureMax.setText(mContext.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(temperature.getMax())));
+        holder.tvTemperatureDay.setText(mContext.getString(R.string.label_temperature_day, UnitUtils.getFormatTemperature(temperature.getDay())));
+        holder.tvTemperatureNight.setText(mContext.getString(R.string.label_temperature_night, UnitUtils.getFormatTemperature(temperature.getNight())));
         holder.tvIcon.setTypeface(weatherFontIcon);
         holder.tvIcon.setText(ImageUtils.getStrIcon(mContext, weather.getIcon()));
     }

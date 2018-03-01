@@ -10,8 +10,8 @@ public class WeatherForecastViewHolder extends RecyclerView.ViewHolder {
 
     public TextView tvDateTime;
     public TextView tvDescription;
-    public TextView tvTemperatureMin;
-    public TextView tvTemperatureMax;
+    public TextView tvTemperatureDay;
+    public TextView tvTemperatureNight;
     public TextView tvIcon;
 
     public WeatherForecastViewHolder(View itemView) {
@@ -19,8 +19,8 @@ public class WeatherForecastViewHolder extends RecyclerView.ViewHolder {
 
         tvDateTime = (TextView) itemView.findViewById(R.id.tv_forecast_date_time);
         tvDescription = (TextView) itemView.findViewById(R.id.tv_forecast_description);
-        tvTemperatureMin = (TextView) itemView.findViewById(R.id.tv_forecast_temperature_min);
-        tvTemperatureMax = (TextView) itemView.findViewById(R.id.tv_forecast_temperature_max);
+        tvTemperatureDay = (TextView) itemView.findViewById(R.id.tv_forecast_temperature_day);
+        tvTemperatureNight = (TextView) itemView.findViewById(R.id.tv_forecast_temperature_night);
         tvIcon = (TextView) itemView.findViewById(R.id.tv_forecast_icon);
     }
 }

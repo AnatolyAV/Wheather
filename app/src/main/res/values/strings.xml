@@ -63,6 +63,8 @@
     <string name="label_last_update">Last update: %s</string>
     <string name="label_sunrise">Sunrise: %s</string>
     <string name="label_sunset">Sunset: %s</string>
+    <string name="label_temperature_day">Day: %s\u2103</string>
+    <string name="label_temperature_night">Night: %s\u2103</string>
 
     <!-- SharedPreferences default  -->
     <string name="default_city_name">Moscow</string>

@@ -50,7 +50,7 @@
                 tools:text="Clear" />
 
             <TextView
-                android:id="@+id/tv_forecast_temperature_min"
+                android:id="@+id/tv_forecast_temperature_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/tv_forecast_description"
@@ -61,13 +61,13 @@
                 tools:text="777" />
 
             <TextView
-                android:id="@+id/tv_forecast_temperature_max"
+                android:id="@+id/tv_forecast_temperature_night"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_forecast_description"
                 android:layout_gravity="center_vertical"
-                android:layout_toEndOf="@+id/tv_forecast_temperature_min"
-                android:layout_toRightOf="@+id/tv_forecast_temperature_min"
+                android:layout_toEndOf="@+id/tv_forecast_temperature_day"
+                android:layout_toRightOf="@+id/tv_forecast_temperature_day"
                 android:paddingEnd="?attr/listPreferredItemPaddingRight"
                 android:paddingLeft="?attr/listPreferredItemPaddingLeft"
                 android:paddingRight="?attr/listPreferredItemPaddingRight"
