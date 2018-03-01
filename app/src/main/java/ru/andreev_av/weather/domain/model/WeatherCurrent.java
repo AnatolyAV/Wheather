@@ -18,9 +18,9 @@ public class WeatherCurrent implements Serializable {
     private final Snow mSnow;
     private final Rain mRain;
 
-    WeatherCurrent(Coordinate coordinate, List<Weather> weathers, Main main, Integer visibility,
-                   Wind wind, Clouds clouds, Long dateTime, Sys sys, Integer cityId,
-                   String cityName, Integer cod, Snow snow, Rain rain) {
+    private WeatherCurrent(Coordinate coordinate, List<Weather> weathers, Main main, Integer visibility,
+                           Wind wind, Clouds clouds, Long dateTime, Sys sys, Integer cityId,
+                           String cityName, Integer cod, Snow snow, Rain rain) {
         mCoordinate = coordinate;
         mWeathers = weathers;
         mMain = main;
