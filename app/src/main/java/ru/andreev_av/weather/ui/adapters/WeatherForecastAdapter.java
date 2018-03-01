@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.model.WeatherForecast;
+import ru.andreev_av.weather.domain.model.Temperature;
+import ru.andreev_av.weather.domain.model.Weather;
+import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.ui.adapters.holders.WeatherForecastViewHolder;
 import ru.andreev_av.weather.utils.ImageUtils;
 import ru.andreev_av.weather.utils.StringUtils;
@@ -18,12 +20,12 @@ import ru.andreev_av.weather.utils.UnitUtils;
 
 public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecastViewHolder> {
 
-    private Context context;
-    private List<WeatherForecast> weatherForecastList;
+    private Context mContext;
+    private List<WeatherForecast> mWeatherForecasts;
 
-    public WeatherForecastAdapter(Context context, List<WeatherForecast> weatherForecastList) {
-        this.context = context;
-        this.weatherForecastList = weatherForecastList;
+    public WeatherForecastAdapter(Context context, List<WeatherForecast> weatherForecasts) {
+        mContext = context;
+        mWeatherForecasts = weatherForecasts;
     }
 
     @Override
@@ -34,24 +36,29 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
 
     @Override
     public void onBindViewHolder(WeatherForecastViewHolder holder, int position) {
-        Typeface weatherFontIcon = Typeface.createFromAsset(context.getAssets(), "fonts/weathericons-regular-webfont.ttf");
+        Typeface weatherFontIcon = Typeface.createFromAsset(mContext.getAssets(), "fonts/weathericons-regular-webfont.ttf");
 
-        WeatherForecast weatherForecast = weatherForecastList.get(position);
+        WeatherForecast weatherForecast = mWeatherForecasts.get(position);
 
         holder.tvDateTime.setText(UnitUtils.getFormatDateTimeEEEddMMMM(weatherForecast.getDateTime()));
-        holder.tvDescription.setText(StringUtils.firstUpperCase(weatherForecast.getWeather().get(0).getDescription()));
-        holder.tvTemperatureMin.setText(context.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(weatherForecast.getTemperature().getMin())));
-        holder.tvTemperatureMax.setText(context.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(weatherForecast.getTemperature().getMax())));
+
+        Weather weather = weatherForecast.getWeather().get(0);
+        Temperature temperature = weatherForecast.getTemperature();
+
+        holder.tvDescription.setText(StringUtils.firstUpperCase(weather.getDescription()));
+        holder.tvTemperatureMin.setText(mContext.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(temperature.getMin())));
+        holder.tvTemperatureMax.setText(mContext.getString(R.string.temperature_with_degree, UnitUtils.getFormatTemperature(temperature.getMax())));
         holder.tvIcon.setTypeface(weatherFontIcon);
-        holder.tvIcon.setText(ImageUtils.getStrIcon(context, weatherForecast.getWeather().get(0).getIcon()));
+        holder.tvIcon.setText(ImageUtils.getStrIcon(mContext, weather.getIcon()));
     }
 
     @Override
     public int getItemCount() {
-        return weatherForecastList.size();
+        return mWeatherForecasts.size();
     }
 
-    public void refreshList(List<WeatherForecast> list) {
-        weatherForecastList = list;
+    public void setWeatherForecasts(List<WeatherForecast> weatherForecasts) {
+        mWeatherForecasts = weatherForecasts;
+        notifyDataSetChanged();
     }
 }

@@ -1,55 +1,43 @@
 package ru.andreev_av.weather.ui.activities;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.model.Temperature;
-import ru.andreev_av.weather.data.model.Weather;
-import ru.andreev_av.weather.data.model.WeatherForecast;
-import ru.andreev_av.weather.db.entry.WeatherCurrentEntry;
-import ru.andreev_av.weather.db.entry.WeatherForecastEntry;
+import ru.andreev_av.weather.data.db.WeatherForecastDao;
+import ru.andreev_av.weather.data.repository.WeatherForecastRepository;
+import ru.andreev_av.weather.domain.model.WeatherForecast;
+import ru.andreev_av.weather.domain.usecase.WeatherForecastUseCase;
 import ru.andreev_av.weather.net.ConnectionDetector;
 import ru.andreev_av.weather.preferences.AppPreference;
-import ru.andreev_av.weather.processors.Processor;
-import ru.andreev_av.weather.services.ServiceHelper;
 import ru.andreev_av.weather.ui.adapters.WeatherForecastAdapter;
-import ru.andreev_av.weather.utils.DateUtils;
+import ru.andreev_av.weather.ui.presentation.IWeatherForecastView;
+import ru.andreev_av.weather.ui.presentation.WeatherForecastPresenter;
 
-public class WeatherForecastActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class WeatherForecastActivity extends BaseActivity implements IWeatherForecastView {
 
-    private final static String BROADCAST_ACTION = "ru.andreev_av.weather.WeatherForecastActivity.ActionResult";
-    private final static int WEATHER_FORECAST_LOADER = 1;
-    private final static int COUNT_DAYS_DEFAULT = 16;
     private final static int COUNT_DAYS_THREE = 3;
     private final static int COUNT_DAYS_SEVEN = 7;
-    private final IntentFilter intentFilter = new IntentFilter(BROADCAST_ACTION);
-    private List<WeatherForecast> weatherForecastList = new ArrayList<>();
-    private RecyclerView rvWeatherForecastList;
-    private WeatherForecastAdapter adapter;
-    private ConnectionDetector connectionDetector;
-    private ServiceHelper serviceHelper;
-    private int cityId;
-    private boolean isRefreshed;
-    private int countDays;
-    private BroadcastReceiver weatherBroadcastReceiver;
-    private ProgressDialog dialog;
+    @InjectPresenter
+    WeatherForecastPresenter mWeatherForecastPresenter;
+    private List<WeatherForecast> mWeatherForecasts = new ArrayList<>();
+    private RecyclerView mWeatherForecastsRecycleView;
+    private WeatherForecastAdapter mAdapter;
+    // TODO заменить на ProgressBar
+    private ProgressDialog mProgressDialog;
+
+    private int mCityId;
+    private int mCountDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,96 +54,39 @@ public class WeatherForecastActivity extends BaseActivity implements LoaderManag
 
         initComponents();
 
-        connectionDetector = ConnectionDetector.getInstance(this);
+        mCityId = AppPreference.getCurrentCityId(this);
 
-        serviceHelper = new ServiceHelper(this, BROADCAST_ACTION);
+        mProgressDialog = new ProgressDialog(this);
 
-        cityId = AppPreference.getCurrentCityId(this);
+        mCountDays = COUNT_DAYS_THREE;
 
-        isRefreshed = true;
+        // TODO заменить на Dagger
+        WeatherForecastUseCase weatherForecastUseCase = new WeatherForecastUseCase(new WeatherForecastRepository(WeatherForecastDao.getInstance(this.getApplicationContext())));
 
-        countDays = COUNT_DAYS_THREE;
-
-        initWeatherReceiver();
-
-        getSupportLoaderManager().initLoader(WEATHER_FORECAST_LOADER, null, this);
+        mWeatherForecastPresenter.setUseCase(weatherForecastUseCase);
+        mWeatherForecastPresenter.setConnectionDetector(ConnectionDetector.getInstance(this));
+        mWeatherForecastPresenter.setCityId(mCityId);
+        mWeatherForecastPresenter.setCountDays(mCountDays);
+        mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, false);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (cityId != -1)
-            serviceHelper.loadWeatherForecast(cityId, COUNT_DAYS_DEFAULT);
-        registerReceiver(weatherBroadcastReceiver, intentFilter);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(weatherBroadcastReceiver);
-    }
-
+//    @ProvidePresenter
+//    WeatherForecastPresenter provideWeatherForecastPresenter() {
+//        return mWeatherForecastPresenter;
+//    }
 
     protected void findComponents() {
         super.findComponents();
-        rvWeatherForecastList = (RecyclerView) findViewById(R.id.rv_weather_forecast_list);
+        mWeatherForecastsRecycleView = (RecyclerView) findViewById(R.id.rv_weather_forecast_list);
     }
 
     private void initAdapter() {
-        adapter = new WeatherForecastAdapter(this, weatherForecastList);
+        mAdapter = new WeatherForecastAdapter(this, mWeatherForecasts);
     }
 
     private void initComponents() {
-        rvWeatherForecastList.setAdapter(adapter);
-        rvWeatherForecastList.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void initWeatherReceiver() {
-        weatherBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                int status = intent.getIntExtra(PARAM_STATUS, 0);
-
-                if (status == STATUS_CONNECTION_NOT_FOUND) {
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
-                    }
-                    Toast.makeText(WeatherForecastActivity.this,
-                            R.string.connection_not_found,
-                            Toast.LENGTH_SHORT).show();
-                    isRefreshed = false;
-                    getSupportLoaderManager().getLoader(WEATHER_FORECAST_LOADER).forceLoad();
-                }
-
-                if (status == STATUS_START) {
-                    dialog = new ProgressDialog(context);
-                    dialog.setMessage(context.getResources().getString(R.string.loading));
-                    if (!dialog.isShowing()) {
-                        dialog.show();
-                    }
-                }
-
-                if (status == STATUS_FINISH) {
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
-                    }
-                    Bundle extras = intent.getExtras();
-
-                    boolean success = extras.getBoolean(Processor.Extras.RESULT_EXTRA);
-                    int method = extras.getInt(Processor.Extras.METHOD_EXTRA);
-                    switch (method) {
-                        case ServiceHelper.Methods.LOAD_WEATHER_FORECAST:
-                            if (success) {
-                                getSupportLoaderManager().getLoader(WEATHER_FORECAST_LOADER).forceLoad();
-                            }
-                            isRefreshed = false;
-                            setUpdateButtonState(false);
-                            break;
-                    }
-                }
-            }
-        };
+        mWeatherForecastsRecycleView.setAdapter(mAdapter);
+        mWeatherForecastsRecycleView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -170,108 +101,66 @@ public class WeatherForecastActivity extends BaseActivity implements LoaderManag
         int id = item.getItemId();
         switch (id) {
             case R.id.main_menu_refresh:
-                if (connectionDetector.isNetworkAvailableAndConnected()) {
-                    if (cityId != -1) {
-                        serviceHelper.loadWeatherForecast(cityId, COUNT_DAYS_DEFAULT);
-                        setUpdateButtonState(true);
-                    }
-                } else {
-                    Toast.makeText(WeatherForecastActivity.this,
-                            R.string.connection_not_found,
-                            Toast.LENGTH_SHORT).show();
-                    setUpdateButtonState(false);
-                }
+                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, true);
                 return true;
             case R.id.main_menu_count_days:
-                if (countDays == COUNT_DAYS_THREE) {
-                    countDays = COUNT_DAYS_SEVEN;
+                if (mCountDays == COUNT_DAYS_THREE) {
+                    mCountDays = COUNT_DAYS_SEVEN;
                     item.setIcon(R.drawable.ic_filter_3);
                 } else {
-                    countDays = COUNT_DAYS_THREE;
+                    mCountDays = COUNT_DAYS_THREE;
                     item.setIcon(R.drawable.ic_filter_7);
                 }
-                isRefreshed = false;
-                getSupportLoaderManager().restartLoader(WEATHER_FORECAST_LOADER, null, this);
+                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, false);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader cursorLoader = null;
-        switch (id) {
-            case WEATHER_FORECAST_LOADER:
-                String selection = WeatherCurrentEntry.COLUMN_CITY_ID + " = " + cityId
-                        + " and " + WeatherForecastEntry.COLUMN_DATE_TIME + " >= " + DateUtils.getFormatCalendarNowTimeInMillis();
-                String sortOrder = WeatherForecastEntry.COLUMN_DATE_TIME + " ASC " + " LIMIT " + countDays;
-                cursorLoader = new CursorLoader(this, WeatherForecastEntry.CONTENT_URI, null, selection, null, sortOrder);
-                break;
-        }
-
-        return cursorLoader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (!isRefreshed) {
-            if (cityId != -1) {
-                weatherForecastList.clear();
-                if (cursor != null) {
-                    if (!cursor.isClosed()) {
-                        loadWeatherForecastListFromCursor(cursor);
-                        cursor.close();
-                    } else {
-                        getSupportLoaderManager().getLoader(WEATHER_FORECAST_LOADER).forceLoad();
-                    }
-                }
-                adapter.refreshList(weatherForecastList);
-                adapter.notifyDataSetChanged();
-            }
+    public void showLoading() {
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
+    public void hideLoading() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 
-    private void loadWeatherForecastListFromCursor(Cursor cursor) {
+    @Override
+    public void showWeatherForecasts(List<ru.andreev_av.weather.domain.model.WeatherForecast> weatherForecasts) {
+        mWeatherForecasts = weatherForecasts;
 
-        if (cursor.moveToFirst()) {
-            do {
-                WeatherForecast weatherForecast = new WeatherForecast();
+        mAdapter.setWeatherForecasts(mWeatherForecasts);
+        // TODO удалить
+        Toast.makeText(this,
+                "Загрузка погод успешно завершена",
+                Toast.LENGTH_SHORT).show();
+        updateButtonState(false);
+    }
 
-                long dateTime = cursor.getLong(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_DATE_TIME));
-                weatherForecast.setDateTime(dateTime);
+    @Override
+    public void showErrorWeatherForecasts() {
+        Toast.makeText(this,
+                R.string.error_weather_forecasts,
+                Toast.LENGTH_SHORT).show();
+        updateButtonState(false);
+    }
 
-                float temperatureDay = cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_TEMPERATURE_DAY));
-                float temperatureMin = cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_TEMPERATURE_MIN));
-                float temperatureMax = cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_TEMPERATURE_MAX));
-                float temperatureNight = cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_TEMPERATURE_NIGHT));
-                float temperatureEvening = cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_TEMPERATURE_EVENING));
-                float temperatureMorning = cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_TEMPERATURE_MORNING));
-                weatherForecast.setTemperature(new Temperature(temperatureDay, temperatureMin, temperatureMax, temperatureNight, temperatureEvening, temperatureMorning));
+    @Override
+    public void showNotConnection() {
+        Toast.makeText(this,
+                R.string.connection_not_found,
+                Toast.LENGTH_SHORT).show();
+        updateButtonState(false);
+    }
 
-                weatherForecast.setPressure(cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_PRESSURE)));
-
-                weatherForecast.setHumidity(cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_HUMIDITY)));
-
-                int weatherId = cursor.getInt(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_WEATHER_ID));
-                String weatherMain = cursor.getString(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_WEATHER_MAIN));
-                String weatherDescription = cursor.getString(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_WEATHER_DESCRIPTION));
-                String weatherIcon = cursor.getString(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_WEATHER_ICON));
-                Weather weather = new Weather(weatherId, weatherMain, weatherDescription, weatherIcon);
-                List<Weather> weatherList = new ArrayList<>();
-                weatherList.add(weather);
-                weatherForecast.setWeather(weatherList);
-
-                weatherForecast.setSpeed(cursor.getFloat(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_WIND_SPEED)));
-
-                weatherForecast.setClouds(cursor.getInt(cursor.getColumnIndex(WeatherForecastEntry.COLUMN_CLOUDINESS)));
-
-                weatherForecastList.add(weatherForecast);
-            } while (cursor.moveToNext());
-        }
+    @Override
+    public void updateButtonState(boolean isUpdate) {
+        setUpdateButtonState(isUpdate);
     }
 }
