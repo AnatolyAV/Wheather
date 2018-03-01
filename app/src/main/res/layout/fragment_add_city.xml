@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    tools:context="ru.andreev_av.weather.ui.fragments.AddCityFragment">
+    tools:context="ru.andreev_av.weather.presentation.fragments.AddCityFragment">
 
     <AutoCompleteTextView
         android:id="@+id/actv_add_city"

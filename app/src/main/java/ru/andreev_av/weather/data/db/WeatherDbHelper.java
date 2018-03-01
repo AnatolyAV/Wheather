@@ -13,8 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ru.andreev_av.weather.R;
+import ru.andreev_av.weather.data.files.CityFileReader;
 import ru.andreev_av.weather.domain.model.City;
-import ru.andreev_av.weather.files.CityFileReader;
 
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_CITY_ID;
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_COUNTRY_CODE;

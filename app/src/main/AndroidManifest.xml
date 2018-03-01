@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".App"
+        android:name=".presentation.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activities.CitiesListActivity"
+            android:name=".presentation.activities.CitiesListActivity"
             android:label="@string/title_activity_city_list"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.activities.WeatherCurrentDetailsActivity"
+            android:name=".presentation.activities.WeatherCurrentDetailsActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.SplashActivity"
+            android:name=".presentation.activities.SplashActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -37,27 +37,8 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.CityService"
-            android:exported="false" />
-        <service
-            android:name=".services.WeatherCurrentService"
-            android:exported="false" />
-        <service
-            android:name=".services.WeatherForecastService"
-            android:exported="false" />
-
-        <provider
-            android:name=".db.provider.WeatherContentProvider"
-            android:authorities="ru.andreev_av.weather.provider.Weather"
-            android:exported="false" />
-
-        <service
-            android:name=".services.CreateDatabaseService"
-            android:exported="false" />
-
         <activity
-            android:name=".ui.activities.WeatherForecastActivity"
+            android:name=".presentation.activities.WeatherForecastActivity"
             android:label="@string/title_activity_weather_forecast"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"

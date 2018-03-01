@@ -1,8 +1,8 @@
 package ru.andreev_av.weather.dagger.components;
 
 import dagger.Subcomponent;
-import ru.andreev_av.weather.ui.activities.SplashActivity;
-import ru.andreev_av.weather.ui.fragments.AddCityFragment;
+import ru.andreev_av.weather.presentation.activities.SplashActivity;
+import ru.andreev_av.weather.presentation.fragments.AddCityFragment;
 
 @Subcomponent
 public interface CitiesComponent {
