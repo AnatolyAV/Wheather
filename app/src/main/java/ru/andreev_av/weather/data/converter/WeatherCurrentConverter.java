@@ -44,11 +44,7 @@ public class WeatherCurrentConverter implements IWeatherCurrentConverter {
                 while (cursor.moveToNext()) {
                     WeatherCurrent weatherCurrent = convert(cursor);
                     weatherCurrents.add(weatherCurrent);
-//                      if (AppPreference.getCurrentCityId(this) == weatherCurrentModel.getCityId()) {
-//                          AppPreference.saveWeather(this, weatherCurrentModel);
-//                      }
                 }
-
             } else {
                 weatherCurrents = Collections.emptyList();
             }
