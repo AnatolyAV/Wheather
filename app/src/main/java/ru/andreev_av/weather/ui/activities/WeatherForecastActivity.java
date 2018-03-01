@@ -9,16 +9,16 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ru.andreev_av.weather.App;
 import ru.andreev_av.weather.R;
-import ru.andreev_av.weather.data.db.WeatherForecastDao;
-import ru.andreev_av.weather.data.repository.WeatherForecastRepository;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
-import ru.andreev_av.weather.domain.usecase.WeatherForecastUseCase;
-import ru.andreev_av.weather.net.ConnectionDetector;
 import ru.andreev_av.weather.preferences.AppPreference;
 import ru.andreev_av.weather.ui.adapters.WeatherForecastAdapter;
 import ru.andreev_av.weather.ui.presentation.IWeatherForecastView;
@@ -28,6 +28,8 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
 
     private final static int COUNT_DAYS_THREE = 3;
     private final static int COUNT_DAYS_SEVEN = 7;
+
+    @Inject
     @InjectPresenter
     WeatherForecastPresenter mWeatherForecastPresenter;
     private List<WeatherForecast> mWeatherForecasts = new ArrayList<>();
@@ -41,6 +43,7 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        App.getInstance().getAppComponent().plusWeatherForecastComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_forecast);
 
@@ -60,20 +63,15 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
 
         mCountDays = COUNT_DAYS_THREE;
 
-        // TODO заменить на Dagger
-        WeatherForecastUseCase weatherForecastUseCase = new WeatherForecastUseCase(new WeatherForecastRepository(WeatherForecastDao.getInstance(this.getApplicationContext())));
-
-        mWeatherForecastPresenter.setUseCase(weatherForecastUseCase);
-        mWeatherForecastPresenter.setConnectionDetector(ConnectionDetector.getInstance(this));
         mWeatherForecastPresenter.setCityId(mCityId);
         mWeatherForecastPresenter.setCountDays(mCountDays);
         mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, false);
     }
 
-//    @ProvidePresenter
-//    WeatherForecastPresenter provideWeatherForecastPresenter() {
-//        return mWeatherForecastPresenter;
-//    }
+    @ProvidePresenter
+    WeatherForecastPresenter provideWeatherForecastPresenter() {
+        return mWeatherForecastPresenter;
+    }
 
     protected void findComponents() {
         super.findComponents();

@@ -16,7 +16,10 @@ import ru.andreev_av.weather.dagger.modules.ConnectionDetectorModule;
         }
 )
 public interface AppComponent {
-    WeatherCurrentComponent plusWeatherCurrentComponent();
 
     CitiesComponent plusCitiesComponent();
+
+    WeatherCurrentComponent plusWeatherCurrentComponent();
+
+    WeatherForecastComponent plusWeatherForecastComponent();
 }

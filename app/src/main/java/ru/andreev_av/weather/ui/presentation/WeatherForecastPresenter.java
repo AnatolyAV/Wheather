@@ -5,6 +5,8 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.domain.usecase.IWeatherForecastUseCase;
 import ru.andreev_av.weather.net.ConnectionDetector;
@@ -18,45 +20,10 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
     private int mCityId;
     private int mCountDays;
 
-    public WeatherForecastPresenter() {
-    }
-
-    //    @Inject
+    @Inject
     public WeatherForecastPresenter(IWeatherForecastUseCase useCase, ConnectionDetector connectionDetector) {
         mUseCase = useCase;
         mConnectionDetector = connectionDetector;
-    }
-
-    public IWeatherForecastUseCase getUseCase() {
-        return mUseCase;
-    }
-
-    public void setUseCase(IWeatherForecastUseCase useCase) {
-        mUseCase = useCase;
-    }
-
-    public ConnectionDetector getConnectionDetector() {
-        return mConnectionDetector;
-    }
-
-    public void setConnectionDetector(ConnectionDetector connectionDetector) {
-        mConnectionDetector = connectionDetector;
-    }
-
-    public int getCityId() {
-        return mCityId;
-    }
-
-    public void setCityId(int cityId) {
-        mCityId = cityId;
-    }
-
-    public int getCountDays() {
-        return mCountDays;
-    }
-
-    public void setCountDays(int countDays) {
-        mCountDays = countDays;
     }
 
     /**
@@ -91,6 +58,22 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
                                 .showErrorWeatherForecasts();
                     }
                 });
+    }
+
+    public int getCityId() {
+        return mCityId;
+    }
+
+    public void setCityId(int cityId) {
+        mCityId = cityId;
+    }
+
+    public int getCountDays() {
+        return mCountDays;
+    }
+
+    public void setCountDays(int countDays) {
+        mCountDays = countDays;
     }
 
     private boolean checkNetworkAvailableAndConnected() {
