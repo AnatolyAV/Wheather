@@ -33,7 +33,6 @@ import static ru.andreev_av.weather.data.db.WeatherContract.WeatherCurrentEntry.
 
 public class WeatherCurrentConverter implements IWeatherCurrentConverter {
 
-
     @Override
     public List<WeatherCurrent> convertAll(Cursor cursor) {
 
@@ -41,7 +40,10 @@ public class WeatherCurrentConverter implements IWeatherCurrentConverter {
         try {
             if (cursor != null && !cursor.isClosed()) {
                 weatherCurrents = new ArrayList<>();
-                while (cursor.moveToNext()) {
+                // TODO Подумать, как сделать лучше
+                //т.к. в WeatherForecastConverter позиция курсора непонятным образом менялась, что приводило к некорректным данным, то решил в этом классе сделать пока также
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    cursor.moveToPosition(i);
                     WeatherCurrent weatherCurrent = convert(cursor);
                     weatherCurrents.add(weatherCurrent);
                 }
