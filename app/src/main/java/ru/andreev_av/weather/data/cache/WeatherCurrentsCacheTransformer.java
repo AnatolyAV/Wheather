@@ -11,11 +11,13 @@ import rx.functions.Func1;
 public class WeatherCurrentsCacheTransformer implements Observable.Transformer<List<WeatherCurrentModel>, List<WeatherCurrent>> {
 
     private IWeatherCurrentDao mWeatherCurrentDao;
+
     private final Func1<List<WeatherCurrentModel>, Observable<List<WeatherCurrent>>> mSaveFunc = weatherCurrentModels -> {
         mWeatherCurrentDao.insertOrUpdate(weatherCurrentModels);
         List<WeatherCurrent> weatherCurrents = mWeatherCurrentDao.getAll();
         return Observable.just(weatherCurrents);
     };
+
     private final Func1<Throwable, Observable<List<WeatherCurrent>>> mCacheErrorHandler = throwable -> {
         List<WeatherCurrent> weatherCurrents = mWeatherCurrentDao.getAll();
         return Observable.just(weatherCurrents);

@@ -13,11 +13,13 @@ public class WeatherForecastCacheTransformer implements Observable.Transformer<W
     private IWeatherForecastDao mWeatherForecastDao;
     private int mCityId;
     private int mCountDays;
+
     private final Func1<WeatherForecastModel, Observable<List<WeatherForecast>>> mSaveFunc = weatherForecastModel -> {
         mWeatherForecastDao.insertOrUpdate(weatherForecastModel);
         List<WeatherForecast> weatherForecasts = mWeatherForecastDao.getWeatherForecastsByCityId(weatherForecastModel.getCity().getId(), mCountDays);
         return Observable.just(weatherForecasts);
     };
+
     private final Func1<Throwable, Observable<List<WeatherForecast>>> mCacheErrorHandler = throwable -> {
         List<WeatherForecast> weatherForecasts = mWeatherForecastDao.getWeatherForecastsByCityId(mCityId, mCountDays);
         return Observable.just(weatherForecasts);
