@@ -1,4 +1,4 @@
-package ru.andreev_av.weather.net;
+package ru.andreev_av.weather.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.andreev_av.weather.net.ConnectionDetector;
+import ru.andreev_av.weather.utils.ConnectionDetector;
 
 @Module(includes = {AppModule.class})
 public class ConnectionDetectorModule {

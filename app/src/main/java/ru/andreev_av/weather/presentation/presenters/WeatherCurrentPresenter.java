@@ -10,8 +10,8 @@ import javax.inject.Inject;
 
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
-import ru.andreev_av.weather.net.ConnectionDetector;
 import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
+import ru.andreev_av.weather.utils.ConnectionDetector;
 import rx.functions.Action1;
 
 @InjectViewState
