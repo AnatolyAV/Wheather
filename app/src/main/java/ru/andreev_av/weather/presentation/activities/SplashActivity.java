@@ -47,7 +47,7 @@ public class SplashActivity extends MvpAppCompatActivity implements ICitiesView 
             mCityIds.add(city.getId());
         }
 
-        if (AppPreference.getCurrentCityId(this) != AppPreference.NOT_CURRENT_CITY_ID) {
+        if (AppPreference.getCurrentCityId(this) == AppPreference.NOT_CURRENT_CITY_ID) {
             AppPreference.saveCurrentCityId(this, mCityIds.get(0));
         }
 

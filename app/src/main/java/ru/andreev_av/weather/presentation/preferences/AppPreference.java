@@ -9,7 +9,7 @@ import ru.andreev_av.weather.utils.StringUtils;
 
 public class AppPreference {
 
-    public static final int NOT_CURRENT_CITY_ID = 1;
+    public static final int NOT_CURRENT_CITY_ID = -1;
     private static final String PREF_CITY = "PrefCity";
     private static final String PREF_CITY_IDS = "pref_city_ids";
     private static final String PREF_CITY_ID = "pref_city_id";
