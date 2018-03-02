@@ -6,15 +6,22 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.data.converter.CityConverter;
 import ru.andreev_av.weather.data.converter.ICityConverter;
+import ru.andreev_av.weather.data.files.CityFileReader;
 import ru.andreev_av.weather.domain.model.City;
 
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_CITY_ID;
+import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_COUNTRY_CODE;
+import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_LATITUDE;
+import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_LONGITUDE;
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_NAME;
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.COLUMN_WATCHED;
 import static ru.andreev_av.weather.data.db.WeatherContract.CityEntry.TABLE_NAME;
@@ -27,14 +34,15 @@ public class CityDao extends AbstractDao implements ICityDao {
     private final static int CITY_WATCH = 1;
     private final static int CITY_NOT_WATCH = 0;
     private final static int UPDATED_SUCCESS = 1;
-
     private static CityDao mInstance;
-
+    private Context mContext;
     private ICityConverter converter;
 
     private CityDao(Context context) {
         super(WeatherDbHelper.getInstance(context));
         converter = new CityConverter();
+        mContext = context;
+        mDbHelper.setDbTablesCreatedListener(this);
     }
 
     public static CityDao getInstance(Context context) {
@@ -116,13 +124,13 @@ public class CityDao extends AbstractDao implements ICityDao {
             if (db != null) {
                 db.endTransaction();
                 mDbHelper.close();
-
             }
         }
 
         return cities;
     }
 
+    @Override
     public boolean updateCityWatched(City city) throws IllegalArgumentException {
         SQLiteDatabase db = null;
         int updated = 0;
@@ -148,5 +156,40 @@ public class CityDao extends AbstractDao implements ICityDao {
             }
         }
         return (updated == UPDATED_SUCCESS);
+    }
+
+    @Override
+    public void onDbTablesCreated(SQLiteDatabase db) {
+        fillTable(db);
+    }
+
+    // TODO подумать, может вынести и отрефакторить
+    private void fillTable(SQLiteDatabase db) {
+        InputStream inputStream = mContext.getResources().openRawResource(R.raw.city_list);
+        CityFileReader fileReader = new CityFileReader();
+        try {
+            final List<City> cities = fileReader.readCityListFromFile(inputStream);
+            inputStream.close();
+            db.beginTransaction();
+            for (City city : cities) {
+                ContentValues cv = new ContentValues();
+                cv.put(COLUMN_CITY_ID, city.getId());
+                cv.put(COLUMN_NAME, city.getName());
+                cv.put(COLUMN_LATITUDE, city.getCoordinate().getLatitude());
+                cv.put(COLUMN_LONGITUDE, city.getCoordinate().getLongitude());
+                cv.put(COLUMN_COUNTRY_CODE, city.getCountryCode());
+                cv.put(COLUMN_WATCHED, city.getWatch());
+                db.insert(TABLE_NAME, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } catch (IOException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE, null, e);
+        } finally {
+            mContext = null;
+            mDbHelper.removeDbTablesCreatedListener();
+            if (db != null) {
+                db.endTransaction();
+            }
+        }
     }
 }
