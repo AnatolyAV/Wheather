@@ -27,20 +27,14 @@ import ru.andreev_av.weather.presentation.adapters.WeatherCurrentCitiesAdapter;
 import ru.andreev_av.weather.presentation.fragments.AddCityFragment;
 import ru.andreev_av.weather.presentation.listeners.RecyclerItemClickListener;
 import ru.andreev_av.weather.presentation.preferences.AppPreference;
-import ru.andreev_av.weather.presentation.presenters.CitiesPresenter;
 import ru.andreev_av.weather.presentation.presenters.WeatherCurrentPresenter;
-import ru.andreev_av.weather.presentation.views.ICitiesView;
 import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
 
-public class CitiesListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentView, ICitiesView {
+public class CitiesListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentView {
 
     @Inject
     @InjectPresenter
     WeatherCurrentPresenter mWeatherCurrentPresenter;
-
-    @Inject
-    @InjectPresenter
-    CitiesPresenter mCitiesPresenter;
 
     private RecyclerView mWeatherCurrentCitiesRecyclerView;
     private WeatherCurrentCitiesAdapter mWeatherCurrentCitiesAdapter;
@@ -80,11 +74,6 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     @ProvidePresenter
     WeatherCurrentPresenter provideWeatherCurrentPresenter() {
         return mWeatherCurrentPresenter;
-    }
-
-    @ProvidePresenter
-    CitiesPresenter provideCitiesPresenter() {
-        return mCitiesPresenter;
     }
 
     protected void findComponents() {
@@ -146,7 +135,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     public void onAddCityFragmentInteraction(City city) {
         if (city != null) {
             AppPreference.addCityId(this, city.getId());
-            mCitiesPresenter.loadCityToWatch(city);
+            mWeatherCurrentPresenter.loadWeather(city.getId(), false, false);
         }
     }
 
@@ -218,13 +207,4 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         updateButtonState(false);
     }
 
-    @Override
-    public void processAddedCity(City city) {
-        mWeatherCurrentPresenter.loadWeather(city.getId(), false, false);
-    }
-
-    @Override
-    public void showCities(List<City> cities) {
-
-    }
 }

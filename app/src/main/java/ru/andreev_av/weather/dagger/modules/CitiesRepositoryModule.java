@@ -1,9 +1,8 @@
 package ru.andreev_av.weather.dagger.modules;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import ru.andreev_av.weather.dagger.scope.ForCities;
 import ru.andreev_av.weather.data.db.ICityDao;
 import ru.andreev_av.weather.data.repository.CitiesRepository;
 import ru.andreev_av.weather.data.repository.ICitiesRepository;
@@ -12,7 +11,7 @@ import ru.andreev_av.weather.data.repository.ICitiesRepository;
 public class CitiesRepositoryModule {
 
     @Provides
-    @Singleton
+    @ForCities
     public ICitiesRepository provideCitiesRepository(ICityDao cityDao) {
         return new CitiesRepository(cityDao);
     }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.MvpDialogFragment;
@@ -77,12 +78,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
         builder.setTitle(R.string.dialog_add_city_title_label);
         builder.setView(mAddCityLayout)
                 // Add action buttons
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onAddCityFragmentInteraction(mSelectedCity);
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mSelectedCity = null;
@@ -90,6 +86,25 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
                 });
 
         final AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button buttonPositive = (dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                buttonPositive.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        if (mSelectedCity != null) {
+                            mCitiesPresenter.loadCityToWatch(mSelectedCity);
+                        }
+                    }
+                });
+            }
+        });
+
 
         mAddCityAutoCompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -133,6 +148,8 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
     @Override
     public void processAddedCity(City city) {
+        mListener.onAddCityFragmentInteraction(city);
+        getDialog().dismiss();
     }
 
     private void findComponents() {
