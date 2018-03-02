@@ -98,7 +98,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
             @Override
             public void onItemClick(View view, int position) {
                 // TODO заменить на intent.putExtra()
-                AppPreference.updateCurrentCityId(CitiesListActivity.this, mWeatherCurrents.get(position).getCityId());
+                AppPreference.saveCurrentCityId(CitiesListActivity.this, mWeatherCurrents.get(position).getCityId());
                 AppPreference.saveCityNameAndCountryCode(CitiesListActivity.this, mWeatherCurrents.get(position).getCityName(), mWeatherCurrents.get(position).getSys().getCountryCode());
                 Intent intent = new Intent(CitiesListActivity.this, WeatherCurrentDetailsActivity.class);
                 startActivity(intent);

@@ -46,7 +46,13 @@ public class SplashActivity extends MvpAppCompatActivity implements ICitiesView 
         for (City city : cities) {
             mCityIds.add(city.getId());
         }
-        AppPreference.saveCityIds(SplashActivity.this, mCityIds);
+
+        if (AppPreference.getCurrentCityId(this) != AppPreference.NOT_CURRENT_CITY_ID) {
+            AppPreference.saveCurrentCityId(this, mCityIds.get(0));
+        }
+
+        AppPreference.saveCityIds(this, mCityIds);
+
         Intent weatherCurrentListIntent = new Intent(this, CitiesListActivity.class);
         startActivity(weatherCurrentListIntent);
     }

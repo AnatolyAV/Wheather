@@ -9,8 +9,8 @@ import ru.andreev_av.weather.utils.StringUtils;
 
 public class AppPreference {
 
+    public static final int NOT_CURRENT_CITY_ID = 1;
     private static final String PREF_CITY = "PrefCity";
-
     private static final String PREF_CITY_IDS = "pref_city_ids";
     private static final String PREF_CITY_ID = "pref_city_id";
     private static final String PREF_CITY_NAME = "pref_city_name";
@@ -34,7 +34,7 @@ public class AppPreference {
         return result;
     }
 
-    public static void updateCurrentCityId(Context context, int cityId) {
+    public static void saveCurrentCityId(Context context, int cityId) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_CITY,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -45,14 +45,13 @@ public class AppPreference {
     public static int getCurrentCityId(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_CITY,
                 Context.MODE_PRIVATE);
-        return preferences.getInt(PREF_CITY_ID, -1);
+        return preferences.getInt(PREF_CITY_ID, NOT_CURRENT_CITY_ID);
     }
 
     public static void saveCityIds(Context context, ArrayList<Integer> cityIds) {
         SharedPreferences preferences = context.getSharedPreferences(PREF_CITY,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(PREF_CITY_ID, cityIds.get(0));
         editor.putString(PREF_CITY_IDS, StringUtils.joinIds(cityIds));
         editor.apply();
     }
