@@ -45,7 +45,7 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
     public void loadWeatherForecast(int cityId, int countDays, RefreshingType typeRefreshing) {
         mUseCase.loadWeatherForecast(cityId, countDays)
                 .doOnSubscribe(() -> getViewState().showLoading(typeRefreshing))
-                .doAfterTerminate(() -> getViewState().showLoading(typeRefreshing))
+                .doAfterTerminate(() -> getViewState().hideLoading(typeRefreshing))
                 .subscribe(new Action1<List<WeatherForecast>>() {
                     @Override
                     public void call(List<WeatherForecast> weatherForecasts) {
