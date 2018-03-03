@@ -20,6 +20,7 @@ import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.presentation.App;
 import ru.andreev_av.weather.presentation.adapters.WeatherForecastAdapter;
+import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.preferences.AppPreference;
 import ru.andreev_av.weather.presentation.presenters.WeatherForecastPresenter;
 import ru.andreev_av.weather.presentation.views.IWeatherForecastView;
@@ -61,11 +62,12 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
 
         mProgressDialog = new ProgressDialog(this);
 
-        mCountDays = COUNT_DAYS_THREE;
-
-        mWeatherForecastPresenter.setCityId(mCityId);
-        mWeatherForecastPresenter.setCountDays(mCountDays);
-        mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, false);
+        if (savedInstanceState == null) {
+            mCountDays = COUNT_DAYS_THREE;
+            mWeatherForecastPresenter.setCityId(mCityId);
+            mWeatherForecastPresenter.setCountDays(mCountDays);
+            mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
+        }
     }
 
     @ProvidePresenter
@@ -99,7 +101,7 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         int id = item.getItemId();
         switch (id) {
             case R.id.main_menu_refresh:
-                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, true);
+                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, RefreshingType.UPDATE_BUTTON);
                 return true;
             case R.id.main_menu_count_days:
                 if (mCountDays == COUNT_DAYS_THREE) {
@@ -109,23 +111,37 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
                     mCountDays = COUNT_DAYS_THREE;
                     item.setIcon(R.drawable.ic_filter_7);
                 }
-                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, false);
+                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void showLoading() {
-        if (!mProgressDialog.isShowing()) {
-            mProgressDialog.show();
+    public void showLoading(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                if (!mProgressDialog.isShowing()) {
+                    mProgressDialog.show();
+                }
+                break;
+            case UPDATE_BUTTON:
+                setUpdateButtonState(true);
+                break;
         }
     }
 
     @Override
-    public void hideLoading() {
-        if (mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+    public void hideLoading(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                break;
+            case UPDATE_BUTTON:
+                setUpdateButtonState(false);
+                break;
         }
     }
 
@@ -138,7 +154,6 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         Toast.makeText(this,
                 "Загрузка погод успешно завершена",
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
 
     @Override
@@ -146,7 +161,6 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         Toast.makeText(this,
                 R.string.error_weather_forecasts,
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
 
     @Override
@@ -154,11 +168,5 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         Toast.makeText(this,
                 R.string.connection_not_found,
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
-    }
-
-    @Override
-    public void updateButtonState(boolean isUpdate) {
-        setUpdateButtonState(isUpdate);
     }
 }

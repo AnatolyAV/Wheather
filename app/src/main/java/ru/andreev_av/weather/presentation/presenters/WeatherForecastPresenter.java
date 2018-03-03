@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.domain.usecase.IWeatherForecastUseCase;
+import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.views.IWeatherForecastView;
 import ru.andreev_av.weather.utils.ConnectionDetector;
 import rx.functions.Action1;
@@ -36,14 +37,15 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
     }
 
     @Override
-    public void loadWeatherForecast(int cityId, int countDays, boolean isRefreshing) {
-        if (isRefreshing) {
-            getViewState().updateButtonState(true);
-        }
+    public void loadWeatherForecast(int cityId, int countDays) {
+        loadWeatherForecast(cityId, countDays, RefreshingType.STANDARD);
+    }
 
+    @Override
+    public void loadWeatherForecast(int cityId, int countDays, RefreshingType typeRefreshing) {
         mUseCase.loadWeatherForecast(cityId, countDays)
-                .doOnSubscribe(getViewState()::showLoading)
-                .doAfterTerminate(getViewState()::hideLoading)
+                .doOnSubscribe(() -> getViewState().showLoading(typeRefreshing))
+                .doAfterTerminate(() -> getViewState().showLoading(typeRefreshing))
                 .subscribe(new Action1<List<WeatherForecast>>() {
                     @Override
                     public void call(List<WeatherForecast> weatherForecasts) {

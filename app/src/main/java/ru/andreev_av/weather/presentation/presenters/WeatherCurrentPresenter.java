@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
+import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
 import ru.andreev_av.weather.utils.ConnectionDetector;
 import rx.functions.Action1;
@@ -35,14 +36,15 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     }
 
     @Override
-    public void loadWeather(int cityId, boolean isRefreshing, boolean isSwipeRefreshing) {
-        if (isRefreshing && !isSwipeRefreshing) {
-            getViewState().updateButtonState(true);
-        }
+    public void loadWeather(int cityId) {
+        loadWeather(cityId, RefreshingType.STANDARD);
+    }
 
+    @Override
+    public void loadWeather(int cityId, RefreshingType refreshingType) {
         mWeatherCurrentUseCase.loadWeather(cityId)
-                .doOnSubscribe(getViewState()::showLoading)
-                .doAfterTerminate(getViewState()::hideLoading)
+                .doOnSubscribe(() -> getViewState().showLoading(refreshingType))
+                .doAfterTerminate(() -> getViewState().hideLoading(refreshingType))
                 .subscribe(new Action1<WeatherCurrent>() {
                     @Override
                     public void call(WeatherCurrent weatherCurrent) {
@@ -61,14 +63,15 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     }
 
     @Override
-    public void loadWeather(ArrayList<Integer> cityIds, boolean isRefreshing) {
-        if (isRefreshing) {
-            getViewState().updateButtonState(true);
-        }
+    public void loadWeather(ArrayList<Integer> cityIds) {
+        loadWeather(cityIds, RefreshingType.STANDARD);
+    }
 
+    @Override
+    public void loadWeather(ArrayList<Integer> cityIds, RefreshingType refreshingType) {
         mWeatherCurrentUseCase.loadWeather(cityIds)
-                .doOnSubscribe(getViewState()::showLoading)
-                .doAfterTerminate(getViewState()::hideLoading)
+                .doOnSubscribe(() -> getViewState().showLoading(refreshingType))
+                .doAfterTerminate(() -> getViewState().hideLoading(refreshingType))
                 .subscribe(new Action1<List<WeatherCurrent>>() {
                     @Override
                     public void call(List<WeatherCurrent> weatherCurrents) {

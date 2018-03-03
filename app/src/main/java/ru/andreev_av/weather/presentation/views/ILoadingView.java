@@ -1,14 +1,16 @@
 package ru.andreev_av.weather.presentation.views;
 
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-/**
- * Created by Tolik on 01.02.2018.
- */
+import ru.andreev_av.weather.presentation.enums.RefreshingType;
 
 public interface ILoadingView extends MvpView {
 
-    void showLoading();
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showLoading(RefreshingType refreshingType);
 
-    void hideLoading();
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void hideLoading(RefreshingType refreshingType);
 }

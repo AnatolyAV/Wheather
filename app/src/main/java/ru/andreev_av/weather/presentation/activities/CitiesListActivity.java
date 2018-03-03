@@ -24,6 +24,7 @@ import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.presentation.App;
 import ru.andreev_av.weather.presentation.adapters.WeatherCurrentCitiesAdapter;
+import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.fragments.AddCityFragment;
 import ru.andreev_av.weather.presentation.listeners.RecyclerItemClickListener;
 import ru.andreev_av.weather.presentation.preferences.AppPreference;
@@ -67,8 +68,9 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
         mProgressDialog = new ProgressDialog(this);
 
-        // TODO возможно при пересоздании некорректные mCityIds будут, надо проверить
-        mWeatherCurrentPresenter.loadWeather(mCityIds, false);
+        if (savedInstanceState == null) {
+            mWeatherCurrentPresenter.loadWeather(mCityIds);
+        }
     }
 
     @ProvidePresenter
@@ -123,7 +125,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         switch (id) {
             case R.id.main_menu_refresh:
                 if (mCityIds != null && !mCityIds.isEmpty()) {
-                    mWeatherCurrentPresenter.loadWeather(mCityIds, true);
+                    mWeatherCurrentPresenter.loadWeather(mCityIds, RefreshingType.UPDATE_BUTTON);
                 }
                 return true;
         }
@@ -135,27 +137,36 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     public void onAddCityFragmentInteraction(City city) {
         if (city != null) {
             AppPreference.addCityId(this, city.getId());
-            mWeatherCurrentPresenter.loadWeather(city.getId(), false, false);
+            mWeatherCurrentPresenter.loadWeather(city.getId());
         }
     }
 
     @Override
-    public void showLoading() {
-        if (!mProgressDialog.isShowing()) {
-            mProgressDialog.show();
+    public void showLoading(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                if (!mProgressDialog.isShowing()) {
+                    mProgressDialog.show();
+                }
+                break;
+            case UPDATE_BUTTON:
+                setUpdateButtonState(true);
+                break;
         }
     }
 
     @Override
-    public void hideLoading() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+    public void hideLoading(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
+                break;
+            case UPDATE_BUTTON:
+                setUpdateButtonState(false);
+                break;
         }
-    }
-
-    @Override
-    public void updateButtonState(boolean isUpdate) {
-        setUpdateButtonState(isUpdate);
     }
 
     @Override
@@ -166,7 +177,6 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         Toast.makeText(this,
                 "Загрузка погод успешно завершена",
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
 
     @Override
@@ -179,8 +189,6 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
                     "Загрузка погоды успешно завершена",
                     Toast.LENGTH_SHORT).show();
         }
-        updateButtonState(false);
-
     }
 
     @Override
@@ -188,7 +196,6 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         Toast.makeText(this,
                 R.string.error_weather_current,
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
 
     @Override
@@ -196,7 +203,6 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         Toast.makeText(this,
                 R.string.error_weather_currents,
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
 
     @Override
@@ -204,7 +210,5 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         Toast.makeText(this,
                 R.string.connection_not_found,
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
-
 }

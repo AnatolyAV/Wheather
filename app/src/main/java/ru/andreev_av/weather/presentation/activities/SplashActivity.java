@@ -32,7 +32,9 @@ public class SplashActivity extends MvpAppCompatActivity implements ICitiesView 
         App.getInstance().getAppComponent().plusCitiesComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        mCitiesPresenter.getCitiesByToWatch(true);
+        if (savedInstanceState == null) {
+            mCitiesPresenter.getCitiesByToWatch(true);
+        }
     }
 
 

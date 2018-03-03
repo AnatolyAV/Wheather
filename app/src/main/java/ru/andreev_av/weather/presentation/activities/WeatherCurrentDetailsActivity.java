@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import ru.andreev_av.weather.R;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.presentation.App;
+import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.preferences.AppPreference;
 import ru.andreev_av.weather.presentation.presenters.WeatherCurrentPresenter;
 import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
@@ -49,7 +50,9 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
     private TextView tvSunrise;
     private TextView tvIconSunset;
     private TextView tvSunset;
+
     private int cityId;
+    private WeatherCurrent mWeatherCurrent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,12 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
 
         cityId = AppPreference.getCurrentCityId(this);
 
-        mWeatherCurrentPresenter.loadWeather(cityId, false, false);
+        if (savedInstanceState == null) {
+            mWeatherCurrentPresenter.loadWeather(cityId, RefreshingType.STANDARD);
+        } else {
+            mWeatherCurrent = (WeatherCurrent) getLastCustomNonConfigurationInstance();
+            fillComponentsFromWeatherCurrent(mWeatherCurrent);
+        }
     }
 
     @Override
@@ -85,7 +93,7 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu_refresh:
-                mWeatherCurrentPresenter.loadWeather(cityId, true, false);
+                mWeatherCurrentPresenter.loadWeather(cityId, RefreshingType.UPDATE_BUTTON);
                 return true;
         }
 
@@ -158,7 +166,7 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
         srLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mWeatherCurrentPresenter.loadWeather(cityId, true, true);
+                mWeatherCurrentPresenter.loadWeather(cityId, RefreshingType.SWIPE);
             }
         });
     }
@@ -170,13 +178,33 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
 
 
     @Override
-    public void showLoading() {
-
+    public void showLoading(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                break;
+            case UPDATE_BUTTON:
+                setUpdateButtonState(true);
+                break;
+            case SWIPE:
+                srLayout.setRefreshing(true);
+                srLayout.setEnabled(false);
+                break;
+        }
     }
 
     @Override
-    public void hideLoading() {
-
+    public void hideLoading(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                break;
+            case UPDATE_BUTTON:
+                setUpdateButtonState(false);
+                break;
+            case SWIPE:
+                srLayout.setRefreshing(false);
+                srLayout.setEnabled(true);
+                break;
+        }
     }
 
     @Override
@@ -185,18 +213,15 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
 
     @Override
     public void showWeatherCurrent(WeatherCurrent weatherCurrent) {
-        fillComponentsFromWeatherCurrent(weatherCurrent);
-        updateButtonState(false);
-        srLayout.setRefreshing(false);
+        mWeatherCurrent = weatherCurrent;
+        fillComponentsFromWeatherCurrent(mWeatherCurrent);
     }
 
     @Override
     public void showErrorWeatherCurrent() {
-        srLayout.setRefreshing(false);
         Toast.makeText(this,
                 R.string.error_weather_current,
                 Toast.LENGTH_SHORT).show();
-        updateButtonState(false);
     }
 
     @Override
@@ -205,13 +230,14 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
 
     @Override
     public void showNotConnection() {
-        srLayout.setRefreshing(false);
-        updateButtonState(false);
+        Toast.makeText(this,
+                R.string.connection_not_found,
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void updateButtonState(boolean isUpdate) {
-        setUpdateButtonState(isUpdate);
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mWeatherCurrent;
     }
 
     private void fillComponentsFromWeatherCurrent(WeatherCurrent weatherCurrent) {
