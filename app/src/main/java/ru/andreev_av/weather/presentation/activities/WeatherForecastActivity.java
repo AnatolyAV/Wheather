@@ -29,6 +29,7 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
 
     private final static int COUNT_DAYS_THREE = 3;
     private final static int COUNT_DAYS_SEVEN = 7;
+    private final static String COUNT_DAYS = "countDays";
 
     @Inject
     @InjectPresenter
@@ -67,7 +68,14 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
             mWeatherForecastPresenter.setCityId(mCityId);
             mWeatherForecastPresenter.setCountDays(mCountDays);
             mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
+        } else {
+            mCountDays = savedInstanceState.getInt(COUNT_DAYS);
         }
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(COUNT_DAYS, mCountDays);
     }
 
     @ProvidePresenter
@@ -93,6 +101,12 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_weather_forecast, menu);
         updateItem = menu.findItem(R.id.main_menu_refresh);
+        MenuItem countDaysMenuItem = menu.findItem(R.id.main_menu_count_days);
+        if (mCountDays == COUNT_DAYS_THREE) {
+            countDaysMenuItem.setIcon(R.drawable.ic_filter_7);
+        } else {
+            countDaysMenuItem.setIcon(R.drawable.ic_filter_3);
+        }
         return true;
     }
 
