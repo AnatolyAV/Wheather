@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -37,6 +39,7 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
     private List<WeatherForecast> mWeatherForecasts = new ArrayList<>();
     private RecyclerView mWeatherForecastsRecycleView;
     private WeatherForecastAdapter mAdapter;
+    private ImageView mCountDaysImageView;
     // TODO заменить на ProgressBar
     private ProgressDialog mProgressDialog;
 
@@ -50,6 +53,8 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         setContentView(R.layout.activity_weather_forecast);
 
         findComponents();
+
+        initListeners();
 
         initToolbar();
 
@@ -70,6 +75,11 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
             mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
         } else {
             mCountDays = savedInstanceState.getInt(COUNT_DAYS);
+            if (mCountDays == COUNT_DAYS_THREE) {
+                mCountDaysImageView.setImageResource(R.drawable.ic_filter_7);
+            } else {
+                mCountDaysImageView.setImageResource(R.drawable.ic_filter_3);
+            }
         }
     }
 
@@ -86,6 +96,7 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
     protected void findComponents() {
         super.findComponents();
         mWeatherForecastsRecycleView = (RecyclerView) findViewById(R.id.rv_weather_forecast_list);
+        mCountDaysImageView = (ImageView) findViewById(R.id.img_count_days);
     }
 
     private void initAdapter() {
@@ -97,16 +108,26 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         mWeatherForecastsRecycleView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    protected void initListeners() {
+        mCountDaysImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCountDays == COUNT_DAYS_THREE) {
+                    mCountDays = COUNT_DAYS_SEVEN;
+                    mCountDaysImageView.setImageResource(R.drawable.ic_filter_3);
+                } else {
+                    mCountDays = COUNT_DAYS_THREE;
+                    mCountDaysImageView.setImageResource(R.drawable.ic_filter_7);
+                }
+                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_weather_forecast, menu);
         updateItem = menu.findItem(R.id.main_menu_refresh);
-        MenuItem countDaysMenuItem = menu.findItem(R.id.main_menu_count_days);
-        if (mCountDays == COUNT_DAYS_THREE) {
-            countDaysMenuItem.setIcon(R.drawable.ic_filter_7);
-        } else {
-            countDaysMenuItem.setIcon(R.drawable.ic_filter_3);
-        }
         return true;
     }
 
@@ -117,15 +138,6 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
             case R.id.main_menu_refresh:
                 mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays, RefreshingType.UPDATE_BUTTON);
                 return true;
-            case R.id.main_menu_count_days:
-                if (mCountDays == COUNT_DAYS_THREE) {
-                    mCountDays = COUNT_DAYS_SEVEN;
-                    item.setIcon(R.drawable.ic_filter_3);
-                } else {
-                    mCountDays = COUNT_DAYS_THREE;
-                    item.setIcon(R.drawable.ic_filter_7);
-                }
-                mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
         }
 
         return super.onOptionsItemSelected(item);
