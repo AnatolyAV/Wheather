@@ -11,8 +11,6 @@ import android.widget.Toast;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import ru.andreev_av.weather.R;
@@ -52,7 +50,6 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
     private TextView tvSunset;
 
     private int cityId;
-    private WeatherCurrent mWeatherCurrent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +67,7 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
         cityId = AppPreference.getCurrentCityId(this);
 
         if (savedInstanceState == null) {
-            mWeatherCurrentPresenter.loadWeather(cityId, RefreshingType.STANDARD);
-        } else {
-            mWeatherCurrent = (WeatherCurrent) getLastCustomNonConfigurationInstance();
-            fillComponentsFromWeatherCurrent(mWeatherCurrent);
+            mWeatherCurrentPresenter.loadWeather(cityId);
         }
     }
 
@@ -177,14 +171,6 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
     }
 
     @Override
-    public void showLoading() {
-    }
-
-    @Override
-    public void hideLoading() {
-    }
-
-    @Override
     public void showButtonRefreshing() {
         setUpdateButtonState(true);
     }
@@ -207,13 +193,8 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
     }
 
     @Override
-    public void showWeatherCurrents(List<WeatherCurrent> weatherCurrents) {
-    }
-
-    @Override
     public void showWeatherCurrent(WeatherCurrent weatherCurrent) {
-        mWeatherCurrent = weatherCurrent;
-        fillComponentsFromWeatherCurrent(mWeatherCurrent);
+        fillComponentsFromWeatherCurrent(weatherCurrent);
     }
 
     @Override
@@ -224,19 +205,10 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
     }
 
     @Override
-    public void showErrorWeatherCurrents() {
-    }
-
-    @Override
     public void showNotConnection() {
         Toast.makeText(this,
                 R.string.connection_not_found,
                 Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return mWeatherCurrent;
     }
 
     private void fillComponentsFromWeatherCurrent(WeatherCurrent weatherCurrent) {

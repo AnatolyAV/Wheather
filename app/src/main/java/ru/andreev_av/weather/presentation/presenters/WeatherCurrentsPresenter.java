@@ -3,23 +3,26 @@ package ru.andreev_av.weather.presentation.presenters;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
 import ru.andreev_av.weather.presentation.enums.RefreshingType;
-import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
+import ru.andreev_av.weather.presentation.views.IWeatherCurrentsView;
 import ru.andreev_av.weather.utils.ConnectionDetector;
 import rx.functions.Action1;
 
 @InjectViewState
-public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> implements IWeatherCurrentPresenter {
+public class WeatherCurrentsPresenter extends MvpPresenter<IWeatherCurrentsView> implements IWeatherCurrentsPresenter {
 
     private final IWeatherCurrentUseCase mWeatherCurrentUseCase;
     private final ConnectionDetector mConnectionDetector;
 
     @Inject
-    public WeatherCurrentPresenter(IWeatherCurrentUseCase weatherCurrentUseCase, ConnectionDetector connectionDetector) {
+    public WeatherCurrentsPresenter(IWeatherCurrentUseCase weatherCurrentUseCase, ConnectionDetector connectionDetector) {
         mWeatherCurrentUseCase = weatherCurrentUseCase;
         mConnectionDetector = connectionDetector;
     }
@@ -33,19 +36,19 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     }
 
     @Override
-    public void loadWeather(int cityId) {
-        loadWeather(cityId, RefreshingType.STANDARD);
+    public void loadWeather(ArrayList<Integer> cityIds) {
+        loadWeather(cityIds, RefreshingType.STANDARD);
     }
 
     @Override
-    public void loadWeather(int cityId, RefreshingType refreshingType) {
-        mWeatherCurrentUseCase.loadWeather(cityId)
+    public void loadWeather(ArrayList<Integer> cityIds, RefreshingType refreshingType) {
+        mWeatherCurrentUseCase.loadWeather(cityIds)
                 .doOnSubscribe(() -> showProgress(refreshingType))
                 .doAfterTerminate(() -> hideProgress(refreshingType))
-                .subscribe(new Action1<WeatherCurrent>() {
+                .subscribe(new Action1<List<WeatherCurrent>>() {
                     @Override
-                    public void call(WeatherCurrent weatherCurrent) {
-                        getViewState().showWeatherCurrent(weatherCurrent);
+                    public void call(List<WeatherCurrent> weatherCurrents) {
+                        getViewState().showWeatherCurrents(weatherCurrents);
                         if (!checkNetworkAvailableAndConnected()) {
                             getViewState().showNotConnection();
                         }
@@ -54,29 +57,29 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
                     @Override
                     public void call(Throwable throwable) {
                         getViewState()
-                                .showErrorWeatherCurrent();
+                                .showErrorWeatherCurrents();
                     }
                 });
     }
 
     private void showProgress(RefreshingType refreshingType) {
         switch (refreshingType) {
+            case STANDARD:
+                getViewState().showLoading();
+                break;
             case UPDATE_BUTTON:
                 getViewState().showButtonRefreshing();
-                break;
-            case SWIPE:
-                getViewState().showSwipeRefreshing();
                 break;
         }
     }
 
     private void hideProgress(RefreshingType refreshingType) {
         switch (refreshingType) {
+            case STANDARD:
+                getViewState().hideLoading();
+                break;
             case UPDATE_BUTTON:
                 getViewState().hideButtonRefreshing();
-                break;
-            case SWIPE:
-                getViewState().hideSwipeRefreshing();
                 break;
         }
     }

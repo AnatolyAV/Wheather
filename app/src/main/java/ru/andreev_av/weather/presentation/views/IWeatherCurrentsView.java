@@ -4,15 +4,17 @@ import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import java.util.List;
+
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 
 @StateStrategyType(SkipStrategy.class)
-public interface IWeatherCurrentView extends ISwipeRefreshingView, IButtonRefreshingView {
+public interface IWeatherCurrentsView extends ILoadingView, IButtonRefreshingView {
 
     @StateStrategyType(SingleStateStrategy.class)
-    void showWeatherCurrent(WeatherCurrent weatherCurrent);
+    void showWeatherCurrents(List<WeatherCurrent> weatherCurrents);
 
-    void showErrorWeatherCurrent();
+    void showErrorWeatherCurrents();
 
     void showNotConnection();
 }

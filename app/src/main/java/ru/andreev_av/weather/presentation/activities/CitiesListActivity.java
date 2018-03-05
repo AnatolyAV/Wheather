@@ -28,14 +28,14 @@ import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.fragments.AddCityFragment;
 import ru.andreev_av.weather.presentation.listeners.RecyclerItemClickListener;
 import ru.andreev_av.weather.presentation.preferences.AppPreference;
-import ru.andreev_av.weather.presentation.presenters.WeatherCurrentPresenter;
-import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
+import ru.andreev_av.weather.presentation.presenters.WeatherCurrentsPresenter;
+import ru.andreev_av.weather.presentation.views.IWeatherCurrentsView;
 
-public class CitiesListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentView {
+public class CitiesListActivity extends BaseActivity implements AddCityFragment.OnAddCityFragmentInteractionListener, IWeatherCurrentsView {
 
     @Inject
     @InjectPresenter
-    WeatherCurrentPresenter mWeatherCurrentPresenter;
+    WeatherCurrentsPresenter mWeatherCurrentsPresenter;
 
     private RecyclerView mWeatherCurrentCitiesRecyclerView;
     private WeatherCurrentCitiesAdapter mWeatherCurrentCitiesAdapter;
@@ -48,7 +48,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        App.getInstance().getAppComponent().plusWeatherCurrentComponent().inject(this);
+        App.getInstance().getAppComponent().plusWeatherCurrentsComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_list);
 
@@ -69,13 +69,13 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         mProgressDialog = new ProgressDialog(this);
 
         if (savedInstanceState == null) {
-            mWeatherCurrentPresenter.loadWeather(mCityIds);
+            mWeatherCurrentsPresenter.loadWeather(mCityIds);
         }
     }
 
     @ProvidePresenter
-    WeatherCurrentPresenter provideWeatherCurrentPresenter() {
-        return mWeatherCurrentPresenter;
+    WeatherCurrentsPresenter provideWeatherCurrentsPresenter() {
+        return mWeatherCurrentsPresenter;
     }
 
     protected void findComponents() {
@@ -125,7 +125,7 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
         switch (id) {
             case R.id.main_menu_refresh:
                 if (mCityIds != null && !mCityIds.isEmpty()) {
-                    mWeatherCurrentPresenter.loadWeather(mCityIds, RefreshingType.UPDATE_BUTTON);
+                    mWeatherCurrentsPresenter.loadWeather(mCityIds, RefreshingType.UPDATE_BUTTON);
                 }
                 return true;
         }
@@ -137,7 +137,8 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     public void onAddCityFragmentInteraction(City city) {
         if (city != null) {
             AppPreference.addCityId(this, city.getId());
-            mWeatherCurrentPresenter.loadWeather(city.getId());
+            mCityIds.add(city.getId());
+            mWeatherCurrentsPresenter.loadWeather(mCityIds);
         }
     }
 
@@ -166,41 +167,12 @@ public class CitiesListActivity extends BaseActivity implements AddCityFragment.
     }
 
     @Override
-    public void showSwipeRefreshing() {
-
-    }
-
-    @Override
-    public void hideSwipeRefreshing() {
-
-    }
-
-    @Override
     public void showWeatherCurrents(List<WeatherCurrent> weatherCurrents) {
         mWeatherCurrents = weatherCurrents;
         mWeatherCurrentCitiesAdapter.refreshList(mWeatherCurrents);
         // TODO удалить
         Toast.makeText(this,
                 "Загрузка погод успешно завершена",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showWeatherCurrent(WeatherCurrent weatherCurrent) {
-        if (weatherCurrent != null) {
-            mWeatherCurrents.add(weatherCurrent);
-            mWeatherCurrentCitiesAdapter.refreshList(mWeatherCurrents);
-            // TODO удалить
-            Toast.makeText(this,
-                    "Загрузка погоды успешно завершена",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void showErrorWeatherCurrent() {
-        Toast.makeText(this,
-                R.string.error_weather_current,
                 Toast.LENGTH_SHORT).show();
     }
 
