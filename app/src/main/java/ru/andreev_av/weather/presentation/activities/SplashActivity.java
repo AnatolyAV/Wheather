@@ -60,6 +60,11 @@ public class SplashActivity extends MvpAppCompatActivity implements ICitiesView 
     }
 
     @Override
+    public void showSelectedCity(City city) {
+
+    }
+
+    @Override
     public void processAddedCity(City city) {
 
     }

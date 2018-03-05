@@ -41,6 +41,11 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     }
 
     @Override
+    public void processSelectedCity(City city) {
+        getViewState().showSelectedCity(city);
+    }
+
+    @Override
     public void loadCityToWatch(City city) {
         mCitiesUseCase.loadCityToWatch(city)
                 .subscribe(new Action1<Boolean>() {

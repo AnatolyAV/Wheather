@@ -44,7 +44,6 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
     private CitiesAutoCompleteAdapter mCityAdapter;
 
     private City mSelectedCity;
-    private boolean mIsSelectedCity;
 
     private OnAddCityFragmentInteractionListener mListener;
 
@@ -60,7 +59,9 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         App.getInstance().getAppComponent().plusCitiesComponent().inject(this);
         super.onCreate(savedInstanceState);
-        mCitiesPresenter.initPublishSubjectForFindCities();
+        if (savedInstanceState == null) {
+            mCitiesPresenter.initPublishSubjectForFindCities();
+        }
     }
 
     @Override
@@ -147,6 +148,12 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
     }
 
     @Override
+    public void showSelectedCity(City city) {
+        mSelectedCity = city;
+        mAddCityAutoCompleteTextView.setText(mSelectedCity.toString());
+    }
+
+    @Override
     public void processAddedCity(City city) {
         mListener.onAddCityFragmentInteraction(city);
         getDialog().dismiss();
@@ -176,12 +183,11 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // необходимо, чтобы поиск не отрабатывал сразу же после выбора города
-                if (!mIsSelectedCity) {
+                if (mSelectedCity == null) {
                     mSelectedCity = null;
                     final String cityNameFirstLetters = mAddCityAutoCompleteTextView.getText().toString();
                     mCitiesPresenter.findCities(cityNameFirstLetters);
                 }
-                mIsSelectedCity = false;
             }
 
             @Override
@@ -192,11 +198,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 City city = (City) parent.getItemAtPosition(position);
-                if (city != null) {
-                    mIsSelectedCity = true;
-                    mSelectedCity = city;
-                    mAddCityAutoCompleteTextView.setText(mSelectedCity.toString());
-                }
+                mCitiesPresenter.processSelectedCity(city);
             }
         });
     }

@@ -11,5 +11,7 @@ public interface ICitiesPresenter {
 
     void findCities(String cityNameFirstLetters);
 
+    void processSelectedCity(City city);
+
     void loadCityToWatch(City city);
 }
