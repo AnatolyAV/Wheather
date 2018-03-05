@@ -10,16 +10,13 @@ import java.util.List;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
-public interface IWeatherForecastView extends ILoadingView, IButtonRefreshingView {
+public interface IWeatherForecastView extends ILoadingView, IButtonRefreshingView, INotConnectionView {
 
     @StateStrategyType(SingleStateStrategy.class)
     void showWeatherForecasts(List<WeatherForecast> weatherForecasts);
 
     @StateStrategyType(SkipStrategy.class)
     void showErrorWeatherForecasts();
-
-    @StateStrategyType(SkipStrategy.class)
-    void showNotConnection();
 
     void setCountDays(int countDays);
 
