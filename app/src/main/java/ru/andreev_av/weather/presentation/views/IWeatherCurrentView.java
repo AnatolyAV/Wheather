@@ -8,20 +8,17 @@ import java.util.List;
 
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 
+@StateStrategyType(SkipStrategy.class)
 public interface IWeatherCurrentView extends ILoadingView, ISwipeRefreshingView, IButtonRefreshingView {
 
     @StateStrategyType(SingleStateStrategy.class)
     void showWeatherCurrents(List<WeatherCurrent> weatherCurrents);
 
-    @StateStrategyType(SkipStrategy.class)
     void showWeatherCurrent(WeatherCurrent weatherCurrent);
 
-    @StateStrategyType(SkipStrategy.class)
     void showErrorWeatherCurrent();
 
-    @StateStrategyType(SkipStrategy.class)
     void showErrorWeatherCurrents();
 
-    @StateStrategyType(SkipStrategy.class)
     void showNotConnection();
 }
