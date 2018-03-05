@@ -144,31 +144,27 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
     }
 
     @Override
-    public void showLoading(RefreshingType refreshingType) {
-        switch (refreshingType) {
-            case STANDARD:
-                if (!mProgressDialog.isShowing()) {
-                    mProgressDialog.show();
-                }
-                break;
-            case UPDATE_BUTTON:
-                setUpdateButtonState(true);
-                break;
+    public void showLoading() {
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
         }
     }
 
     @Override
-    public void hideLoading(RefreshingType refreshingType) {
-        switch (refreshingType) {
-            case STANDARD:
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-                break;
-            case UPDATE_BUTTON:
-                setUpdateButtonState(false);
-                break;
+    public void hideLoading() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void showButtonRefreshing() {
+        setUpdateButtonState(true);
+    }
+
+    @Override
+    public void hideButtonRefreshing() {
+        setUpdateButtonState(false);
     }
 
     @Override

@@ -42,10 +42,10 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
     }
 
     @Override
-    public void loadWeatherForecast(int cityId, int countDays, RefreshingType typeRefreshing) {
+    public void loadWeatherForecast(int cityId, int countDays, RefreshingType refreshingType) {
         mUseCase.loadWeatherForecast(cityId, countDays)
-                .doOnSubscribe(() -> getViewState().showLoading(typeRefreshing))
-                .doAfterTerminate(() -> getViewState().hideLoading(typeRefreshing))
+                .doOnSubscribe(() -> showProgress(refreshingType))
+                .doAfterTerminate(() -> hideProgress(refreshingType))
                 .subscribe(new Action1<List<WeatherForecast>>() {
                     @Override
                     public void call(List<WeatherForecast> weatherForecasts) {
@@ -77,6 +77,28 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
 
     public void setCountDays(int countDays) {
         mCountDays = countDays;
+    }
+
+    private void showProgress(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                getViewState().showLoading();
+                break;
+            case UPDATE_BUTTON:
+                getViewState().showButtonRefreshing();
+                break;
+        }
+    }
+
+    private void hideProgress(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                getViewState().hideLoading();
+                break;
+            case UPDATE_BUTTON:
+                getViewState().hideButtonRefreshing();
+                break;
+        }
     }
 
     private boolean checkNetworkAvailableAndConnected() {

@@ -176,35 +176,34 @@ public class WeatherCurrentDetailsActivity extends BaseActivity implements AppBa
         srLayout.setEnabled(verticalOffset == 0);
     }
 
-
     @Override
-    public void showLoading(RefreshingType refreshingType) {
-        switch (refreshingType) {
-            case STANDARD:
-                break;
-            case UPDATE_BUTTON:
-                setUpdateButtonState(true);
-                break;
-            case SWIPE:
-                srLayout.setRefreshing(true);
-                srLayout.setEnabled(false);
-                break;
-        }
+    public void showLoading() {
     }
 
     @Override
-    public void hideLoading(RefreshingType refreshingType) {
-        switch (refreshingType) {
-            case STANDARD:
-                break;
-            case UPDATE_BUTTON:
-                setUpdateButtonState(false);
-                break;
-            case SWIPE:
-                srLayout.setRefreshing(false);
-                srLayout.setEnabled(true);
-                break;
-        }
+    public void hideLoading() {
+    }
+
+    @Override
+    public void showButtonRefreshing() {
+        setUpdateButtonState(true);
+    }
+
+    @Override
+    public void hideButtonRefreshing() {
+        setUpdateButtonState(false);
+    }
+
+    @Override
+    public void showSwipeRefreshing() {
+        srLayout.setRefreshing(true);
+        srLayout.setEnabled(false);
+    }
+
+    @Override
+    public void hideSwipeRefreshing() {
+        srLayout.setRefreshing(false);
+        srLayout.setEnabled(true);
     }
 
     @Override

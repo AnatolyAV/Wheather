@@ -43,8 +43,8 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     @Override
     public void loadWeather(int cityId, RefreshingType refreshingType) {
         mWeatherCurrentUseCase.loadWeather(cityId)
-                .doOnSubscribe(() -> getViewState().showLoading(refreshingType))
-                .doAfterTerminate(() -> getViewState().hideLoading(refreshingType))
+                .doOnSubscribe(() -> showProgress(refreshingType))
+                .doAfterTerminate(() -> hideProgress(refreshingType))
                 .subscribe(new Action1<WeatherCurrent>() {
                     @Override
                     public void call(WeatherCurrent weatherCurrent) {
@@ -62,6 +62,7 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
                 });
     }
 
+    // TODO подумать над разделением на два презентора
     @Override
     public void loadWeather(ArrayList<Integer> cityIds) {
         loadWeather(cityIds, RefreshingType.STANDARD);
@@ -70,8 +71,8 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     @Override
     public void loadWeather(ArrayList<Integer> cityIds, RefreshingType refreshingType) {
         mWeatherCurrentUseCase.loadWeather(cityIds)
-                .doOnSubscribe(() -> getViewState().showLoading(refreshingType))
-                .doAfterTerminate(() -> getViewState().hideLoading(refreshingType))
+                .doOnSubscribe(() -> showProgress(refreshingType))
+                .doAfterTerminate(() -> hideProgress(refreshingType))
                 .subscribe(new Action1<List<WeatherCurrent>>() {
                     @Override
                     public void call(List<WeatherCurrent> weatherCurrents) {
@@ -87,6 +88,34 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
                                 .showErrorWeatherCurrents();
                     }
                 });
+    }
+
+    private void showProgress(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                getViewState().showLoading();
+                break;
+            case UPDATE_BUTTON:
+                getViewState().showButtonRefreshing();
+                break;
+            case SWIPE:
+                getViewState().showSwipeRefreshing();
+                break;
+        }
+    }
+
+    private void hideProgress(RefreshingType refreshingType) {
+        switch (refreshingType) {
+            case STANDARD:
+                getViewState().hideLoading();
+                break;
+            case UPDATE_BUTTON:
+                getViewState().hideButtonRefreshing();
+                break;
+            case SWIPE:
+                getViewState().hideSwipeRefreshing();
+                break;
+        }
     }
 
     private boolean checkNetworkAvailableAndConnected() {

@@ -8,7 +8,7 @@ import java.util.List;
 
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 
-public interface IWeatherCurrentView extends ILoadingView {
+public interface IWeatherCurrentView extends ILoadingView, ISwipeRefreshingView, IButtonRefreshingView {
 
     @StateStrategyType(SingleStateStrategy.class)
     void showWeatherCurrents(List<WeatherCurrent> weatherCurrents);

@@ -8,7 +8,7 @@ import java.util.List;
 
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 
-public interface IWeatherForecastView extends ILoadingView {
+public interface IWeatherForecastView extends ILoadingView, IButtonRefreshingView {
 
     @StateStrategyType(SingleStateStrategy.class)
     void showWeatherForecasts(List<WeatherForecast> weatherForecasts);
