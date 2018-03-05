@@ -1,5 +1,6 @@
 package ru.andreev_av.weather.presentation.views;
 
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
@@ -18,4 +19,13 @@ public interface IWeatherForecastView extends ILoadingView, IButtonRefreshingVie
 
     @StateStrategyType(SkipStrategy.class)
     void showNotConnection();
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void setCountDays(int countDays);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showCountDaysImageThree();
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showCountDaysImageSeven();
 }

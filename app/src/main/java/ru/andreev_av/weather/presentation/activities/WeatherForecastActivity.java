@@ -29,10 +29,6 @@ import ru.andreev_av.weather.presentation.views.IWeatherForecastView;
 
 public class WeatherForecastActivity extends BaseActivity implements IWeatherForecastView {
 
-    private final static int COUNT_DAYS_THREE = 3;
-    private final static int COUNT_DAYS_SEVEN = 7;
-    private final static String COUNT_DAYS = "countDays";
-
     @Inject
     @InjectPresenter
     WeatherForecastPresenter mWeatherForecastPresenter;
@@ -69,23 +65,13 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         mProgressDialog = new ProgressDialog(this);
 
         if (savedInstanceState == null) {
-            mCountDays = COUNT_DAYS_THREE;
+            mCountDays = WeatherForecastPresenter.COUNT_DAYS_THREE;
             mWeatherForecastPresenter.setCityId(mCityId);
             mWeatherForecastPresenter.setCountDays(mCountDays);
             mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
         } else {
-            mCountDays = savedInstanceState.getInt(COUNT_DAYS);
-            if (mCountDays == COUNT_DAYS_THREE) {
-                mCountDaysImageView.setImageResource(R.drawable.ic_filter_7);
-            } else {
-                mCountDaysImageView.setImageResource(R.drawable.ic_filter_3);
-            }
+            mWeatherForecastPresenter.updateCountDaysAndItsImage(false);
         }
-    }
-
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(COUNT_DAYS, mCountDays);
     }
 
     @ProvidePresenter
@@ -112,13 +98,7 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         mCountDaysImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCountDays == COUNT_DAYS_THREE) {
-                    mCountDays = COUNT_DAYS_SEVEN;
-                    mCountDaysImageView.setImageResource(R.drawable.ic_filter_3);
-                } else {
-                    mCountDays = COUNT_DAYS_THREE;
-                    mCountDaysImageView.setImageResource(R.drawable.ic_filter_7);
-                }
+                mWeatherForecastPresenter.updateCountDaysAndItsImage(true);
                 mWeatherForecastPresenter.loadWeatherForecast(mCityId, mCountDays);
             }
         });
@@ -190,5 +170,20 @@ public class WeatherForecastActivity extends BaseActivity implements IWeatherFor
         Toast.makeText(this,
                 R.string.connection_not_found,
                 Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setCountDays(int countDays) {
+        mCountDays = countDays;
+    }
+
+    @Override
+    public void showCountDaysImageThree() {
+        mCountDaysImageView.setImageResource(R.drawable.ic_filter_3);
+    }
+
+    @Override
+    public void showCountDaysImageSeven() {
+        mCountDaysImageView.setImageResource(R.drawable.ic_filter_7);
     }
 }

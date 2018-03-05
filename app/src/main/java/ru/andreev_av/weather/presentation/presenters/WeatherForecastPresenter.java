@@ -17,6 +17,9 @@ import rx.functions.Action1;
 @InjectViewState
 public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView> implements IWeatherForecastPresenter {
 
+    public final static int COUNT_DAYS_THREE = 3;
+    public final static int COUNT_DAYS_SEVEN = 7;
+
     private IWeatherForecastUseCase mUseCase;
     private ConnectionDetector mConnectionDetector;
     private int mCityId;
@@ -61,6 +64,28 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
                                 .showErrorWeatherForecasts();
                     }
                 });
+    }
+
+    @Override
+    public void updateCountDaysAndItsImage(boolean isClickingImage) {
+        if (isClickingImage) {
+            if (mCountDays == COUNT_DAYS_THREE) {
+                mCountDays = COUNT_DAYS_SEVEN;
+                getViewState().setCountDays(mCountDays);
+                getViewState().showCountDaysImageThree();
+            } else {
+                mCountDays = COUNT_DAYS_THREE;
+                getViewState().setCountDays(mCountDays);
+                getViewState().showCountDaysImageSeven();
+            }
+        } else {
+            getViewState().setCountDays(mCountDays);
+            if (mCountDays == COUNT_DAYS_THREE) {
+                getViewState().showCountDaysImageSeven();
+            } else {
+                getViewState().showCountDaysImageThree();
+            }
+        }
     }
 
     public int getCityId() {
