@@ -17,6 +17,8 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
 
     private ICitiesUseCase mCitiesUseCase;
 
+    private City mSelectedCity;
+
     @Inject
     public CitiesPresenter(ICitiesUseCase citiesUseCase) {
         mCitiesUseCase = citiesUseCase;
@@ -34,6 +36,17 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
                 .subscribe(cities -> getViewState().showCities(cities));
     }
 
+    @Override
+    public void processEnteredCityName(CharSequence cityNameFirstLetters) {
+        // необходимо, чтобы поиск не отрабатывал сразу же после выбора города
+        if (mSelectedCity == null) {
+            findCities(cityNameFirstLetters.toString());
+        } else if (!mSelectedCity.toString().equals(cityNameFirstLetters.toString())) {
+            mSelectedCity = null;
+            getViewState().updateCity(null);
+            getViewState().showCityName(cityNameFirstLetters.toString());
+        }
+    }
 
     @Override
     public void findCities(String cityNameFirstLetters) {
@@ -42,19 +55,25 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
 
     @Override
     public void processSelectedCity(City city) {
-        getViewState().showSelectedCity(city);
+        mSelectedCity = city;
+        getViewState().updateCity(city);
+        getViewState().showCityName(city.toString());
     }
 
     @Override
     public void loadCityToWatch(City city) {
-        mCitiesUseCase.loadCityToWatch(city)
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean successAddingCity) {
-                        if (successAddingCity) {
-                            getViewState().processAddedCity(city);
+        if (city != null) {
+            mCitiesUseCase.loadCityToWatch(city)
+                    .subscribe(new Action1<Boolean>() {
+                        @Override
+                        public void call(Boolean successAddingCity) {
+                            if (successAddingCity) {
+                                getViewState().processAddedCity(city);
+                            }
                         }
-                    }
-                });
+                    });
+        } else {
+            getViewState().showErrorSelectedCity();
+        }
     }
 }

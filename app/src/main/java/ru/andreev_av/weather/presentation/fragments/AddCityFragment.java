@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpDialogFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -80,29 +81,16 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
         builder.setView(mAddCityLayout)
                 // Add action buttons
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mSelectedCity = null;
-                    }
+                .setNegativeButton(android.R.string.cancel, (dialog, id) -> {
                 });
 
         final AlertDialog dialog = builder.create();
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
             @Override
             public void onShow(DialogInterface dialogInterface) {
-
                 Button buttonPositive = (dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                buttonPositive.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        if (mSelectedCity != null) {
-                            mCitiesPresenter.loadCityToWatch(mSelectedCity);
-                        }
-                    }
-                });
+                buttonPositive.setOnClickListener(view -> mCitiesPresenter.loadCityToWatch(mSelectedCity));
             }
         });
 
@@ -148,15 +136,26 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
     }
 
     @Override
-    public void showSelectedCity(City city) {
+    public void updateCity(City city) {
         mSelectedCity = city;
-        mAddCityAutoCompleteTextView.setText(mSelectedCity.toString());
+    }
+
+    @Override
+    public void showCityName(String cityName) {
+        mAddCityAutoCompleteTextView.setText(cityName);
     }
 
     @Override
     public void processAddedCity(City city) {
         mListener.onAddCityFragmentInteraction(city);
         getDialog().dismiss();
+    }
+
+    @Override
+    public void showErrorSelectedCity() {
+        Toast.makeText(getActivity(),
+                R.string.error_selected_city,
+                Toast.LENGTH_SHORT).show();
     }
 
     private void findComponents() {
@@ -181,13 +180,8 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // необходимо, чтобы поиск не отрабатывал сразу же после выбора города
-                if (mSelectedCity == null) {
-                    mSelectedCity = null;
-                    final String cityNameFirstLetters = mAddCityAutoCompleteTextView.getText().toString();
-                    mCitiesPresenter.findCities(cityNameFirstLetters);
-                }
+            public void onTextChanged(CharSequence cityNameLetters, int start, int before, int count) {
+                mCitiesPresenter.processEnteredCityName(cityNameLetters.toString());
             }
 
             @Override

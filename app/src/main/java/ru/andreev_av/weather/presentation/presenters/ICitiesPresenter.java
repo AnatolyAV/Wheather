@@ -9,6 +9,8 @@ public interface ICitiesPresenter {
 
     void getCitiesByToWatch(boolean isToWatch);
 
+    void processEnteredCityName(CharSequence cityNameFirstLetters);
+
     void findCities(String cityNameFirstLetters);
 
     void processSelectedCity(City city);

@@ -27,6 +27,7 @@
     <string name="error_weather_current">An error has occurred weather current.</string>
     <string name="error_weather_currents">An error has occurred weather currents</string>
     <string name="error_weather_forecasts">An error has occurred weather forecasts</string>
+    <string name="error_selected_city">You need select a city!</string>
     <string name="error">An error has occurred. Try later!</string>
     <string name="loaded">Data updated!</string>
     <string name="not_loaded">Data could not be downloaded or updated!</string>

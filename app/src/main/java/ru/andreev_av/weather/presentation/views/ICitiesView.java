@@ -14,8 +14,13 @@ public interface ICitiesView extends MvpView {
 
     void showCities(List<City> cities);
 
-    void showSelectedCity(City city);
+    void updateCity(City city);
+
+    void showCityName(String cityName);
 
     @StateStrategyType(SkipStrategy.class)
     void processAddedCity(City city);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showErrorSelectedCity();
 }

@@ -21,6 +21,7 @@ import ru.andreev_av.weather.presentation.views.ICitiesView;
 
 public class SplashActivity extends MvpAppCompatActivity implements ICitiesView {
 
+    // TODO подумать над разделением на два презентора
     @Inject
     @InjectPresenter
     CitiesPresenter mCitiesPresenter;
@@ -60,12 +61,18 @@ public class SplashActivity extends MvpAppCompatActivity implements ICitiesView 
     }
 
     @Override
-    public void showSelectedCity(City city) {
+    public void updateCity(City city) {
+    }
 
+    @Override
+    public void showCityName(String cityName) {
     }
 
     @Override
     public void processAddedCity(City city) {
+    }
 
+    @Override
+    public void showErrorSelectedCity() {
     }
 }
