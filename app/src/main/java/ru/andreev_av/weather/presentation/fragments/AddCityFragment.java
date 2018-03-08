@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpDialogFragment;
@@ -41,6 +42,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
     private FrameLayout mAddCityLayout;
     private AutoCompleteTextView mAddCityAutoCompleteTextView;
+    private ImageView mClearImageView;
 
     private CitiesAutoCompleteAdapter mCityAdapter;
 
@@ -162,6 +164,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         mAddCityLayout = (FrameLayout) inflater.inflate(R.layout.fragment_add_city, null);
         mAddCityAutoCompleteTextView = (AutoCompleteTextView) mAddCityLayout.findViewById(R.id.actv_add_city);
+        mClearImageView = (ImageView) mAddCityLayout.findViewById(R.id.img_clear);
     }
 
     private void initAdapter() {
@@ -195,6 +198,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
                 mCitiesPresenter.processSelectedCity(city);
             }
         });
+        mClearImageView.setOnClickListener(v -> mCitiesPresenter.processClearCity());
     }
 
     public interface OnAddCityFragmentInteractionListener {

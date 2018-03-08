@@ -11,6 +11,8 @@ public interface ICitiesPresenter {
 
     void processEnteredCityName(CharSequence cityNameFirstLetters);
 
+    void processClearCity();
+
     void findCities(String cityNameFirstLetters);
 
     void processSelectedCity(City city);

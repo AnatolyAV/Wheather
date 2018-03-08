@@ -49,6 +49,13 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     }
 
     @Override
+    public void processClearCity() {
+        mSelectedCity = null;
+        getViewState().updateCity(null);
+        getViewState().showCityName(null);
+    }
+
+    @Override
     public void findCities(String cityNameFirstLetters) {
         mCitiesUseCase.findCities(cityNameFirstLetters);
     }
