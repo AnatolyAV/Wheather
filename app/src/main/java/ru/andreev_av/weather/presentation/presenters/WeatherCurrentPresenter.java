@@ -5,12 +5,12 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
 import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.views.IWeatherCurrentView;
 import ru.andreev_av.weather.utils.ConnectionDetector;
-import rx.functions.Action1;
 
 @InjectViewState
 public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> implements IWeatherCurrentPresenter {
@@ -40,19 +40,19 @@ public class WeatherCurrentPresenter extends MvpPresenter<IWeatherCurrentView> i
     @Override
     public void loadWeather(int cityId, RefreshingType refreshingType) {
         mWeatherCurrentUseCase.loadWeather(cityId)
-                .doOnSubscribe(() -> showProgress(refreshingType))
+                .doOnSubscribe(disposable -> showProgress(refreshingType))
                 .doAfterTerminate(() -> hideProgress(refreshingType))
-                .subscribe(new Action1<WeatherCurrent>() {
+                .subscribe(new Consumer<WeatherCurrent>() {
                     @Override
-                    public void call(WeatherCurrent weatherCurrent) {
+                    public void accept(WeatherCurrent weatherCurrent) {
                         getViewState().showWeatherCurrent(weatherCurrent);
                         if (!checkNetworkAvailableAndConnected()) {
                             getViewState().showNotConnection();
                         }
                     }
-                }, new Action1<Throwable>() {
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void accept(Throwable throwable) {
                         getViewState()
                                 .showErrorWeatherCurrent();
                     }

@@ -3,12 +3,12 @@ package ru.andreev_av.weather.data.repository;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.data.cache.WeatherForecastCacheTransformer;
 import ru.andreev_av.weather.data.db.IWeatherForecastDao;
 import ru.andreev_av.weather.data.network.OwmService;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.presentation.App;
-import rx.Observable;
 
 public class WeatherForecastRepository implements IWeatherForecastRepository {
 

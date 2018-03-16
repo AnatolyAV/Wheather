@@ -2,25 +2,26 @@ package ru.andreev_av.weather.utils;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public final class RxUtils {
-    // TODO перевести везде на Rx2
+
     private RxUtils() {
     }
 
     @NonNull
-    public static <T> Observable.Transformer<T, T> async() {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> async() {
+
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable
+            public ObservableSource<T> apply(io.reactivex.Observable<T> upstream) {
+                return upstream
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
-
 }

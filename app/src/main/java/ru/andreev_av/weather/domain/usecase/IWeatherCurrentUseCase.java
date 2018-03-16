@@ -3,8 +3,8 @@ package ru.andreev_av.weather.domain.usecase;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
-import rx.Observable;
 
 public interface IWeatherCurrentUseCase {
     Observable<WeatherCurrent> loadWeather(int cityId);

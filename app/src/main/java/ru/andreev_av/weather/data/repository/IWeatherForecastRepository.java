@@ -2,8 +2,8 @@ package ru.andreev_av.weather.data.repository;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
-import rx.Observable;
 
 public interface IWeatherForecastRepository {
 

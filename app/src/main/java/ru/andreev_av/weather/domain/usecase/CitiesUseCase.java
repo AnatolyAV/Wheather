@@ -3,11 +3,11 @@ package ru.andreev_av.weather.domain.usecase;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import ru.andreev_av.weather.data.repository.ICitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.utils.RxUtils;
-import rx.Observable;
-import rx.subjects.PublishSubject;
 
 public class CitiesUseCase implements ICitiesUseCase {
 

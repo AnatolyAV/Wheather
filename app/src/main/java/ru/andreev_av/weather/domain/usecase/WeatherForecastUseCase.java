@@ -2,10 +2,10 @@ package ru.andreev_av.weather.domain.usecase;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.data.repository.IWeatherForecastRepository;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.utils.RxUtils;
-import rx.Observable;
 
 public class WeatherForecastUseCase implements IWeatherForecastUseCase {
 

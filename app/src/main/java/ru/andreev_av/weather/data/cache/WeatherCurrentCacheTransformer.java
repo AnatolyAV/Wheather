@@ -1,21 +1,23 @@
 package ru.andreev_av.weather.data.cache;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.functions.Function;
 import ru.andreev_av.weather.data.db.IWeatherCurrentDao;
 import ru.andreev_av.weather.data.model.WeatherCurrentModel;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
-import rx.Observable;
-import rx.functions.Func1;
 
-public class WeatherCurrentCacheTransformer implements Observable.Transformer<WeatherCurrentModel, WeatherCurrent> {
+public class WeatherCurrentCacheTransformer implements ObservableTransformer<WeatherCurrentModel, WeatherCurrent> {
 
     private IWeatherCurrentDao mWeatherCurrentDao;
-    private final Func1<WeatherCurrentModel, Observable<WeatherCurrent>> mSaveFunc = weatherCurrentModel -> {
+    private final Function<WeatherCurrentModel, Observable<WeatherCurrent>> mSaveFunc = weatherCurrentModel -> {
         mWeatherCurrentDao.insertOrUpdate(weatherCurrentModel);
         WeatherCurrent weatherCurrent = mWeatherCurrentDao.getWeatherCurrentByCityId(weatherCurrentModel.getCityId());
         return Observable.just(weatherCurrent);
     };
     private int mCityId;
-    private final Func1<Throwable, Observable<WeatherCurrent>> mCacheErrorHandler = throwable -> {
+    private final Function<Throwable, Observable<WeatherCurrent>> mCacheErrorHandler = throwable -> {
         WeatherCurrent weatherCurrent = mWeatherCurrentDao.getWeatherCurrentByCityId(mCityId);
         return Observable.just(weatherCurrent);
     };
@@ -26,7 +28,7 @@ public class WeatherCurrentCacheTransformer implements Observable.Transformer<We
     }
 
     @Override
-    public Observable<WeatherCurrent> call(Observable<WeatherCurrentModel> weatherCurrentObservable) {
+    public ObservableSource<WeatherCurrent> apply(Observable<WeatherCurrentModel> weatherCurrentObservable) {
         return weatherCurrentObservable
                 .flatMap(mSaveFunc)
                 .onErrorResumeNext(mCacheErrorHandler);

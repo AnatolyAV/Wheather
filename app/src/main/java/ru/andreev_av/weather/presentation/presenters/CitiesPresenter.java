@@ -5,10 +5,10 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.domain.usecase.ICitiesUseCase;
 import ru.andreev_av.weather.presentation.views.ICitiesView;
-import rx.functions.Action1;
 
 @InjectViewState
 public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitiesPresenter {
@@ -79,9 +79,9 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     public void loadCityToWatch(City city) {
         if (city != null) {
             mCitiesUseCase.loadCityToWatch(city)
-                    .subscribe(new Action1<Boolean>() {
+                    .subscribe(new Consumer<Boolean>() {
                         @Override
-                        public void call(Boolean successAddingCity) {
+                        public void accept(Boolean successAddingCity) {
                             if (successAddingCity) {
                                 getViewState().processAddedCity(city);
                             }

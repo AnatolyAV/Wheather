@@ -3,10 +3,10 @@ package ru.andreev_av.weather.domain.usecase;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.data.repository.IWeatherCurrentRepository;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.utils.RxUtils;
-import rx.Observable;
 
 public class WeatherCurrentUseCase implements IWeatherCurrentUseCase {
 

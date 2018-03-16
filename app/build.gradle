@@ -27,9 +27,10 @@ def androidSupportVersion = '25.3.1'
 def constraintLayoutVersion = '1.0.2'
 def daggerVersion = '2.13'
 def moxyVersion = '1.5.3'
-def rxJavaVersion = '1.1.10'
-def rxAndroidVersion = '1.2.1'
+def rxJavaVersion = '2.x.y'
+def rxAndroidVersion = '2.0.2'
 def retrofitVersion = '2.1.0'
+def retrofitRxJava2AdapterVersion = '1.0.0'
 def googleProgressBarVersion = '1.2.0'
 def junitVersion = '4.12'
 
@@ -58,13 +59,13 @@ dependencies {
     annotationProcessor 'com.arello-mobile:moxy-compiler:' + moxyVersion
 
     // rx
-    compile 'io.reactivex:rxjava:' + rxJavaVersion
-    compile 'io.reactivex:rxandroid:' + rxAndroidVersion
+    compile 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
+    compile 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
 
     // retrofit
     compile 'com.squareup.retrofit2:retrofit:' + retrofitVersion
     compile 'com.squareup.retrofit2:converter-gson:' + retrofitVersion
-    compile 'com.squareup.retrofit2:adapter-rxjava:' + retrofitVersion
+    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:' + retrofitRxJava2AdapterVersion
 
     // googleProgressBar
     compile 'com.jpardogo.googleprogressbar:library:' + googleProgressBarVersion

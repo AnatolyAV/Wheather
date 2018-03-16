@@ -2,8 +2,9 @@ package ru.andreev_av.weather.presentation;
 
 import android.app.Application;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.andreev_av.weather.dagger.components.AppComponent;
 import ru.andreev_av.weather.dagger.components.DaggerAppComponent;
@@ -45,7 +46,7 @@ public class App extends Application {
                 // TODO можно вынести в buildConfigField
                 .baseUrl(OwmService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
 

@@ -7,12 +7,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import ru.andreev_av.weather.domain.model.WeatherForecast;
 import ru.andreev_av.weather.domain.usecase.IWeatherForecastUseCase;
 import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.views.IWeatherForecastView;
 import ru.andreev_av.weather.utils.ConnectionDetector;
-import rx.functions.Action1;
 
 @InjectViewState
 public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView> implements IWeatherForecastPresenter {
@@ -47,19 +47,19 @@ public class WeatherForecastPresenter extends MvpPresenter<IWeatherForecastView>
     @Override
     public void loadWeatherForecast(int cityId, int countDays, RefreshingType refreshingType) {
         mUseCase.loadWeatherForecast(cityId, countDays)
-                .doOnSubscribe(() -> showProgress(refreshingType))
+                .doOnSubscribe(disposable -> showProgress(refreshingType))
                 .doAfterTerminate(() -> hideProgress(refreshingType))
-                .subscribe(new Action1<List<WeatherForecast>>() {
+                .subscribe(new Consumer<List<WeatherForecast>>() {
                     @Override
-                    public void call(List<WeatherForecast> weatherForecasts) {
+                    public void accept(List<WeatherForecast> weatherForecasts) {
                         getViewState().showWeatherForecasts(weatherForecasts);
                         if (!checkNetworkAvailableAndConnected()) {
                             getViewState().showNotConnection();
                         }
                     }
-                }, new Action1<Throwable>() {
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void accept(Throwable throwable) {
                         getViewState()
                                 .showErrorWeatherForecasts();
                     }

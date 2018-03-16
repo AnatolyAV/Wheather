@@ -3,9 +3,9 @@ package ru.andreev_av.weather.data.repository;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.data.db.ICityDao;
 import ru.andreev_av.weather.domain.model.City;
-import rx.Observable;
 
 public class CitiesRepository implements ICitiesRepository {
 

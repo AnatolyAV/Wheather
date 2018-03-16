@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observable;
 import ru.andreev_av.weather.data.cache.WeatherCurrentCacheTransformer;
 import ru.andreev_av.weather.data.cache.WeatherCurrentsCacheTransformer;
 import ru.andreev_av.weather.data.db.IWeatherCurrentDao;
@@ -12,7 +13,6 @@ import ru.andreev_av.weather.data.network.OwmService;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.presentation.App;
 import ru.andreev_av.weather.utils.StringUtils;
-import rx.Observable;
 
 public class WeatherCurrentRepository implements IWeatherCurrentRepository {
 

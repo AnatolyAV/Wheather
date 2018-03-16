@@ -8,12 +8,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import ru.andreev_av.weather.domain.model.WeatherCurrent;
 import ru.andreev_av.weather.domain.usecase.IWeatherCurrentUseCase;
 import ru.andreev_av.weather.presentation.enums.RefreshingType;
 import ru.andreev_av.weather.presentation.views.IWeatherCurrentsView;
 import ru.andreev_av.weather.utils.ConnectionDetector;
-import rx.functions.Action1;
 
 @InjectViewState
 public class WeatherCurrentsPresenter extends MvpPresenter<IWeatherCurrentsView> implements IWeatherCurrentsPresenter {
@@ -43,19 +43,19 @@ public class WeatherCurrentsPresenter extends MvpPresenter<IWeatherCurrentsView>
     @Override
     public void loadWeather(ArrayList<Integer> cityIds, RefreshingType refreshingType) {
         mWeatherCurrentUseCase.loadWeather(cityIds)
-                .doOnSubscribe(() -> showProgress(refreshingType))
+                .doOnSubscribe(disposable -> showProgress(refreshingType))
                 .doAfterTerminate(() -> hideProgress(refreshingType))
-                .subscribe(new Action1<List<WeatherCurrent>>() {
+                .subscribe(new Consumer<List<WeatherCurrent>>() {
                     @Override
-                    public void call(List<WeatherCurrent> weatherCurrents) {
+                    public void accept(List<WeatherCurrent> weatherCurrents) {
                         getViewState().showWeatherCurrents(weatherCurrents);
                         if (!checkNetworkAvailableAndConnected()) {
                             getViewState().showNotConnection();
                         }
                     }
-                }, new Action1<Throwable>() {
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void accept(Throwable throwable) {
                         getViewState()
                                 .showErrorWeatherCurrents();
                     }

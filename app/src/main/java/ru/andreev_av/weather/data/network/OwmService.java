@@ -1,11 +1,11 @@
 package ru.andreev_av.weather.data.network;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import ru.andreev_av.weather.data.model.WeatherCurrentListModel;
 import ru.andreev_av.weather.data.model.WeatherCurrentModel;
 import ru.andreev_av.weather.data.model.WeatherForecastModel;
-import rx.Observable;
 
 public interface OwmService {
 
