@@ -23,28 +23,52 @@ android {
     }
 }
 
+def androidSupportVersion = '25.3.1'
+def constraintLayoutVersion = '1.0.2'
+def daggerVersion = '2.13'
+def moxyVersion = '1.5.3'
+def rxJavaVersion = '1.1.10'
+def rxAndroidVersion = '1.2.1'
+def retrofitVersion = '2.1.0'
+def googleProgressBarVersion = '1.2.0'
+def junitVersion = '4.12'
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.jpardogo.googleprogressbar:library:1.2.0'
-    compile 'com.arello-mobile:moxy:1.5.3'
-    compile 'com.arello-mobile:moxy-android:1.5.3'
-    compile 'com.arello-mobile:moxy-app-compat:1.5.3'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    annotationProcessor  'com.arello-mobile:moxy-compiler:1.5.3'
-    compile "io.reactivex:rxandroid:1.2.1"
-    compile "io.reactivex:rxjava:1.1.10"
-    compile 'com.google.dagger:dagger:2.13'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
-    testCompile 'junit:junit:4.12'
+
+    // support library
+    compile 'com.android.support:appcompat-v7:' + androidSupportVersion
+    compile 'com.android.support.constraint:constraint-layout:' + constraintLayoutVersion
+    compile 'com.android.support:design:' + androidSupportVersion
+    compile 'com.android.support:cardview-v7:' + androidSupportVersion
+    compile 'com.android.support:support-v4:' + androidSupportVersion
+    compile 'com.android.support:appcompat-v7:' + androidSupportVersion
+
+    // dagger
+    compile 'com.google.dagger:dagger:' + daggerVersion
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + daggerVersion
+
+    // moxy
+    compile 'com.arello-mobile:moxy:' + moxyVersion
+    compile 'com.arello-mobile:moxy-android:' + moxyVersion
+    compile 'com.arello-mobile:moxy-app-compat:' + moxyVersion
+    annotationProcessor 'com.arello-mobile:moxy-compiler:' + moxyVersion
+
+    // rx
+    compile 'io.reactivex:rxjava:' + rxJavaVersion
+    compile 'io.reactivex:rxandroid:' + rxAndroidVersion
+
+    // retrofit
+    compile 'com.squareup.retrofit2:retrofit:' + retrofitVersion
+    compile 'com.squareup.retrofit2:converter-gson:' + retrofitVersion
+    compile 'com.squareup.retrofit2:adapter-rxjava:' + retrofitVersion
+
+    // googleProgressBar
+    compile 'com.jpardogo.googleprogressbar:library:' + googleProgressBarVersion
+
+    // junit
+    testCompile 'junit:junit:' + junitVersion
 }
