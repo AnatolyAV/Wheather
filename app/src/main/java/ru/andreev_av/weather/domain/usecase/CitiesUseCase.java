@@ -7,7 +7,6 @@ import ru.andreev_av.weather.data.repository.ICitiesRepository;
 import ru.andreev_av.weather.domain.model.City;
 import ru.andreev_av.weather.utils.RxUtils;
 import rx.Observable;
-import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 public class CitiesUseCase implements ICitiesUseCase {
@@ -23,16 +22,6 @@ public class CitiesUseCase implements ICitiesUseCase {
     @Override
     public Observable<List<City>> initPublishSubjectForFindCities(int cityNameLettersMinForSearch) {
         return subject.debounce(500, TimeUnit.MILLISECONDS)
-                .filter(new Func1<String, Boolean>() {
-                    @Override
-                    public Boolean call(String cityNameFirstLetters) {
-                        if (cityNameFirstLetters.isEmpty() || cityNameFirstLetters.length() < cityNameLettersMinForSearch) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
-                })
                 .distinctUntilChanged()
                 .map(String::toLowerCase)
                 .switchMap(cityNameFirstLetters -> mRepository.findCities(cityNameFirstLetters))

@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpDialogFragment;
@@ -42,6 +43,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
     private FrameLayout mAddCityLayout;
     private AutoCompleteTextView mAddCityAutoCompleteTextView;
+    private ProgressBar mProgressBar;
     private ImageView mClearImageView;
 
     private CitiesAutoCompleteAdapter mCityAdapter;
@@ -133,6 +135,18 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
     }
 
     @Override
+    public void showLoading() {
+        mClearImageView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mClearImageView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showCities(List<City> cities) {
         mCityAdapter.setCities(cities);
     }
@@ -164,6 +178,7 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         mAddCityLayout = (FrameLayout) inflater.inflate(R.layout.fragment_add_city, null);
         mAddCityAutoCompleteTextView = (AutoCompleteTextView) mAddCityLayout.findViewById(R.id.actv_add_city);
+        mProgressBar = (ProgressBar) mAddCityLayout.findViewById(R.id.progress_bar);
         mClearImageView = (ImageView) mAddCityLayout.findViewById(R.id.img_clear);
     }
 
@@ -184,6 +199,9 @@ public class AddCityFragment extends MvpDialogFragment implements ICitiesView {
 
             @Override
             public void onTextChanged(CharSequence cityNameLetters, int start, int before, int count) {
+                if (mAddCityAutoCompleteTextView.isPerformingCompletion()) {
+                    return;
+                }
                 mCitiesPresenter.processEnteredCityName(cityNameLetters.toString());
             }
 

@@ -45,6 +45,16 @@ public class SplashActivity extends MvpAppCompatActivity implements ICitiesView 
     }
 
     @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
     public void showCities(List<City> cities) {
         for (City city : cities) {
             mCityIds.add(city.getId());

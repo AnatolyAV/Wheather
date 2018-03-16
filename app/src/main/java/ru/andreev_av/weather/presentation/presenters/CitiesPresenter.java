@@ -27,7 +27,10 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     @Override
     public void initPublishSubjectForFindCities() {
         mCitiesUseCase.initPublishSubjectForFindCities(CITY_NAME_LETTERS_MIN_FOR_SEARCH)
-                .subscribe(cities -> getViewState().showCities(cities));
+                .subscribe(cities -> {
+                    getViewState().showCities(cities);
+                    getViewState().hideLoading();
+                });
     }
 
     @Override
@@ -40,7 +43,12 @@ public class CitiesPresenter extends MvpPresenter<ICitiesView> implements ICitie
     public void processEnteredCityName(CharSequence cityNameFirstLetters) {
         // необходимо, чтобы поиск не отрабатывал сразу же после выбора города
         if (mSelectedCity == null) {
-            findCities(cityNameFirstLetters.toString());
+            if (cityNameFirstLetters != null
+                    && !cityNameFirstLetters.toString().isEmpty()
+                    && cityNameFirstLetters.toString().length() >= CITY_NAME_LETTERS_MIN_FOR_SEARCH) {
+                getViewState().showLoading();
+                findCities(cityNameFirstLetters.toString());
+            }
         } else if (!mSelectedCity.toString().equals(cityNameFirstLetters.toString())) {
             mSelectedCity = null;
             getViewState().updateCity(null);
